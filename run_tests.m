@@ -1,0 +1,10 @@
+init();
+memory_copy_test();
+scale_test();
+matrix_mult_test();
+add_vector_test();
+act_relu_test();
+conv_test();
+maxpooling_test();
+gpu_verification();
+GC();
