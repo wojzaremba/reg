@@ -3,7 +3,6 @@ classdef Layer < handle
         type
         dims % Output dimensions.
         cpu % variables stored on CPU. Contains parameters.
-        gpu % same as above but on GPU.
         json 
         layer_nr 
         Fun % Activation function.
@@ -14,7 +13,6 @@ classdef Layer < handle
         padding
         gids %
         name
-        on_gpu % is it on GPU.
     end
     
     methods
@@ -36,10 +34,7 @@ classdef Layer < handle
             fname = Val(json, 'function', 'RELU');
             obj.Fun = eval(sprintf('@%s;', fname));
             obj.dFun = eval(sprintf('@d%s;', fname));            
-            obj.Fun_ = eval(sprintf('Act%s', fname));
             obj.cpu = struct('vars', struct(), 'dvars', struct(), 'accum', struct());
-            obj.gpu = struct('vars', struct(), 'dvars', struct(), 'accum', struct());
-            obj.on_gpu = Val(json, 'on_gpu', plan.default_on_gpu);
             obj.layer_nr = length(plan.layer) + 1;
             obj.name = Val(json, 'name', [json.type, num2str(obj.layer_nr)]);            
         end
@@ -161,42 +156,20 @@ classdef Layer < handle
                 return;
             end 
             momentum = plan.momentum;
-            if (~layer.on_gpu)
-                f = fields(layer.cpu.dvars);
-                for i = 1:length(f)
-                    if (strcmp(f{i}, 'X')) || (strcmp(f{i}, 'out'))
-                        continue;
-                    end 
-                    name = f{i};    
-                    eval(sprintf('layer.cpu.accum.%s = (1 - momentum) * layer.cpu.dvars.%s / plan.input.batch_size + momentum * layer.cpu.accum.%s;', name, name, name));
-                    eval(sprintf('layer.cpu.vars.%s = layer.cpu.vars.%s - lr * layer.cpu.accum.%s;', name, name, name));
-                end 
-            else    
-                f = fields(layer.gpu.dvars);
-                for i = 1:length(f)
-                    if (strcmp(f{i}, 'X')) || (strcmp(f{i}, 'out'))
-                        continue;
-                    end 
-                    name = f{i};
-                    vars_gid = eval(sprintf('layer.gpu.vars.%s', name));
-                    dvars_gid = eval(sprintf('layer.gpu.dvars.%s', name));
-                    accum_gid = eval(sprintf('layer.gpu.accum.%s', name));
-    
-                    C_(Scale, accum_gid, single(momentum), accum_gid);
-                    C_(Scale, dvars_gid, single((1 - momentum) * 1 / plan.input.batch_size), dvars_gid);
-                    C_(Add, accum_gid, dvars_gid, accum_gid);
-                    C_(Scale, dvars_gid, single(1 / (1 - momentum) * plan.input.batch_size), dvars_gid); % XXXXXXX : Create a single GPU function for this update.
-                    C_(Scale, accum_gid, single(lr), accum_gid); % XXX : Fix it (lose of numerical precision.
-                    C_(Subtract, vars_gid, accum_gid, vars_gid);
-                    C_(Scale, accum_gid, single(1 / lr), accum_gid); % XXX : Fix it (lose of numerical precision.
-                end    
-            end 
+            f = fields(layer.cpu.dvars);
+            for i = 1:length(f)
+		if (strcmp(f{i}, 'X')) || (strcmp(f{i}, 'out'))
+		    continue;
+		end 
+		name = f{i};    
+		eval(sprintf('layer.cpu.accum.%s = (1 - momentum) * layer.cpu.dvars.%s / plan.input.batch_size + momentum * layer.cpu.accum.%s;', name, name, name));
+		eval(sprintf('layer.cpu.vars.%s = layer.cpu.vars.%s - lr * layer.cpu.accum.%s;', name, name, name));
+	    end 
         end        
         
         function DisplayInfo(layer)
             global plan
-            fprintf('%s ', layer.type);
-            fprintf('\n\ton gpu = %d', layer.on_gpu);
+            fprintf('%s \n', layer.type);
             f = fields(layer.cpu.vars);
             for i = 1:length(f)
                 if (strcmp(f{i}, 'X'))
@@ -222,11 +195,6 @@ classdef Layer < handle
         end
                 
         function AddParam(obj, name, dims, includeDer)
-            obj.AddParamsOnlyCPU(name, dims, includeDer);
-            obj.AddParamsOnlyGPU(name, dims, includeDer);
-        end
-
-        function AddParamsOnlyCPU(obj, name, dims, includeDer)
             global plan
             if (isempty(plan.all_uploaded_weights) || ~includeDer || strcmp(name, 'out') || strcmp(name, 'X'))
                 obj.RandomWeights(name, dims);
@@ -242,66 +210,16 @@ classdef Layer < handle
             end
         end
 
-        function AddParamsOnlyGPU(obj, name, dims, includeDer)
-            global plan
-            if (obj.on_gpu == 1)
-                vartype = {'vars', 'dvars', 'accum'};
-                for i = 1 : length(vartype)
-                    try
-                        var = eval(sprintf('single(obj.cpu.%s.%s)', vartype{i}, name));
-                        eval(sprintf('obj.gpu.%s.%s = plan.GetGID();', vartype{i}, name));
-                        gid = eval(sprintf('obj.gpu.%s.%s', vartype{i}, name));
-                        C_(CopyToGPU, gid, var);
-                        plan.stats.total_vars_gpu = plan.stats.total_vars_gpu + prod(dims);
-                    catch
-                        % This variable don't have corresponding derivates.
-                    end
-                end
-            end
-        end
-        
-        % Establishes correspondence between layer outputs and derivatives of outputs on GPU.
         function Finalize(obj)
             global plan
             obj.InitWeights();
             dims = [plan.input.batch_size, obj.dims];
-            obj.AddParamsOnlyCPU('out', dims, true);
+            obj.AddParam('out', dims, true);
             if (obj.layer_nr > 1)                
                 pobj = plan.layer{obj.layer_nr - 1};
-                obj.AddParamsOnlyCPU('X', [plan.input.batch_size, pobj.dims], true);                
-            end
-            if (obj.on_gpu)                
-                % vars.out corresponds to the next layer vars.X.
-                % dvars.X corrensponds to the previous layer dvars.out.
-                obj.gpu.vars.out = plan.GetGID();
-                C_(CopyToGPU, obj.gpu.vars.out, single(obj.cpu.vars.out));
-                plan.stats.total_vars_gpu = plan.stats.total_vars_gpu + prod(dims);               
-                
-                if (obj.layer_nr > 1)
-                    if (pobj.on_gpu)
-                        obj.gpu.vars.X = pobj.gpu.vars.out;
-                    else
-                        obj.gpu.vars.X = plan.GetGID();
-                        C_(CopyToGPU, obj.gpu.vars.X, single(obj.cpu.vars.X));
-                        plan.stats.total_vars_gpu = plan.stats.total_vars_gpu + prod(dims);                                                
-                    end
-                end
+                obj.AddParam('X', [plan.input.batch_size, pobj.dims], true);                
             end
             obj.DisplayInfo();
         end        
-        
-        function Upload(obj, name, val)
-            if (obj.on_gpu == 1)
-                gid = eval(sprintf('obj.gpu.vars.%s', name));
-                C_(CopyToGPU, gid, eval(sprintf('single(val)')));               
-            end            
-            eval(sprintf('obj.cpu.vars.%s = val;', name));            
-        end
-
-        function ret = Download(obj, name)
-            gid = eval(sprintf('obj.gids.%s', name));
-            ret = C_(CopyFromGPU, gid);
-        end
-        
     end
 end

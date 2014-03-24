@@ -21,12 +21,7 @@ classdef LRNormal < Layer
             end
         end
         
-        function FPgpu(obj)
-            v = obj.gpu.vars;
-            C_(ConvResponseNormCrossMap, v.X, v.denoms, v.out, obj.depth(), obj.n, obj.k, obj.alpha, obj.beta);
-        end
-        
-        function FPmatlab(obj)
+        function FP(obj)
             X = obj.cpu.vars.X;
             normal = zeros(size(X), class(X));
             for i = 1:obj.depth

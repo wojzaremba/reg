@@ -8,7 +8,6 @@ classdef Plan < handle
         classifier
         gid
         time
-        default_on_gpu
         upload_weights
         all_uploaded_weights
         lr
@@ -17,16 +16,11 @@ classdef Plan < handle
     end
     
     methods
-        function obj = Plan(param1, weights, default_on_gpu)
+        function obj = Plan(param1, weights)
             if (ischar(param1))
                 jsons = ParseJSON(param1);
             else
                 jsons = param1;
-            end
-            if (exist('default_on_gpu', 'var'))
-                obj.default_on_gpu = default_on_gpu;
-            else
-                obj.default_on_gpu = 0;
             end
             
             obj.jsons = jsons;
@@ -41,7 +35,7 @@ classdef Plan < handle
             global plan cuda
             plan = obj;     
             cuda = zeros(2, 1);            
-            obj.stats = struct('total_vars', 0, 'total_learnable_vars', 0, 'total_vars_gpu', 0);
+            obj.stats = struct('total_vars', 0, 'total_learnable_vars', 0);
             for i = 1:length(jsons)
                 json = jsons{i};
                 if (strcmp(json.type(), 'Spec'))
@@ -51,7 +45,7 @@ classdef Plan < handle
                     obj.layer{end + 1} = eval(sprintf('%s(json);', json.type()));
                 end
             end
-            fprintf('Total number of\n\ttotal learnable vars = %d\n\ttotal vars = %d\n\ttotal vars on the gpu = %d\n', obj.stats.total_learnable_vars, obj.stats.total_vars, obj.stats.total_vars_gpu);            
+            fprintf('Total number of\n\ttotal learnable vars = %d\n\ttotal vars = %d\n', obj.stats.total_learnable_vars, obj.stats.total_vars);            
             obj.all_uploaded_weights = [];
         end        
         

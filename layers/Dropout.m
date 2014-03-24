@@ -10,7 +10,7 @@ classdef Dropout < Layer
             obj.Finalize();
         end
         
-        function FPmatlab(obj)
+        function FP(obj)
             global plan;
             vars = obj.cpu.vars;
             out = zeros(size(vars.X));

@@ -8,14 +8,7 @@ classdef FC < Layer
             obj.Finalize();
         end      
         
-        function FPgpu(obj)
-            v = obj.gpu.vars;
-            C_(Mult, v.X, v.W, v.out);
-            C_(AddVector, v.out, v.B, v.out);
-            C_(obj.Fun_, v.out, v.out);
-        end
-        
-        function FPmatlab(obj)
+        function FP(obj)
             v = obj.cpu.vars;            
             act = v.X(:, :) * v.W(:, :);
             act = act + repmat(v.B, size(act, 1), 1);

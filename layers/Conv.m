@@ -9,19 +9,7 @@ classdef Conv < Layer
             obj.Finalize();
         end                      
        
-        function FPgpu(obj)
-            global plan
-            bs = plan.input.batch_size;
-            v = obj.gpu.vars;
-            pdims = obj.prev_dim();
-            C_(ConvAct, v.X, v.W, v.out, pdims(2), pdims(3), obj.patch(1), obj.stride(1), obj.padding(1));
-            C_(Reshape, v.out, bs * obj.dims(1) * obj.dims(2), obj.depth());
-            C_(AddVector, v.out, v.B, v.out);
-            C_(Reshape, v.out, obj.dims(1) * obj.dims(2) * obj.depth(), bs);
-            C_(obj.Fun_, v.out, v.out);            
-        end
-        
-        function FPmatlab(obj)
+        function FP(obj)
             global plan
             prev_dim = obj.prev_dim();
             v = obj.cpu.vars;

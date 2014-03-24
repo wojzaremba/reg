@@ -8,12 +8,7 @@ classdef MaxPooling < Layer
             obj.Finalize();
         end
         
-        function FPgpu(obj)
-            v = obj.gpu.vars;
-            C_(MaxPool, v.X, v.out, obj.depth(), obj.patch(1), obj.stride(1), obj.dims(1));            
-        end
-        
-        function FPmatlab(obj)
+        function FP(obj)
             X = obj.cpu.vars.X;
             dims = obj.dims;
             dims_prev = obj.prev_dim();
