@@ -10,7 +10,7 @@
 
 
     {
-        "type": "Conv",
+        "type": "Convreg",
         "local_2d_patch" : {
            "patch_rows": 10,
            "patch_cols": 10,
@@ -34,13 +34,13 @@
     },
 
     {
-        "type": "FC",
+        "type": "FCreg",
         "depth": 100,
         "function": "RELU"
     },
 
     {
-        "type": "FC",
+        "type": "FCreg",
         "depth": 10,
         "function": "LINEAR"
     },

@@ -13,6 +13,7 @@ classdef Plan < handle
         lr
         momentum
         training
+        regu
     end
     
     methods
