@@ -6,7 +6,7 @@ All the weights, and many training sets are available under http://www.cs.nyu.ed
 Setting up hooks
 ================
 cd .git/hooks
-.git/hooks$ ln -s ../../PRESUBMIT.py pre-commit
+.git/hooks$ ln -s ../../theano/PRESUBMIT.py pre-commit
 chmod a+x ./pre-commit
 
 
