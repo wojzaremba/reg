@@ -40,11 +40,12 @@ class FCL(Layer):
     self.params = [self.W]
 
   def fp(self, x, _):
-    self.output = T.dot(x, self.W)
+    x_tmp = T.flatten(x, 2)
+    self.output = T.dot(x_tmp, self.W)
 
 class ConvL(Layer):
   def __init__(self, filter_shape, image_shape,
-               subsample=1, border_mode='full'):
+               subsample=(1, 1), border_mode='full'):
     super(ConvL, self).__init__()
     assert image_shape[1] == filter_shape[1]
     fan_in = np.prod(filter_shape[1:])
@@ -62,7 +63,7 @@ class ConvL(Layer):
   def fp(self, x, _):
     self.output = conv.conv2d(x, self.W,
       filter_shape=self.filter_shape, image_shape=self.image_shape,
-      subsample=self.stide, border_mode=self.border_mode)
+      subsample=self.subsample, border_mode=self.border_mode)
 
 class SoftmaxC(Cost):
   def __init__(self):

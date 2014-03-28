@@ -28,7 +28,7 @@ CHECKS = [
         'output': 'Checking for print statements...',
         'command': 'grep -n print %s',
         'match_files': ['.*\.py$'],
-        'ignore_files': ['.*_test.py', '.*PRESUBMIT.py'],
+        'ignore_files': ['.*_test.py', '.*PRESUBMIT.py', 'theano/not_clean/*'],
         'print_filename': True,
         'should_stop_commit': False,
     },
@@ -36,8 +36,7 @@ CHECKS = [
         'output': 'Running pylint...',
         'command': 'pylint --rcfile=pylintrc %s',
         'match_files': ['.*\.py$'],
-        # TODO(karol): solver is ignored because of import from scipy.minimize
-        'ignore_files': ['.*PRESUBMIT.py'],
+        'ignore_files': ['.*PRESUBMIT.py', 'theano/not_clean/*'],
         'print_filename': False,
         'should_stop_commit': True,
     },

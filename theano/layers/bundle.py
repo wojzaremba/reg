@@ -1,7 +1,5 @@
 from layers.layer import Layer, FCL, BiasL, ReluL, SoftmaxC, Cost
 
-# XXX: act missing.
-
 class Bundle(Layer):
   def __init__(self, bundle, is_cost=False):
     super(Bundle, self).__init__()
