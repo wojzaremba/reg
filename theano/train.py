@@ -16,7 +16,7 @@ def load_data(dataset):
   print '... loading data'
   home = expanduser("~")
   f = gzip.open(home + '/data/' + dataset + '/data.pkl.gz', 'rb')
-  train_set, valid_set, test_set = cPickle.load(f)
+  train_set, test_set = cPickle.load(f)
   f.close()
 
   def shared_dataset(data_xy, borrow=True):
@@ -26,11 +26,9 @@ def load_data(dataset):
     return shared_x, T.cast(shared_y, 'int32')
 
   test_set_x, test_set_y = shared_dataset(test_set)
-  valid_set_x, valid_set_y = shared_dataset(valid_set)
   train_set_x, train_set_y = shared_dataset(train_set)
 
   rval = [(train_set_x, train_set_y),
-          (valid_set_x, valid_set_y),
           (test_set_x, test_set_y)]
   return rval
 
@@ -39,7 +37,10 @@ def sgd(model, lr=0.13, n_epochs=1000, dataset='mnist', batch_size=600):
   datasets = load_data(dataset)
 
   train_set_x, train_set_y = datasets[0]
-  test_set_x, test_set_y = datasets[2]
+  test_set_x, test_set_y = datasets[1]
+
+  print "train size: ", train_set_x.get_value(borrow=True).shape
+  print "test size: ",  test_set_x.get_value(borrow=True).shape
 
   n_train_batches = train_set_x.get_value(borrow=True).shape[0] / batch_size
   n_test_batches = test_set_x.get_value(borrow=True).shape[0] / batch_size

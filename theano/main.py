@@ -8,9 +8,9 @@ from train import sgd
 def main():
   filter_shape = (96, 1, 5, 5)
   image_shape = (600, 1, 28, 28)
-  subsample = (1, 1)
-  model = [ConvL(filter_shape, image_shape, subsample),
-           SoftmaxBC(96 * 28 * 28, 10)]
+  subsample = (4, 4)
+  model = [ConvL(filter_shape, image_shape, subsample, border_mode='valid'),
+           SoftmaxBC(96 * 6 * 6, 10)]
   sgd(model)
 
 
