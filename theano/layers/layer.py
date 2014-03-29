@@ -1,6 +1,7 @@
 import numpy as np
 import theano
 import theano.tensor as T
+from theano.tensor.signal import downsample
 from numpy import random
 from theano.tensor.nnet import conv
 
@@ -100,3 +101,12 @@ class ReluL(ActL):
     relu = lambda x: T.maximum(x, 0)
     ActL.__init__(self, relu)
 
+class MaxpoolL(Layer):
+  def __init__(self, pool_shape, ignore_border=True):
+	super(MaxpoolL, self).__init__()
+	self.pool_shape = pool_shape
+	self.ignore_border = ignore_border
+	self.params = []
+
+  def fp(self, x, _):
+	self.output = downsample.max_pool_2d(x, self.pool_shape, self.ignore_border) 

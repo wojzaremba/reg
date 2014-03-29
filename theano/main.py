@@ -1,5 +1,5 @@
 from layers.bundle import SoftmaxBC
-from layers.layer import ReluL, ConvL
+from layers.layer import ReluL, ConvL, MaxpoolL
 from train import sgd
 
 # XXX: Test conv (separate test).
@@ -10,8 +10,9 @@ def main():
   image_shape = (600, 1, 28, 28)
   subsample = (4, 4)
   model = [ConvL(filter_shape, image_shape, subsample, border_mode='valid'),
-           ReluL(), 
-		   SoftmaxBC(96 * 6 * 6, 10)]
+           ReluL(),
+		   MaxpoolL( (2, 2)), 
+		   SoftmaxBC(96 * 3 * 3, 10)]
   sgd(model)
 
 
