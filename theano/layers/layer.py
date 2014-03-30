@@ -6,7 +6,6 @@ import theano.tensor as T
 from theano.tensor.signal import downsample
 from numpy import random
 from theano.tensor.nnet import conv
-import cache
 from os.path import expanduser
 
 class Layer(object):
@@ -158,26 +157,21 @@ class Source(object):
   def load_data(self):
     floatX = theano.config.floatX
     print '\tloading data', self.dataset
-    if cache.DATA.has_key(self.dataset):
-      print '\tloading dataset from cache'
-      rval = cache.DATA[self.dataset]
-    else:
-      home = expanduser("~")
-      fname = "%s/data/%s/data.pkl.gz" % (home, self.dataset)
-      f = gzip.open(fname, 'rb')
-      train_set, test_set = cPickle.load(f)
-      f.close()
-      def shared_dataset(data_xy, borrow=True):
-        data_x, data_y = data_xy
-        data_array_x = np.asarray(data_x, dtype=floatX)
-        data_array_y = np.asarray(data_y, dtype=floatX)
-        shared_x = theano.shared(data_array_x, borrow=borrow)
-        shared_y = theano.shared(data_array_y, borrow=borrow)
-        return shared_x, T.cast(shared_y, 'int32')
-      test_x, test_y = shared_dataset(test_set)
-      train_x, train_y = shared_dataset(train_set)
-      rval = (train_x, train_y, test_x, test_y)
-      cache.DATA[self.dataset] = rval
-    print "\ttrain set size:", rval[0].get_value(borrow=True).shape
-    print "\ttest set size:", rval[2].get_value(borrow=True).shape
+    home = expanduser("~")
+    fname = "%s/data/%s/data.pkl.gz" % (home, self.dataset)
+    f = gzip.open(fname, 'rb')
+    train_set, test_set = cPickle.load(f)
+    f.close()
+    def shared_dataset(data_xy, borrow=True):
+      data_x, data_y = data_xy
+      data_array_x = np.asarray(data_x, dtype=floatX)
+      data_array_y = np.asarray(data_y, dtype=floatX)
+      shared_x = theano.shared(data_array_x, borrow=borrow)
+      shared_y = theano.shared(data_array_y, borrow=borrow)
+      return shared_x, T.cast(shared_y, 'int32')
+    test_x, test_y = shared_dataset(test_set)
+    train_x, train_y = shared_dataset(train_set)
+    rval = (train_x, train_y, test_x, test_y)
+    print "\ttrain set size:", train_x.get_value(borrow=True).shape
+    print "\ttest set size:", test_x.get_value(borrow=True).shape
     return rval

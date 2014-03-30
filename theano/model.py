@@ -9,7 +9,8 @@ class Model(object):
 
   def __init__(self, lr=0.13, n_epochs=100, batch_size=100):
     print "_" * 100
-    print "Creating model lr = %f, batch_size = %d" % (lr, batch_size)
+    print "Creating model lr=%f, n_epochs=%d, batch_size=%d" % \
+      (lr, n_epochs, batch_size)
     self.lr = lr
     self.n_epochs = n_epochs
     self.batch_size = batch_size
