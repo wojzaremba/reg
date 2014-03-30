@@ -1,20 +1,29 @@
-from layers.bundle import SoftmaxBC
-from layers.layer import ReluL, ConvL, MaxpoolL
-from train import sgd
+from layers.bundle import SoftmaxBC, ConvB
+from layers.layer import MaxpoolL, Source
+from model import Model
 
 # XXX: Test conv (separate test).
-# XXX: write bundles.
+
+def conv_mnist():
+  model = Model()
+  model.set_source(Source, {'dataset': 'mnist'})
+  model.append(ConvB, {'filter_shape':(96, 1, 5, 5),
+                       'subsample':(4, 4),
+                       'border_mode':'valid'})
+  model.append(MaxpoolL, {'pool_shape':(2, 2)})
+  model.append(SoftmaxBC, {})
+  return model
+
+def fully_connected_mnist():
+  model = Model()
+  model.set_source(Source, {'dataset': 'mnist'})
+  model.append(SoftmaxBC, {})
+  return model
 
 def main():
-  filter_shape = (96, 1, 5, 5)
-  image_shape = (600, 1, 28, 28)
-  subsample = (4, 4)
-  model = [ConvL(filter_shape, image_shape, subsample, border_mode='valid'),
-           ReluL(),
-		   MaxpoolL( (2, 2)), 
-		   SoftmaxBC(96 * 3 * 3, 10)]
-  sgd(model)
-
+  #model = conv_mnist()
+  model = fully_connected_mnist()
+  model.train()
 
 if __name__ == '__main__':
   main()

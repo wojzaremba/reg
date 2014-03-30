@@ -1,21 +1,24 @@
+import cPickle
+import gzip
 import numpy as np
 import theano
 import theano.tensor as T
 from theano.tensor.signal import downsample
 from numpy import random
 from theano.tensor.nnet import conv
-
-#class ActL(Layer):
-#class Bundle(object):
-#class LogRegB(Bundle):
-
+import cache
+from os.path import expanduser
 
 class Layer(object):
-  def __init__(self):
+  def __init__(self, gen):
     self.output = None
+    self.gen = gen
+    self.batch_size = gen['batch_size']
+    self.in_shape = gen['in_shape']
 
-class Cost(object):
-  def __init__(self):
+class Cost(Layer):
+  def __init__(self, gen):
+    Layer.__init__(self, gen)
     self.output = None
     self.prob = None
 
@@ -33,11 +36,13 @@ class Cost(object):
       raise NotImplementedError()
 
 class FCL(Layer):
-  def __init__(self, n_in, n_out):
-    super(FCL, self).__init__()
-    self.W = theano.shared(value=np.zeros((n_in, n_out),
-                         dtype=theano.config.floatX),
-                 name='W', borrow=True)
+  def __init__(self, out_len, gen=None):
+    Layer.__init__(self, gen)
+    in_len = reduce(lambda x, y: x * y, list(self.in_shape))
+    self.W = theano.shared(value=np.zeros((in_len, out_len),
+                           dtype=theano.config.floatX),
+                           name='W', borrow=True)
+    self.out_shape = (out_len,)
     self.params = [self.W]
 
   def fp(self, x, _):
@@ -45,13 +50,14 @@ class FCL(Layer):
     self.output = T.dot(x_tmp, self.W)
 
 class ConvL(Layer):
-  def __init__(self, filter_shape, image_shape,
-               subsample=(1, 1), border_mode='full'):
-    super(ConvL, self).__init__()
-    assert image_shape[1] == filter_shape[1]
+  def __init__(self, filter_shape, subsample=(1, 1),
+               border_mode='full', gen=None):
+    Layer.__init__(self, gen)
+    in_shape = (gen['batch_size'],) + gen['in_shape']
+    assert in_shape[1] == filter_shape[1]
     fan_in = np.prod(filter_shape[1:])
     self.filter_shape = filter_shape
-    self.image_shape = image_shape
+    self.in_shape = in_shape
     W_values = np.asarray(random.uniform(
       low=-np.sqrt(3./fan_in),
       high=np.sqrt(3./fan_in),
@@ -59,16 +65,21 @@ class ConvL(Layer):
     self.W = theano.shared(value=W_values, name='W')
     self.subsample = subsample
     self.border_mode = border_mode
+    # TODO: Doesn't care about border.
+    self.out_shape = (filter_shape[0],
+                      (in_shape[2] - filter_shape[2]) / subsample[0] + 1,
+                      (in_shape[3] - filter_shape[3]) / subsample[1] + 1)
     self.params = [self.W]
 
   def fp(self, x, _):
     self.output = conv.conv2d(x, self.W,
-      filter_shape=self.filter_shape, image_shape=self.image_shape,
+      filter_shape=self.filter_shape, image_shape=self.in_shape,
       subsample=self.subsample, border_mode=self.border_mode)
 
 class SoftmaxC(Cost):
-  def __init__(self):
-    super(SoftmaxC, self).__init__()
+  def __init__(self, gen=None):
+    Cost.__init__(self, gen)
+    self.out_shape = self.in_shape
     self.params = []
 
   def fp(self, x, y):
@@ -76,11 +87,12 @@ class SoftmaxC(Cost):
     self.output = -T.mean(T.log(self.prob)[T.arange(y.shape[0]), y])
 
 class BiasL(Layer):
-  def __init__(self, n_out):
-    super(BiasL, self).__init__()
-    self.b = theano.shared(value=np.zeros((n_out,),
-                         dtype=theano.config.floatX),
-                 name='b', borrow=True)
+  def __init__(self, gen=None):
+    Layer.__init__(self, gen)
+    self.b = theano.shared(value=np.zeros((self.in_shape[0],),
+                           dtype=theano.config.floatX),
+                           name='b', borrow=True)
+    self.out_shape = self.in_shape
     self.params = [self.b]
 
   def fp(self, x, _):
@@ -88,25 +100,67 @@ class BiasL(Layer):
 
 
 class ActL(Layer):
-  def __init__(self, f):
-    super(ActL, self).__init__()
+  def __init__(self, f, gen=None):
+    Layer.__init__(self, gen)
     self.f = f
+    self.out_shape = self.in_shape
     self.params = []
 
   def fp(self, x, _):
     self.output = self.f(x)
 
 class ReluL(ActL):
-  def __init__(self):
+  def __init__(self, gen):
     relu = lambda x: T.maximum(x, 0)
-    ActL.__init__(self, relu)
+    ActL.__init__(self, relu, gen)
 
 class MaxpoolL(Layer):
-  def __init__(self, pool_shape, ignore_border=True):
-	super(MaxpoolL, self).__init__()
-	self.pool_shape = pool_shape
-	self.ignore_border = ignore_border
-	self.params = []
+  def __init__(self, pool_shape, ignore_border=True, gen=None):
+    Layer.__init__(self, gen)
+    self.pool_shape = pool_shape
+    self.ignore_border = ignore_border
+    self.out_shape = (self.in_shape[0],
+                      self.in_shape[1] / pool_shape[0],
+                      self.in_shape[2] / pool_shape[1])
+    self.params = []
 
   def fp(self, x, _):
-	self.output = downsample.max_pool_2d(x, self.pool_shape, self.ignore_border) 
+    self.output = downsample.max_pool_2d(x, self.pool_shape, self.ignore_border)
+
+class Source(object):
+  def __init__(self, dataset, batch_size):
+    self.dataset = dataset
+    self.train_x, self.train_y, self.test_x, self.test_y = self.load_data()
+    data_shape = self.train_x.get_value(borrow=True).shape
+    self.out_shape = (data_shape[1], data_shape[2], data_shape[3])
+    self.n_train_batches = \
+      self.train_x.get_value(borrow=True).shape[0] / batch_size
+    self.n_test_batches = \
+      self.test_x.get_value(borrow=True).shape[0] / batch_size
+
+  def load_data(self):
+    floatX = theano.config.floatX
+    print '\tloading data', self.dataset
+    if cache.DATA.has_key(self.dataset):
+      print '\tloading dataset from cache'
+      rval = cache.DATA[self.dataset]
+    else:
+      home = expanduser("~")
+      fname = "%s/data/%s/data.pkl.gz" % (home, self.dataset)
+      f = gzip.open(fname, 'rb')
+      train_set, test_set = cPickle.load(f)
+      f.close()
+      def shared_dataset(data_xy, borrow=True):
+        data_x, data_y = data_xy
+        data_array_x = np.asarray(data_x, dtype=floatX)
+        data_array_y = np.asarray(data_y, dtype=floatX)
+        shared_x = theano.shared(data_array_x, borrow=borrow)
+        shared_y = theano.shared(data_array_y, borrow=borrow)
+        return shared_x, T.cast(shared_y, 'int32')
+      test_x, test_y = shared_dataset(test_set)
+      train_x, train_y = shared_dataset(train_set)
+      rval = (train_x, train_y, test_x, test_y)
+      cache.DATA[self.dataset] = rval
+    print "\ttrain set size:", rval[0].get_value(borrow=True).shape
+    print "\ttest set size:", rval[2].get_value(borrow=True).shape
+    return rval

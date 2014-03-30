@@ -20,13 +20,8 @@ def main():
   print "train(y) size: ",  train_set[1].shape
   print "val(y) size: ",  valid_set[1].shape
 
-
   x = np.concatenate((train_set[0], valid_set[0]), axis=0) 
   y = np.concatenate((train_set[1], valid_set[1]), axis=0) 
-
-
-  print "train(x) size: ",  x.shape
-  print "train(y) size: ",  y.shape
 
   x = np.reshape(x, (60000, 1, 28, 28))
   train_set = (x, y)
