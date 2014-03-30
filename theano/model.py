@@ -1,6 +1,3 @@
-import os
-import os.path
-import sys
 import time
 
 import numpy as np
@@ -10,7 +7,7 @@ import theano.tensor as T
 
 class Model(object):
 
-  def __init__(self, lr=0.13, n_epochs=1000, batch_size=100):
+  def __init__(self, lr=0.13, n_epochs=100, batch_size=100):
     print "_" * 100
     print "Creating model lr = %f, batch_size = %d" % (lr, batch_size)
     self.lr = lr
@@ -51,8 +48,8 @@ class Model(object):
       l.fp(x_out, y)
       x_out = l.output
     costL = self.layers[-1]
-
-    test_model = theano.function(inputs=[idx], outputs=costL.errors(y),
+    outputs = [costL.errors(y), costL.output]
+    test_model = theano.function(inputs=[idx], outputs=outputs,
                                  givens={
       x: self.source.test_x[idx * bs: (idx + 1) * bs],
       y: self.source.test_y[idx * bs: (idx + 1) * bs]})
@@ -63,68 +60,37 @@ class Model(object):
         updates.append((p, p - self.lr * g))
 
     train_model = theano.function(inputs=[idx],
-      outputs=costL.output,
+      outputs=outputs,
       updates=updates,
       givens={
         x: self.source.train_x[idx * bs:(idx + 1) * bs],
         y: self.source.train_y[idx * bs:(idx + 1) * bs]})
     return (train_model, test_model)
 
-# XXX: Don't apply fp to train data, but just look on proper output
-# (relie on polymorpism of cost.errors).
   def train(self):
     train_model, test_model = self.build_model()
     print '... training the model'
-    patience = 5000
-    patience_increase = 2
-    improvement_threshold = 0.995
-    test_frequency = 10#min(self.source.n_train_batches, patience / 2)
+    test_frequency = self.source.n_train_batches / 5
 
-    best_test_loss = np.inf
-    test_score = 0.
-    start_time = time.clock()
-
-    done_looping = False
-    epoch = 0
-    while (epoch < self.n_epochs) and (not done_looping):
-      epoch = epoch + 1
+    for epoch in xrange(self.n_epochs):
+      start_time = time.clock()
+      train_res = []
       for minibatch_index in xrange(self.source.n_train_batches):
-        train_model(minibatch_index)
+        train_res.append(train_model(minibatch_index))
         it = (epoch - 1) * self.source.n_train_batches + minibatch_index
-
         if (it + 1) % test_frequency == 0:
-          test_losses = \
-            [test_model(i) for i in xrange(self.source.n_test_batches)]
-          this_test_loss = np.mean(test_losses)
+          test_res = \
+            zip(*[test_model(i) for i in xrange(self.source.n_test_batches)])
 
-          print('epoch %i, minibatch %i/%i, test error %f %%' % \
-            (epoch, minibatch_index + 1, self.source.n_train_batches,
-            this_test_loss * 100.))
+          train_error = np.mean(zip(*train_res)[0]) * 100.
+          train_loss = np.mean(zip(*train_res)[1])
+          test_error = np.mean(test_res[0]) * 100.
+          test_loss = np.mean(test_res[1])
+          print '\ttrain err = %.2f%%, loss = %.5f; \
+                   test err %.2f%%, loss = %.5f' % \
+                     (train_error, train_loss, test_error, test_loss)
+      end_time = time.clock()
+      print "Epoch %d took %.1fs" % (epoch, end_time - start_time)
 
-          if this_test_loss < best_test_loss:
-            if this_test_loss < best_test_loss * \
-               improvement_threshold:
-              patience = max(patience, it * patience_increase)
-            best_test_loss = this_test_loss
-            test_losses = \
-              [test_model(i) for i in xrange(self.source.n_test_batches)]
-            test_score = np.mean(test_losses)
-
-            print(('\tepoch %i, minibatch %i/%i, test error of best'
-               ' model %f %%') %
-              (epoch, minibatch_index + 1, self.source.n_train_batches,
-               test_score * 100.))
-
-        if patience <= it:
-          done_looping = True
-          break
-
-    end_time = time.clock()
-    print 'Optimization complete with best test score of %f' \
-      % (best_test_loss * 100.)
-    print 'The code run for %d epochs, with %f epochs/sec' % (
-      epoch, 1. * epoch / (end_time - start_time))
-    print >> sys.stderr, ('The code for file ' +
-                os.path.split(__file__)[1] +
-                ' ran for %.1fs' % ((end_time - start_time)))
+    print "Training finished !"
 
