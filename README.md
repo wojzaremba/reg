@@ -11,4 +11,4 @@ chmod a+x ./pre-commit
 
 
 TODO: 
-1. Set up testing hooks, and lint.
+1. make clean in PRESUBMIT
