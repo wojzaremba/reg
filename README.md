@@ -11,6 +11,7 @@ chmod a+x ./pre-commit
 
 
 TODO: 
+0. Fix bias to account for tensor and matrix.
 1. make clean in PRESUBMIT
 2. Figure out how to make cache working.
 3. Implement dropout (tell Karol).
