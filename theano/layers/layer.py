@@ -13,6 +13,11 @@ class Layer(object):
     self.output = None
     self.in_shape = in_shape
 
+# Some layers behave differently during testing
+# than training (e.g. Dropout).
+  def fptest(self, x, y):
+    return self.fp(x, y)
+
 class Cost(Layer):
   def __init__(self, in_shape):
     Layer.__init__(self, in_shape)
@@ -32,7 +37,6 @@ class Cost(Layer):
     else:
       raise NotImplementedError()
 
-# XXX: Missing multiplication by constant during testing.
 class DropoutL(Layer):
   def __init__(self, p=0.5, in_shape=None):
     Layer.__init__(self, in_shape)
@@ -43,8 +47,11 @@ class DropoutL(Layer):
 
   def fp(self, x, _):
     srng = T.shared_randomstreams.RandomStreams(self.rng.randint(2))
-    mask = srng.binomial(n=1, p=1 - self.p, size=self.in_shape)
+    mask = srng.binomial(n=1, p=1-self.p, size=self.in_shape)
     self.output = x * T.cast(mask, theano.config.floatX)
+
+  def fptest(self, x, _):
+    self.output = x * self.p
 
 class FCL(Layer):
   def __init__(self, out_len, in_shape=None):

@@ -44,24 +44,30 @@ class Model(object):
     x = T.tensor4('x')
     y = T.ivector('y')
     x_out = x
-    for i in range(0, len(self.layers)):
-      l = self.layers[i]
+    for l in self.layers:
+      l.fptest(x_out, y)
+      x_out = l.output
+    cost_test = self.layers[-1]
+
+    test_model = theano.function(inputs=[idx],
+      outputs=[cost_test.errors(y), cost_test.output],
+      givens={
+        x: self.source.test_x[idx * bs: (idx + 1) * bs],
+        y: self.source.test_y[idx * bs: (idx + 1) * bs]})
+
+    x_out = x
+    for l in self.layers:
       l.fp(x_out, y)
       x_out = l.output
-    costL = self.layers[-1]
-    outputs = [costL.errors(y), costL.output]
-    test_model = theano.function(inputs=[idx], outputs=outputs,
-                                 givens={
-      x: self.source.test_x[idx * bs: (idx + 1) * bs],
-      y: self.source.test_y[idx * bs: (idx + 1) * bs]})
+    cost_train = self.layers[-1]
     updates = []
     for l in self.layers:
       for p in l.params:
-        g = T.grad(cost=costL.output, wrt=p)
+        g = T.grad(cost=cost_train.output, wrt=p)
         updates.append((p, p - self.lr * g))
 
     train_model = theano.function(inputs=[idx],
-      outputs=outputs,
+      outputs=[cost_train.errors(y), cost_train.output],
       updates=updates,
       givens={
         x: self.source.train_x[idx * bs:(idx + 1) * bs],
