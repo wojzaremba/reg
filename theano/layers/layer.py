@@ -94,7 +94,13 @@ class BiasL(Layer):
     self.params = [self.b]
 
   def fp(self, x, _):
-    self.output = x + self.b
+    if len(self.in_shape) == 4:
+      tmp = x.dimshuffle((0, 2, 3, 1)) + self.b
+      self.output = tmp.dimshuffle((0, 3, 1, 2))
+    elif len(self.in_shape) == 2:
+      self.output = x + self.b
+    else:
+      assert False
 
 
 class ActL(Layer):

@@ -40,7 +40,6 @@ class FCB(Bundle):
     self.append(BiasL, {})
     self.append(ReluL, {})
 
-# XXX: Fix bias.
 class ConvB(Bundle):
   def __init__(self, filter_shape,
                subsample=(1, 1), border_mode='full', in_shape=None):
@@ -48,7 +47,7 @@ class ConvB(Bundle):
     self.append(ConvL, {'filter_shape':filter_shape,
                         'subsample':subsample,
                         'border_mode':border_mode})
-    #self.append(BiasL, {})
+    self.append(BiasL, {})
     self.append(ReluL, {})
 
 # XXX : Somehow should know about number of labels.
