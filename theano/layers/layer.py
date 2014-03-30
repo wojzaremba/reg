@@ -33,12 +33,24 @@ class Cost(Layer):
     else:
       raise NotImplementedError()
 
+class DropoutL(Layer):
+  def __init__(self, p=0.5, in_shape=None):
+    Layer.__init__(self, in_shape)
+    self.p = p
+    self.out_shape = self.in_shape
+    self.rng = np.random.RandomState(1)
+    self.params = []
+
+  def fp(self, x, _):
+    srng = T.shared_randomstreams.RandomStreams(self.rng.randint(2))
+    mask = srng.binomial(n=1, p=1 - self.p, size=self.in_shape)
+    self.output = x * T.cast(mask, theano.config.floatX)
+
 class FCL(Layer):
   def __init__(self, out_len, in_shape=None):
     Layer.__init__(self, in_shape)
     in_len = reduce(lambda x, y: x * y, list(self.in_shape)[1:])
-    self.W = theano.shared(value=np.zeros((in_len, out_len),
-                           dtype=theano.config.floatX),
+    self.W = theano.shared(value=0.1 * np.random.randn(in_len, out_len),
                            name='W', borrow=True)
     self.out_shape = (in_shape[0], out_len)
     self.params = [self.W]
@@ -117,6 +129,7 @@ class ReluL(ActL):
   def __init__(self, in_shape):
     relu = lambda x: T.maximum(x, 0)
     ActL.__init__(self, relu, in_shape)
+
 
 class MaxpoolL(Layer):
   def __init__(self, pool_shape, ignore_border=True, in_shape=None):

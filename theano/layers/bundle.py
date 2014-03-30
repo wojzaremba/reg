@@ -50,9 +50,8 @@ class ConvB(Bundle):
     self.append(BiasL, {})
     self.append(ReluL, {})
 
-# XXX : Somehow should know about number of labels.
 class SoftmaxBC(Cost, Bundle):
-  def __init__(self, out_len=10, in_shape=None):
+  def __init__(self, out_len, in_shape=None):
     Cost.__init__(self, in_shape)
     Bundle.__init__(self, True, in_shape)
     self.append(FCL, {'out_len': out_len})
