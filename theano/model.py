@@ -86,8 +86,7 @@ class Model(object):
           train_loss = np.mean(zip(*train_res)[1])
           test_error = np.mean(test_res[0]) * 100.
           test_loss = np.mean(test_res[1])
-          print '\ttrain err = %.2f%%, loss = %.5f; \
-                   test err %.2f%%, loss = %.5f' % \
+          print '\ttrain err=%.2f%%,loss=%.5f;  test err=%.2f%%,loss=%.5f''' % \
                      (train_error, train_loss, test_error, test_loss)
       end_time = time.clock()
       print "Epoch %d took %.1fs" % (epoch, end_time - start_time)
