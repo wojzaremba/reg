@@ -18,3 +18,5 @@ TODO:
 5. Import CIFAR-10.
 6. Create multiple costs.
 7. Fix softmax to know about number of labels.
+8. Get some faster impl. on CPU.
+

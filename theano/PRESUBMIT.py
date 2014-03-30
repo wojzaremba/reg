@@ -104,6 +104,7 @@ def check_files(files, check):
 
 
 def main(all_files):
+  subprocess.call(['make', '-f', 'theano/Makefile', 'clean'])
   register_all_signals()
   # Stash any changes to the working tree that are not going to be committed
   # TODO(karol): uncomment this after making sure that it doesn't break workflow
