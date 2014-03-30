@@ -32,7 +32,7 @@ class Model(object):
       in_shape = self.layers[-1].out_shape
     else:
       in_shape = self.source.out_shape
-    params['gen'] = {'in_shape': in_shape, 'batch_size': self.batch_size}
+    params['in_shape'] = in_shape
     l = layer(**params)
     self.out_shape = l.out_shape
     self.layers.append(l)
@@ -70,13 +70,15 @@ class Model(object):
         y: self.source.train_y[idx * bs:(idx + 1) * bs]})
     return (train_model, test_model)
 
+# XXX: Don't apply fp to train data, but just look on proper output
+# (relie on polymorpism of cost.errors).
   def train(self):
     train_model, test_model = self.build_model()
     print '... training the model'
     patience = 5000
     patience_increase = 2
     improvement_threshold = 0.995
-    test_frequency = min(self.source.n_train_batches, patience / 2)
+    test_frequency = 10#min(self.source.n_train_batches, patience / 2)
 
     best_test_loss = np.inf
     test_score = 0.

@@ -21,8 +21,8 @@ def fully_connected_mnist():
   return model
 
 def main():
-  #model = conv_mnist()
-  model = fully_connected_mnist()
+  model = conv_mnist()
+  #model = fully_connected_mnist()
   model.train()
 
 if __name__ == '__main__':
