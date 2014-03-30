@@ -5,12 +5,12 @@ All the weights, and many training sets are available under http://www.cs.nyu.ed
 
 Setting up hooks
 ================
-cd .git/hooks
-.git/hooks$ ln -s ../../theano/PRESUBMIT.py pre-commit
-chmod a+x ./pre-commit
+    cd .git/hooks
+    .git/hooks$ ln -s ../../theano/PRESUBMIT.py pre-commit
+    chmod a+x ./pre-commit
 
-
-TODO: 
+**TODO**
+========
 - Implement normalizations.
 - Import CIFAR-10.
 - Create multiple costs.
