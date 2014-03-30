@@ -11,7 +11,6 @@ chmod a+x ./pre-commit
 
 
 TODO: 
-1. figure out how to make cache working.
 4. Implement normalizations.
 5. Import CIFAR-10.
 6. Create multiple costs.
@@ -22,4 +21,4 @@ TODO:
 12. Write script to visulalize weights from the first layer.
 13. Store mnist as int in 0-255 ? 
 14. Common initialization mechanism.
-15. Get predictions without additional testing.
+15. Fix dropout.

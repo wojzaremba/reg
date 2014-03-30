@@ -32,6 +32,7 @@ class Cost(Layer):
     else:
       raise NotImplementedError()
 
+# XXX: Missing multiplication by constant during testing.
 class DropoutL(Layer):
   def __init__(self, p=0.5, in_shape=None):
     Layer.__init__(self, in_shape)
