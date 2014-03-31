@@ -6,13 +6,17 @@ import theano.tensor as T
 from theano.tensor.signal import downsample
 from numpy import random
 from theano.tensor.nnet import conv
-import cache
-from os.path import expanduser
+import config
 
 class Layer(object):
   def __init__(self, in_shape):
     self.output = None
     self.in_shape = in_shape
+
+# Some layers behave differently during testing
+# than training (e.g. Dropout).
+  def fptest(self, x, y):
+    return self.fp(x, y)
 
 class Cost(Layer):
   def __init__(self, in_shape):
@@ -43,8 +47,11 @@ class DropoutL(Layer):
 
   def fp(self, x, _):
     srng = T.shared_randomstreams.RandomStreams(self.rng.randint(2))
-    mask = srng.binomial(n=1, p=1 - self.p, size=self.in_shape)
+    mask = srng.binomial(n=1, p=1-self.p, size=self.in_shape)
     self.output = x * T.cast(mask, theano.config.floatX)
+
+  def fptest(self, x, _):
+    self.output = x * self.p
 
 class FCL(Layer):
   def __init__(self, out_len, in_shape=None):
@@ -172,27 +179,21 @@ class Source(object):
 
   def load_data(self):
     floatX = theano.config.floatX
-    print '\tloading data', self.dataset
-    if cache.DATA.has_key(self.dataset):
-      print '\tloading dataset from cache'
-      rval = cache.DATA[self.dataset]
-    else:
-      home = expanduser("~")
-      fname = "%s/data/%s/data.pkl.gz" % (home, self.dataset)
-      f = gzip.open(fname, 'rb')
-      train_set, test_set = cPickle.load(f)
-      f.close()
-      def shared_dataset(data_xy, borrow=True):
-        data_x, data_y = data_xy
-        data_array_x = np.asarray(data_x, dtype=floatX)
-        data_array_y = np.asarray(data_y, dtype=floatX)
-        shared_x = theano.shared(data_array_x, borrow=borrow)
-        shared_y = theano.shared(data_array_y, borrow=borrow)
-        return shared_x, T.cast(shared_y, 'int32')
-      test_x, test_y = shared_dataset(test_set)
-      train_x, train_y = shared_dataset(train_set)
-      rval = (train_x, train_y, test_x, test_y)
-      cache.DATA[self.dataset] = rval
-    print "\ttrain set size:", rval[0].get_value(borrow=True).shape
-    print "\ttest set size:", rval[2].get_value(borrow=True).shape
+    fname = "%s/%s/data.pkl.gz" % (config.DATA_DIR, self.dataset)
+    print '\tloading data %s from %s' % (self.dataset, fname)
+    f = gzip.open(fname, 'rb')
+    train_set, test_set = cPickle.load(f)
+    f.close()
+    def shared_dataset(data_xy, borrow=True):
+      data_x, data_y = data_xy
+      data_array_x = np.asarray(data_x, dtype=floatX)
+      data_array_y = np.asarray(data_y, dtype=floatX)
+      shared_x = theano.shared(data_array_x, borrow=borrow)
+      shared_y = theano.shared(data_array_y, borrow=borrow)
+      return shared_x, T.cast(shared_y, 'int32')
+    test_x, test_y = shared_dataset(test_set)
+    train_x, train_y = shared_dataset(train_set)
+    rval = (train_x, train_y, test_x, test_y)
+    print "\ttrain set size:", train_x.get_value(borrow=True).shape
+    print "\ttest set size:", test_x.get_value(borrow=True).shape
     return rval

@@ -1,8 +1,11 @@
-function collage=collage_imnet(aux)
+function collage=collage_imnet(aux,N)
+
+if nargin < 2
+N=16;
+end
 
 S=size(aux);
 
-N=16;
 M=floor(S(1)/N);
 
 marg=2;

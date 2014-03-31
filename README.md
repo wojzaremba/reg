@@ -5,21 +5,21 @@ All the weights, and many training sets are available under http://www.cs.nyu.ed
 
 Setting up hooks
 ================
-cd .git/hooks
-.git/hooks$ ln -s ../../theano/PRESUBMIT.py pre-commit
-chmod a+x ./pre-commit
+    cd .git/hooks
+    .git/hooks$ ln -s ../../theano/PRESUBMIT.py pre-commit
+    chmod a+x ./pre-commit
 
-
-TODO: 
-1. figure out how to make cache working.
-4. Implement normalizations.
-5. Import CIFAR-10.
-6. Create multiple costs.
-8. Get some faster impl. of conv on CPU.
-9. Save model automatically.
-10. Mean subtraction layer, division layer, subtraction layer. Combine them to input layer.
-11. Add data_augmentation layers (like random view).
-12. Write script to visulalize weights from the first layer.
-13. Store mnist as int in 0-255 ? 
-14. Common initialization mechanism.
-15. Get predictions without additional testing.
+**TODO**
+========
+- Implement normalizations.
+- Import CIFAR-10.
+- Create multiple costs.
+- More parameters for starting execution.
+- Save mnist in float8.
+- Mean subtraction layer, division layer, subtraction layer. Combine them to input layer.
+- Add data_augmentation layers (like random view).
+- Write script to visulalize weights from the first layer.
+- Common initialization mechanism.
+- Import Pierre's model.
+- Write loss (replace cost), write L2 loss, and cross-entropy.
+- add some tests !!
