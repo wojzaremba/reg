@@ -1,10 +1,8 @@
 import sys
 import unittest
-import config
 from tests.empty_test import EmptyTests
 
 def RunTests(with_buffer, test_number=-1, test_name=None):
-  c = config.get()
   testmodules = [
     EmptyTests,
     ]
@@ -12,7 +10,6 @@ def RunTests(with_buffer, test_number=-1, test_name=None):
     testmodules = [testmodules[test_number]]
   totalTestsRun = 0
   for t in testmodules:
-    config.upload(c)
     suite = unittest.TestSuite()
     print "Running %s" % t.__name__
     if test_name is not None:
