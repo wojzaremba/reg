@@ -163,7 +163,7 @@ class LRCrossmapL(Layer):
 	N = self.in_shape[1]
 	output = x
 	for f in range(0, N):
-	  T.set_subtensor(output[:, f, :, :], x[:, f, :, :] / (1 + (self.scale / N) * T.sqr(x[:, max(0, f - self.size/2) : min(N, f + self.size/2), :, :]).sum(axis=1))**self.power())
+	  T.set_subtensor(output[:, f, :, :], x[:, f, :, :] / (1 + (self.scale / N) * T.sqr(x[:, max(0, f - self.size/2) : min(N, f + self.size/2), :, :]).sum(axis=1))**self.power)
 	self.output = output
 
 class Source(object):
