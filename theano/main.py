@@ -1,5 +1,5 @@
 from layers.bundle import SoftmaxBC, ConvB, FCB
-from layers.layer import MaxpoolL, DropoutL, LRCrossmapL, Source
+from layers.layer import MaxpoolL, DropoutL, LRSpatialL, Source
 from model import Model
 import sys
 
@@ -8,7 +8,7 @@ def conv_mnist(model):
   model.append(ConvB, {'filter_shape': (96, 1, 5, 5),
                        'subsample': (4, 4),
                        'border_mode': 'valid'})
-  model.append(LRCrossmapL, {'size': 5,
+  model.append(LRSpatialL, {'size': 5,
 							 'scale':0.001,
 							 'power':0.75})
   model.append(MaxpoolL, {'pool_shape': (2, 2)})
