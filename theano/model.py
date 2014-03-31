@@ -1,20 +1,22 @@
 import time
-
+import cPickle
 import numpy as np
 
 import theano
 import theano.tensor as T
+import os
+import config
 
 class Model(object):
 
-  def __init__(self, lr=0.13, n_epochs=100, batch_size=100):
+  def __init__(self, name, lr=0.13, n_epochs=100, batch_size=100):
     print "_" * 100
     print "Creating model lr=%f, n_epochs=%d, batch_size=%d" % \
       (lr, n_epochs, batch_size)
     self.lr = lr
     self.n_epochs = n_epochs
     self.batch_size = batch_size
-    self.out_shape = None
+    self.name = name
     self.source = None
     self.layers = []
     # XXX: if something is a cost add it here. Sum up all costs at the end.
@@ -32,7 +34,6 @@ class Model(object):
       in_shape = self.source.out_shape
     params['in_shape'] = in_shape
     l = layer(**params)
-    self.out_shape = l.out_shape
     self.layers.append(l)
     print "\tinput shape: %s, output shape: %s" % \
       (str(in_shape), str(l.out_shape))
@@ -74,18 +75,61 @@ class Model(object):
         y: self.source.train_y[idx * bs:(idx + 1) * bs]})
     return (train_model, test_model)
 
+  def save(self, epoch):
+    if not os.path.isdir(config.DUMP_DIR):
+      os.makedirs(config.DUMP_DIR)
+    dname = config.DUMP_DIR + self.name
+    if not os.path.isdir(dname):
+      os.makedirs(dname)
+    all_params = []
+    for l in self.layers:
+      params = []
+      for p in l.params:
+        params.append(p.get_value(borrow=True))
+      all_params.append(params)
+    fname = "%s/%s_%d" % (dname, self.name, epoch)
+    f = open(fname, 'w')
+    print "Saving weights %s" % (fname)
+    cPickle.dump(all_params, f)
+
+  def load(self):
+    dname = config.DUMP_DIR + self.name
+    if not os.path.isdir(dname):
+      return 0
+    epochs = [int(f[len(self.name) + 1:]) for f in os.listdir(dname)]
+    if len(epochs) == 0:
+      return 0
+    epoch = max(epochs)
+    fname = "%s/%s_%d" % (dname, self.name, epoch)
+    res = ''
+    while res != "y" and res != "Y":
+      res = raw_input("Resume %s (y), or start from scratch (n) ? : " % (fname))
+      if res == "n" or res == "N":
+        print "Starting training from beginning"
+        return 0
+    print "Loading weights from %s" % (fname)
+    f = open(fname, 'rb')
+    all_params = cPickle.load(f)
+    for l_idx in xrange(len(self.layers)):
+      l = self.layers[l_idx]
+      for p_idx in xrange(len(l.params)):
+        p = l.params[p_idx]
+        p.set_value(all_params[l_idx][p_idx])
+    return epoch + 1
+
   def train(self):
     train_model, test_model = self.build_model()
+    start_epoch = self.load()
     print '... training the model'
-    test_frequency = self.source.n_train_batches / 5
-
-    for epoch in xrange(self.n_epochs):
+    test_freq = self.source.n_train_batches / 5
+    save_freq = 5
+    for epoch in range(start_epoch, self.n_epochs):
       start_time = time.clock()
       train_res = []
       for minibatch_index in xrange(self.source.n_train_batches):
         train_res.append(train_model(minibatch_index))
         it = (epoch - 1) * self.source.n_train_batches + minibatch_index
-        if (it + 1) % test_frequency == 0:
+        if it % test_freq == 0 and it > 0:
           test_res = \
             zip(*[test_model(i) for i in xrange(self.source.n_test_batches)])
 
@@ -97,6 +141,8 @@ class Model(object):
                      (train_error, train_loss, test_error, test_loss)
       end_time = time.clock()
       print "Epoch %d took %.1fs" % (epoch, end_time - start_time)
-
+      if epoch % save_freq == 0 and epoch > 0:
+        self.save(epoch)
+    self.save(self.n_epochs - 1)
     print "Training finished !"
 

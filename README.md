@@ -14,14 +14,12 @@ Setting up hooks
 - Implement normalizations.
 - Import CIFAR-10.
 - Create multiple costs.
-- Get some faster impl. of conv on CPU.
-- Save model automatically (load it automatically with prompt).
 - More parameters for starting execution.
 - Save mnist in float8.
-- Impl fptest().
 - Mean subtraction layer, division layer, subtraction layer. Combine them to input layer.
 - Add data_augmentation layers (like random view).
 - Write script to visulalize weights from the first layer.
 - Common initialization mechanism.
 - Import Pierre's model.
-- Write L2 loss.
+- Write loss (replace cost), write L2 loss, and cross-entropy.
+- add some tests !!

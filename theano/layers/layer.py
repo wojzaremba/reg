@@ -6,7 +6,7 @@ import theano.tensor as T
 from theano.tensor.signal import downsample
 from numpy import random
 from theano.tensor.nnet import conv
-from os.path import expanduser
+import config
 
 class Layer(object):
   def __init__(self, in_shape):
@@ -164,9 +164,8 @@ class Source(object):
 
   def load_data(self):
     floatX = theano.config.floatX
-    print '\tloading data', self.dataset
-    home = expanduser("~")
-    fname = "%s/data/%s/data.pkl.gz" % (home, self.dataset)
+    fname = "%s/%s/data.pkl.gz" % (config.DATA_DIR, self.dataset)
+    print '\tloading data %s from %s' % (self.dataset, fname)
     f = gzip.open(fname, 'rb')
     train_set, test_set = cPickle.load(f)
     f.close()
