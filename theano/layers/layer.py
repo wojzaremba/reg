@@ -43,6 +43,8 @@ class Layer(object):
     return updates
 
   def get_costs(self, (x, y), train):
+    # Due to circular dependency.
+    from layers.cost import Cost
     if isinstance(self, Cost):
       costs = [self]
     else:
@@ -73,25 +75,6 @@ class Layer(object):
       self.params[p_idx].set_value(params[p_idx])
     for l_idx in xrange(len(self.succ)):
       self.succ[l_idx].load(parent_params[l_idx])
-
-class Cost(Layer):
-  def __init__(self, prev_layer):
-    Layer.__init__(self, prev_layer)
-    self.output = None
-    self.prob = None
-
-  def pred(self):
-    return T.argmax(self.prob, axis=1)
-
-  def errors(self, y):
-    pred = self.pred()
-    if y.ndim != pred.ndim:
-      raise TypeError('y should have the same shape as self.pred()',
-        ('y', y.type, 'pred', pred.type))
-    if y.dtype.startswith('int'):
-      return T.mean(T.neq(pred, y))
-    else:
-      raise NotImplementedError()
 
 class DropoutL(Layer):
   def __init__(self, p=0.5, prev_layer=None):
@@ -148,16 +131,6 @@ class ConvL(Layer):
       filter_shape=self.filter_shape, image_shape=self.in_shape,
       subsample=self.subsample, border_mode=self.border_mode)
 
-class SoftmaxC(Cost):
-  def __init__(self, prev_layer=None):
-    Cost.__init__(self, prev_layer)
-    self.out_shape = self.in_shape
-    self.params = []
-
-  def fp(self, x, y):
-    self.prob = T.nnet.softmax(x)
-    self.output = -T.mean(T.log(self.prob)[T.arange(y.shape[0]), y])
-
 class BiasL(Layer):
   def __init__(self, prev_layer=None):
     Layer.__init__(self, prev_layer)
@@ -174,7 +147,6 @@ class BiasL(Layer):
       self.output = x + self.b
     else:
       assert False
-
 
 class ActL(Layer):
   def __init__(self, f, prev_layer=None):

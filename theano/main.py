@@ -1,5 +1,6 @@
 from layers.bundle import SoftmaxBC, ConvB, FCB
-from layers.layer import MaxpoolL, DropoutL, LRSpatialL, Source
+from layers.layer import MaxpoolL, DropoutL, LRSpatialL, Source, FCL, BiasL
+from layers.cost import WL2C
 from model import Model
 import sys
 
@@ -12,6 +13,14 @@ def conv_mnist(model):
 							 'scale':0.001,
 							 'power':0.75})\
   .attach(MaxpoolL, {'pool_shape': (2, 2)})\
+  .attach(SoftmaxBC, {'out_len': 10})
+  return model
+
+def fc_reg_mnist(model):
+  fc = model.set_source(Source, {'dataset': 'mnist'})\
+  .attach(FCL, {'out_len': 200})
+  fc.attach(WL2C, {'alpha': 0.01})
+  fc.attach(BiasL, {})\
   .attach(SoftmaxBC, {'out_len': 10})
   return model
 

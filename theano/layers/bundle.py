@@ -1,4 +1,5 @@
-from layers.layer import FCL, BiasL, ReluL, SoftmaxC, ConvL
+from layers.layer import FCL, BiasL, ReluL, ConvL
+from layers.cost import SoftmaxC
 
 def FCB(out_len, prev_layer=None):
   return prev_layer.attach(FCL, {'out_len': out_len})\

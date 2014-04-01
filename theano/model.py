@@ -24,6 +24,7 @@ class Model(object):
     self.source = source(**params)
     return self.source
 
+
   def build_model(self):
     print '\n... building the model'
     idx = T.lscalar()
@@ -31,20 +32,21 @@ class Model(object):
     x = T.tensor4('x')
     y = T.ivector('y')
     s = self.source
-    # XXX : Here should be sum over costs.
-    cost_test = s.get_costs((x, y), False)[0]
+    costs_test = s.get_costs((x, y), False)
+    (cost, errors) = sum_costs(costs_test, True)
 
     test_model = theano.function(inputs=[idx],
-      outputs=[cost_test.errors(y), cost_test.output],
+      outputs=[errors(y), cost],
       givens={
         x: s.test_x[idx * bs: (idx + 1) * bs],
         y: s.test_y[idx * bs: (idx + 1) * bs]})
 
-    cost_train = s.get_costs((x, y), True)[0]
-    updates = s.get_updates(self.lr, cost_train.output)
 
+    costs_train = s.get_costs((x, y), True)
+    (cost, errors) = sum_costs(costs_train, False)
+    updates = s.get_updates(self.lr, cost)
     train_model = theano.function(inputs=[idx],
-      outputs=[cost_train.errors(y), cost_train.output],
+      outputs=[errors(y), cost],
       updates=updates,
       givens={
         x: s.train_x[idx * bs:(idx + 1) * bs],
@@ -110,3 +112,21 @@ class Model(object):
         self.save(epoch)
     self.save(self.n_epochs - 1)
     print "Training finished !"
+
+##### End of Model class
+
+def sum_costs(costs, print_on):
+  cost = 0
+  if print_on:
+    print "Costs:"
+  errors = None
+  for c in costs:
+    if print_on:
+      print c.__class__.__name__
+    cost = cost + c.output
+    if c.is_classifier:
+      assert errors is None
+      errors = c.errors
+  if print_on:
+    print
+  return (cost, errors)
