@@ -169,8 +169,7 @@ class BiasL(Layer):
 
   def fp(self, x, _):
     if len(self.in_shape) == 4:
-      tmp = x.dimshuffle((0, 2, 3, 1)) + self.b
-      self.output = tmp.dimshuffle((0, 3, 1, 2))
+      self.output = x + self.b.dimshuffle('x', 0, 'x', 'x')
     elif len(self.in_shape) == 2:
       self.output = x + self.b
     else:
@@ -205,6 +204,48 @@ class MaxpoolL(Layer):
 
   def fp(self, x, _):
     self.output = downsample.max_pool_2d(x, self.pool_shape, self.ignore_border)
+
+class LRCrossmapL(Layer):
+  def __init__(self, size, scale=0.001, power=0.75, prev_layer=None):
+    Layer.__init__(self, prev_layer)
+    self.out_shape = self.in_shape
+    self.scale = scale
+    self.power = power
+    self.size = size
+    self.params = []
+
+  def fp(self, x, _):
+    N = self.in_shape[1]
+    output = x
+    for f in range(0, N):
+      T.set_subtensor(output[:, f, :, :],
+		x[:, f, :, :] /
+		(1 + (self.scale / self.size)
+		* T.sqr(x[:, max(0, f - self.size/2) : min(N, f + self.size/2),
+				  :, :]).sum(axis=1))**self.power)
+    self.output = output
+
+class LRSpatialL(Layer):
+  def __init__(self, size, scale=0.001, power=0.75, prev_layer=None):
+    Layer.__init__(self, prev_layer)
+    self.out_shape = self.in_shape
+    self.scale = scale
+    self.power = power
+    self.size = size
+    self.params = []
+
+  def fp(self, x, _):
+    X, Y = self.in_shape[2:]
+    output = x
+    for i in range(0, X):
+      for j in range(0, Y):
+        T.set_subtensor(output[:, :, i, j],
+		  x[:, :, i, j] /
+		  (1 + (self.scale / self.size**2)
+		  * T.sqr(x[:, :, max(0, i - self.size/2) : min(X, i + self.size/2),
+				    max(0, j - self.size/2) : min(Y, j + self.size/2)])
+				.sum(axis=(2, 3)))**self.power)
+    self.output = output
 
 class Source(Layer):
   def __init__(self, dataset, batch_size):
