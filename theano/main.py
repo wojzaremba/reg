@@ -4,25 +4,25 @@ from model import Model
 import sys
 
 def conv_mnist(model):
-  model.set_source(Source, {'dataset': 'mnist'})
-  model.append(ConvB, {'filter_shape': (96, 1, 5, 5),
-                       'subsample': (4, 4),
-                       'border_mode': 'valid'})
-  model.append(MaxpoolL, {'pool_shape': (2, 2)})
-  model.append(SoftmaxBC, {'out_len': 10})
+  model.set_source(Source, {'dataset': 'mnist'})\
+  .attach(ConvB, {'filter_shape': (96, 1, 5, 5),
+                  'subsample': (4, 4),
+                  'border_mode': 'valid'})\
+  .attach(MaxpoolL, {'pool_shape': (2, 2)})\
+  .attach(SoftmaxBC, {'out_len': 10})
   return model
 
 def fc_mnist(model):
-  model.set_source(Source, {'dataset': 'mnist'})
-  model.append(FCB, {'out_len': 200})
-  model.append(SoftmaxBC, {'out_len': 10})
+  model.set_source(Source, {'dataset': 'mnist'})\
+  .attach(FCB, {'out_len': 200})\
+  .attach(SoftmaxBC, {'out_len': 10})
   return model
 
 def fc_do_mnist(model):
-  model.set_source(Source, {'dataset': 'mnist'})
-  model.append(FCB, {'out_len': 200})
-  model.append(DropoutL, {})
-  model.append(SoftmaxBC, {'out_len': 10})
+  model.set_source(Source, {'dataset': 'mnist'})\
+  .attach(FCB, {'out_len': 200})\
+  .attach(DropoutL, {})\
+  .attach(SoftmaxBC, {'out_len': 10})
   return model
 
 def main():

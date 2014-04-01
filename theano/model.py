@@ -18,25 +18,11 @@ class Model(object):
     self.batch_size = batch_size
     self.name = name
     self.source = None
-    self.layers = []
-    # XXX: if something is a cost add it here. Sum up all costs at the end.
-    self.costs = []
 
   def set_source(self, source, params):
     params['batch_size'] = self.batch_size
     self.source = source(**params)
-
-  def append(self, layer, params):
-    print "Adding layer", layer.__name__
-    if len(self.layers) > 0:
-      in_shape = self.layers[-1].out_shape
-    else:
-      in_shape = self.source.out_shape
-    params['in_shape'] = in_shape
-    l = layer(**params)
-    self.layers.append(l)
-    print "\tinput shape: %s, output shape: %s" % \
-      (str(in_shape), str(l.out_shape))
+    return self.source
 
   def build_model(self):
     print '\n... building the model'
@@ -44,35 +30,25 @@ class Model(object):
     bs = self.batch_size
     x = T.tensor4('x')
     y = T.ivector('y')
-    x_out = x
-    for l in self.layers:
-      l.fptest(x_out, y)
-      x_out = l.output
-    cost_test = self.layers[-1]
+    s = self.source
+    # XXX : Here should be sum over costs.
+    cost_test = s.get_costs((x, y), False)[0]
 
     test_model = theano.function(inputs=[idx],
       outputs=[cost_test.errors(y), cost_test.output],
       givens={
-        x: self.source.test_x[idx * bs: (idx + 1) * bs],
-        y: self.source.test_y[idx * bs: (idx + 1) * bs]})
+        x: s.test_x[idx * bs: (idx + 1) * bs],
+        y: s.test_y[idx * bs: (idx + 1) * bs]})
 
-    x_out = x
-    for l in self.layers:
-      l.fp(x_out, y)
-      x_out = l.output
-    cost_train = self.layers[-1]
-    updates = []
-    for l in self.layers:
-      for p in l.params:
-        g = T.grad(cost=cost_train.output, wrt=p)
-        updates.append((p, p - self.lr * g))
+    cost_train = s.get_costs((x, y), True)[0]
+    updates = s.get_updates(self.lr, cost_train.output)
 
     train_model = theano.function(inputs=[idx],
       outputs=[cost_train.errors(y), cost_train.output],
       updates=updates,
       givens={
-        x: self.source.train_x[idx * bs:(idx + 1) * bs],
-        y: self.source.train_y[idx * bs:(idx + 1) * bs]})
+        x: s.train_x[idx * bs:(idx + 1) * bs],
+        y: s.train_y[idx * bs:(idx + 1) * bs]})
     return (train_model, test_model)
 
   def save(self, epoch):
@@ -81,16 +57,10 @@ class Model(object):
     dname = config.DUMP_DIR + self.name
     if not os.path.isdir(dname):
       os.makedirs(dname)
-    all_params = []
-    for l in self.layers:
-      params = []
-      for p in l.params:
-        params.append(p.get_value(borrow=True))
-      all_params.append(params)
     fname = "%s/%s_%d" % (dname, self.name, epoch)
     f = open(fname, 'w')
     print "Saving weights %s" % (fname)
-    cPickle.dump(all_params, f)
+    cPickle.dump(self.source.dump(), f)
 
   def load(self):
     dname = config.DUMP_DIR + self.name
@@ -109,12 +79,7 @@ class Model(object):
         return 0
     print "Loading weights from %s" % (fname)
     f = open(fname, 'rb')
-    all_params = cPickle.load(f)
-    for l_idx in xrange(len(self.layers)):
-      l = self.layers[l_idx]
-      for p_idx in xrange(len(l.params)):
-        p = l.params[p_idx]
-        p.set_value(all_params[l_idx][p_idx])
+    self.source.load(cPickle.load(f))
     return epoch + 1
 
   def train(self):
@@ -145,4 +110,3 @@ class Model(object):
         self.save(epoch)
     self.save(self.n_epochs - 1)
     print "Training finished !"
-
