@@ -41,7 +41,6 @@ class Model(object):
         x: s.test_x[idx * bs: (idx + 1) * bs],
         y: s.test_y[idx * bs: (idx + 1) * bs]})
 
-
     costs_train = s.get_costs((x, y), True)
     (cost, errors) = sum_costs(costs_train, False)
     updates = s.get_updates(self.lr, cost)

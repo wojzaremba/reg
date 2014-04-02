@@ -188,14 +188,13 @@ class LRCrossmapL(Layer):
 
   def fp(self, x, _):
     N = self.in_shape[1]
-    output = x
+    self.output = T.zeros_like(x)
     for f in range(0, N):
-      T.set_subtensor(output[:, f, :, :],
+      self.output = T.set_subtensor(self.output[:, f, :, :],
 		x[:, f, :, :] /
 		(1 + (self.scale / self.size)
-		* T.sqr(x[:, max(0, f - self.size/2) : min(N, f + self.size/2),
+		* T.sqr(x[:, max(0, f - self.size/2) : min(N, 1 + f + self.size/2),
 				  :, :]).sum(axis=1))**self.power)
-    self.output = output
 
 class LRSpatialL(Layer):
   def __init__(self, size, scale=0.001, power=0.75, prev_layer=None):
@@ -218,6 +217,13 @@ class LRSpatialL(Layer):
 				    max(0, j - self.size/2) : min(Y, j + self.size/2)])
 				.sum(axis=(2, 3)))**self.power)
     self.output = output
+
+class EmptyL(Layer):
+  def __init__(self, in_shape):
+    Layer.__init__(self, None)
+    self.in_shape = in_shape
+    self.out_shape = in_shape
+    self.params = []
 
 class Source(Layer):
   def __init__(self, dataset, batch_size):
