@@ -7,8 +7,8 @@ from layers.layer import EmptyL, LRCrossmapL
 class NormalizationTests(unittest.TestCase):
 
   def testLRCrossmap(self):
-    size = 5
-    scale = 1.
+    size = 24
+    scale = 0.01
     power = 0.5
     N = 5
     shape = [10, N, 5, 5]

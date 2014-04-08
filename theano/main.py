@@ -1,8 +1,19 @@
 from layers.bundle import SoftmaxBC, ConvB, FCB
-from layers.layer import MaxpoolL, DropoutL, LRSpatialL, Source, FCL, BiasL
+from layers.layer import MaxpoolL, DropoutL, LRSpatialL
+from layers.layer import  Source, FCL, BiasL, LRCrossmapL
 from layers.cost import WL2C
 from model import Model
 import sys
+
+def conv_cifar(model):
+  model.set_source(Source, {'dataset': 'cifar10'}) \
+  .attach(ConvB, {'filter_shape': (64, 3, 5, 5),
+				  'subsample': (2, 2),
+				  'border_mode': 'valid'})\
+  .attach(LRCrossmapL, {'size': 5})\
+  .attach(FCB, {'out_len': 64})\
+  .attach(SoftmaxBC, {'out_len': 10})
+  return model
 
 def conv_mnist(model):
   model.set_source(Source, {'dataset': 'mnist'})\
