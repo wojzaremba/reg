@@ -9,7 +9,7 @@ import config
 
 class Model(object):
 
-  def __init__(self, name, lr=0.13, n_epochs=100, batch_size=100):
+  def __init__(self, name, lr=0.13, n_epochs=100, batch_size=128, on_gpu=False):
     print "_" * 100
     print "Creating model lr=%f, n_epochs=%d, batch_size=%d" % \
       (lr, n_epochs, batch_size)
@@ -17,6 +17,7 @@ class Model(object):
     self.n_epochs = n_epochs
     self.batch_size = batch_size
     self.name = name
+    self.on_gpu = on_gpu
     self.source = None
 
   def set_source(self, source, params):
@@ -88,7 +89,7 @@ class Model(object):
     start_epoch = self.load()
     print '... training the model'
     test_freq = self.source.n_train_batches / 5
-    save_freq = 5
+    save_freq = 2
     for epoch in range(start_epoch, self.n_epochs):
       start_time = time.clock()
       train_res = []

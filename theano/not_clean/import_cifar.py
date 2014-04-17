@@ -1,10 +1,9 @@
 import cPickle
 import gzip
 import numpy as np
-import matplotlib.pyplot as plt
 
 def unpickle(name):
-  fname = '/Users/Denton/Downloads/cifar-10-batches-py/' + name
+  fname = '/home/denton/Downloads/cifar-10-batches-py/' + name
   fo = open(fname, 'rb')  
   dict = cPickle.load(fo)
   fo.close()
@@ -28,7 +27,7 @@ if __name__ == '__main__':
   labels = dict1['labels']
   test_set = (data, labels) 
  
-  f = open('/Users/Denton/data/cifar10/data.pkl', 'wb')
+  f = open('/home/denton/data/cifar10/data.pkl', 'wb')
   cPickle.dump( (train_set, test_set), f)
 
   dict1 = unpickle('test_batch')
@@ -36,5 +35,5 @@ if __name__ == '__main__':
   labels = dict1['labels']
   data = data.reshape((10000, 3, 32, 32)) 
   test_set = (data, labels) 
-  f = open('/Users/Denton/data/cifar10/data_test.pkl', 'wb')
+  f = open('/home/denton/data/cifar10/data_test.pkl', 'wb')
   cPickle.dump(test_set, f)
