@@ -10,6 +10,10 @@ classdef Dropout < Layer
             obj.Finalize();
         end
         
+        function FPgpu(obj)
+            assert(0)
+        end
+        
         function FP(obj)
             global plan;
             vars = obj.cpu.vars;
@@ -25,6 +29,10 @@ classdef Dropout < Layer
                 out = vars.X * (1 - obj.p);
             end
             obj.cpu.vars.out = out;
+        end
+        
+        function BPgpu(obj)
+            assort(0)
         end
         
         function BP(obj)                

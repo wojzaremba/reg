@@ -16,6 +16,17 @@ classdef Softmax < Layer
             assert(pdims(3) > 1);
         end
         
+        function FPgpu(obj)
+            assert(obj.beta == 1);
+            v = obj.gpu.vars;
+            C_(Max, v.X, 1, v.max);
+            C_(AddVector, v.X, v.max, v.pred);
+            C_(ActEXP, v.pred, v.pred);            
+            C_(Sum, v.pred, 1, v.sum);
+            C_(EltwiseDivideByVector, v.pred, v.sum);
+            % missing part to generate out.
+        end
+        
         function FP(obj)
             global plan
             X = obj.cpu.vars.X(:, :);
@@ -25,6 +36,10 @@ classdef Softmax < Layer
             pred = X ./ repmat(sum(X, 2), 1, size(X, 2));
             obj.cpu.vars.pred = reshape(pred, size(X));
             obj.cpu.vars.out = -log(pred(logical(plan.input.cpu.vars.Y)));
+        end
+        
+        function BPgpu(obj)
+            assert(0)
         end
         
         function BP(obj)
@@ -43,7 +58,11 @@ classdef Softmax < Layer
         
         function incorrect = GetScore(obj, top)
             global plan
-            X = obj.cpu.vars.X;
+            if (~obj.on_gpu)
+                X = obj.cpu.vars.X;
+            else
+                X = C_(CopyFromGPU, obj.gpu.vars.X);
+            end
             if (~exist('top', 'var'))
                 top = 1;
             end

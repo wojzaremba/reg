@@ -1,7 +1,7 @@
 import time
 import cPickle
 import numpy as np
-
+from subprocess import call
 import theano
 import theano.tensor as T
 import os
@@ -57,6 +57,7 @@ class Model(object):
     if not os.path.isdir(config.DUMP_DIR):
       os.makedirs(config.DUMP_DIR)
     dname = config.DUMP_DIR + self.name
+    call(["rm", "-rf", "%s" % dname])
     if not os.path.isdir(dname):
       os.makedirs(dname)
     fname = "%s/%s_%d" % (dname, self.name, epoch)
@@ -107,7 +108,7 @@ class Model(object):
           print '\ttrain err=%.2f%%,loss=%.5f;  test err=%.2f%%,loss=%.5f''' % \
                      (train_error, train_loss, test_error, test_loss)
       end_time = time.clock()
-      print "Epoch %d took %.1fs" % (epoch, end_time - start_time)
+      print "Epoch %d took %.1fs" % (epoch, (end_time - start_time) / 10.0)
       if epoch % save_freq == 0 and epoch > 0:
         self.save(epoch)
     self.save(self.n_epochs - 1)

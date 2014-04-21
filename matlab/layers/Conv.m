@@ -1,4 +1,3 @@
-
 classdef Conv < Layer
     properties
     end
@@ -9,6 +8,18 @@ classdef Conv < Layer
             obj.Finalize();
         end                      
        
+        function FPgpu(obj)
+            global plan
+            bs = plan.input.batch_size;
+            v = obj.gpu.vars;
+            pdims = obj.prev_dim();
+            C_(ConvAct, v.X, v.W, v.out, pdims(2), pdims(3), obj.patch(1), obj.stride(1), obj.padding(1));
+            C_(Reshape, v.out, bs * obj.dims(1) * obj.dims(2), obj.depth());
+            C_(AddVector, v.out, v.B, v.out);
+            C_(Reshape, v.out, obj.dims(1) * obj.dims(2) * obj.depth(), bs);
+            C_(obj.Fun_, v.out, v.out);            
+        end
+        
         function FP(obj)
             global plan
             prev_dim = obj.prev_dim();
@@ -37,7 +48,11 @@ classdef Conv < Layer
             obj.cpu.vars.stacked = stacked;            
             obj.cpu.vars.out = obj.F(results);
         end         
-          
+        
+        function BPgpu(obj)
+            assert(0)
+        end
+        
         function BP(obj)
             global plan
             v = obj.cpu.vars;
@@ -52,7 +67,7 @@ classdef Conv < Layer
             obj.cpu.vars.pact = pact;
             bs = size(data, 1);
             dX_ = zeros(size(X, 1), size(X, 2) + obj.padding(1) * 2 + obj.patch(1), size(X, 3) + obj.padding(2) * 2 + obj.patch(2), size(X, 4));                
-            if (obj.layer_nr > 2) || (plan.training == 0)
+            if (obj.layer_nr > 2)
                 for x = 1:obj.dims(1)
                     sx = (x - 1) * obj.stride(1) + 1;
                     ex = sx + obj.patch(1) - 1;                    

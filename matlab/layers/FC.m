@@ -8,6 +8,13 @@ classdef FC < Layer
             obj.Finalize();
         end      
         
+        function FPgpu(obj)
+            v = obj.gpu.vars;
+            C_(Mult, v.X, v.W, v.out);
+            C_(AddVector, v.out, v.B, v.out);
+            C_(obj.Fun_, v.out, v.out);
+        end
+        
         function FP(obj)
             v = obj.cpu.vars;            
             act = v.X(:, :) * v.W(:, :);
@@ -16,6 +23,24 @@ classdef FC < Layer
             obj.cpu.vars.out = obj.F(act);
         end
         
+        function BPgpu(obj)
+            dv = obj.gpu.dvars;
+            v = obj.gpu.vars;
+            if (obj.dFun_ == dActLINEAR)
+                v.out = dv.out;
+            else
+                C_(obj.dFun_, v.out, v.out);                      
+                C_(EltwiseMult, v.out, dv.out, v.out);  
+            end
+            C_(Sum, v.out, 0, dv.B);            
+            C_(Transpose, v.X);
+            C_(Mult, v.X, v.out, dv.W);
+            C_(Transpose, v.W);
+            C_(Mult, v.out, v.W, dv.X);
+            C_(Transpose, v.X);            
+            C_(Transpose, v.W);      
+        end
+
         function BP(obj)
             X = obj.cpu.vars.X;
             W = obj.cpu.vars.W;

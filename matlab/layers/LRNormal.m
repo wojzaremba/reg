@@ -21,6 +21,11 @@ classdef LRNormal < Layer
             end
         end
         
+        function FPgpu(obj)
+            v = obj.gpu.vars;
+            C_(ConvResponseNormCrossMap, v.X, v.denoms, v.out, obj.depth(), obj.n, obj.k, obj.alpha, obj.beta);
+        end
+        
         function FP(obj)
             X = obj.cpu.vars.X;
             normal = zeros(size(X), class(X));
@@ -29,6 +34,10 @@ classdef LRNormal < Layer
             end            
             obj.cpu.vars.normal = normal;
             obj.cpu.vars.out = X ./ (normal .^ obj.beta);
+        end      
+        
+        function BPgpu(obj)
+            assert(0)
         end
         
         function BP(obj)

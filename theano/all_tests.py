@@ -1,12 +1,12 @@
 import sys
 import unittest
 from tests.empty_test import EmptyTests
-from tests.normalization_layer_test import NormalizationTests
+#from tests.normalization_layer_test import NormalizationTests
 
 def RunTests(with_buffer, test_number=-1, test_name=None):
   testmodules = [
     EmptyTests,
-    NormalizationTests,
+    #NormalizationTests,
     ]
   if test_number != -1:
     testmodules = [testmodules[test_number]]

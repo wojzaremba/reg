@@ -8,6 +8,11 @@ classdef MaxPooling < Layer
             obj.Finalize();
         end
         
+        function FPgpu(obj)
+            v = obj.gpu.vars;
+            C_(MaxPool, v.X, v.out, obj.depth(), obj.patch(1), obj.stride(1), obj.dims(1));            
+        end
+        
         function FP(obj)
             X = obj.cpu.vars.X;
             dims = obj.dims;
@@ -28,6 +33,10 @@ classdef MaxPooling < Layer
             out = permute(out, [1, 3, 4, 2]);
             obj.cpu.vars.idx = idx;
             obj.cpu.vars.out = out;
+        end    
+        
+        function BPgpu(obj)
+            assert(0)
         end
         
         function BP(obj)

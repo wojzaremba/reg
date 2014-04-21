@@ -1,4 +1,5 @@
 import cPickle
+import pickle
 import gzip
 import numpy as np
 import theano
@@ -95,7 +96,8 @@ class DropinL(Layer):
     else:
       srng = T.shared_randomstreams.RandomStreams(self.rng.randint(2))
       mask = srng.binomial(n=1, p=1-self.p, size=self.in_shape)
-      self.output = self.prev_acts * T.cast(mask, theano.config.floatX) + x * T.cast(1 - mask, theano.config.floatX)
+      self.output = self.prev_acts * T.cast(mask, theano.config.floatX) \
+                    + x * T.cast(1 - mask, theano.config.floatX)
       self.prev_acts = x
 
   def fptest(self, x, _):
@@ -146,12 +148,12 @@ class ConvL(Layer):
     self.border_mode = border_mode
     self.on_gpu = on_gpu
     if on_gpu:
-      assert(self.border_mode == 'full')
-      assert(filter_shape[0] <= 3 or filter_shape[0] % 2 == 0)
-      assert(filter_shape[2] == filter_shape[3])
-      assert(filter_shape[0] % 16 == 0)
-      assert(filter_shape[0] % 4 == 0)
-      assert(self.subsample[0] == self.subsample[1])
+      assert self.border_mode == 'full'
+      assert filter_shape[1] <= 3 or filter_shape[1] % 2 == 0
+      assert filter_shape[2] == filter_shape[3]
+      assert filter_shape[0] % 16 == 0
+      assert filter_shape[0] % 4 == 0
+      assert self.subsample[0] == self.subsample[1]
 
     # TODO: Doesn't care about border.
     self.out_shape = (self.in_shape[0],
@@ -162,6 +164,7 @@ class ConvL(Layer):
 
   def fp(self, x, _):
     if self.on_gpu:
+      print "conv on gpu..."
       conv_op = FilterActs(stride=self.subsample[0])
       input_shuffled = x.dimshuffle(1, 2, 3, 0) # bc01 to c01b
       filters_shuffled = self.W.dimshuffle(1, 2, 3, 0) # bc01 to c01b
@@ -208,7 +211,8 @@ class ReluL(ActL):
 
 
 class MaxpoolL(Layer):
-  def __init__(self, pool_shape, stride=(1,1), ignore_border=True, prev_layer=None, on_gpu=False):
+  def __init__(self, pool_shape, stride=(1, 1), ignore_border=True,
+                prev_layer=None, on_gpu=False):
     Layer.__init__(self, prev_layer)
     self.pool_shape = pool_shape
     self.ignore_border = ignore_border
@@ -216,24 +220,26 @@ class MaxpoolL(Layer):
                       (self.in_shape[2] - pool_shape[0]) / stride[0] + 1,
                       (self.in_shape[3] - pool_shape[1]) / stride[1] + 1)
     self.on_gpu = on_gpu
-    self.stride = stride 
+    self.stride = stride
     if on_gpu:
-      assert(stride[0] == stride[0])
-      assert(pool_shape[0] == pool_shape[1])
+      assert stride[0] == stride[0]
+      assert pool_shape[0] == pool_shape[1]
 
     self.params = []
 
   def fp(self, x, _):
     if self.on_gpu:
-      pool_op = MaxPool(ds=self.pool_shape[0], stride=self.stride[0], start=0, outputs=0)
+      pool_op = MaxPool(ds=self.pool_shape[0], stride=self.stride[0],
+                        start=0, outputs=0)
       input_shuffled = x.dimshuffle(1, 2, 3, 0) # bc01 to c01b
       contiguous_input = gpu_contiguous(input_shuffled)
       out_shuffled = pool_op(contiguous_input)
       self.output = out_shuffled.dimshuffle(3, 0, 1, 2) # c01b to bc01
-      # Get rid of border 
-      self.output = self.output[:, :, 0:self.out_shape[2], 0:self.out_shape[3]] 
+      # Get rid of border
+      self.output = self.output[:, :, 0:self.out_shape[2], 0:self.out_shape[3]]
     else:
-      self.output = downsample.max_pool_2d(x, self.pool_shape, self.ignore_border)
+      self.output = downsample.max_pool_2d(x, self.pool_shape,
+                                          self.ignore_border)
 
 class LRCrossmapL(Layer):
   def __init__(self, size, scale=0.001, power=0.75, prev_layer=None):
@@ -303,8 +309,12 @@ class Source(Layer):
     floatX = theano.config.floatX
     fname = "%s/%s/data.pkl.gz" % (config.DATA_DIR, self.dataset)
     print '\tloading data %s from %s' % (self.dataset, fname)
-    f = gzip.open(fname, 'rb')
-    train_set, test_set = cPickle.load(f)
+    try:
+      f = gzip.open(fname, 'rb')
+      train_set, test_set = cPickle.load(f)
+    except TypeError:
+      f = gzip.open(fname, 'rb')
+      train_set, test_set = pickle.load(f)
     f.close()
     def shared_dataset(data_xy, borrow=True):
       data_x, data_y = data_xy
