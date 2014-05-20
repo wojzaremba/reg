@@ -20,7 +20,7 @@ classdef MaxPooling < Layer
             out = zeros([bs, dims(3), dims(1), dims(2)], class(X));
             idx = zeros([bs, dims(3), dims(1), dims(2)], class(X));
             X = permute(X, [1, 4, 2, 3]);
-            X_ = zeros(size(X, 1), size(X, 2), size(X, 3) + obj.patch(1), size(X, 4) + obj.patch(2));
+            X_ = ones(size(X, 1), size(X, 2), size(X, 3) + obj.patch(1), size(X, 4) + obj.patch(2)) * (-Inf);
             X_(:, :, 1:size(X, 3), 1:size(X, 4)) = X;
             for b = 1:dims(1)
                 for c = 1:dims(2)
