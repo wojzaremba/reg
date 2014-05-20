@@ -50,7 +50,19 @@ classdef Conv < Layer
         end         
         
         function BPgpu(obj)
-            assert(0)
+            global plan
+            bs = plan.input.batch_size;
+            v = obj.gpu.vars;
+            d = obj.gpu.dvars;
+            prev_dim = obj.prev_dim();
+            C_(dActRELU, v.out, v.out); % XXX : changing v.out
+            C_(EltwiseMult, d.out, v.out, v.out); 
+            C_(ConvActUndo, v.out, v.X, d.X, d.W, v.W, prev_dim(1), prev_dim(3), obj.patch(1), obj.stride(1), obj.padding(1));
+            C_(Transpose, v.out);
+            C_(Reshape, v.out, obj.dims(3), obj.dims(1) * obj.dims(2) * bs);
+            C_(Sum, v.out, 0, d.B);
+            C_(Transpose, v.out);
+            C_(Transpose, d.B);
         end
         
         function BP(obj)
@@ -94,5 +106,5 @@ classdef Conv < Layer
 end
 
 function json = FillDefault(json)
-json.type = 'Conv';
+    json.type = 'Conv';
 end

@@ -7,9 +7,6 @@
 #define	CONV_UTIL_CUH
 
 #include "nvmatrix.cuh"
-#include "nvmatrix_kernels.cuh"
-#include "nvmatrix_operators.cuh"
-#include "nvmatrix_shared.cuh"
 
 void convLocalMaxUndo(NVMatrix& images, NVMatrix& maxGrads, NVMatrix& maxActs, NVMatrix& target,
                       int subsX, int startX, int strideX, int outputsX);

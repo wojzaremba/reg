@@ -3,16 +3,19 @@ classdef Layer < handle
         type
         dims % Output dimensions.
         cpu % variables stored on CPU. Contains parameters.
+        gpu % variables stored on GPU. Contains parameters.
         json 
         layer_nr 
         Fun % Activation function.
         dFun % Derivative of activation function.        
         Fun_ % Activation function on GPU.
+        dFun_
         patch
         stride
         padding
         gids %
         name
+        on_gpu
     end
     
     methods
@@ -33,9 +36,17 @@ classdef Layer < handle
             obj.type = json.type;
             fname = Val(json, 'function', 'RELU');
             obj.Fun = eval(sprintf('@%s;', fname));
-            obj.dFun = eval(sprintf('@d%s;', fname));            
+            obj.dFun = eval(sprintf('@d%s;', fname));  
+             try
+                obj.Fun_ = eval(sprintf('Act%s', fname));
+                obj.dFun_ = eval(sprintf('dAct%s', fname));                        
+            catch
+                fprintf('Act%s or dAct%s not implemented on GPU\n', fname, fname);
+            end
             obj.cpu = struct('vars', struct(), 'dvars', struct(), 'accum', struct());
+            obj.gpu = struct('vars', struct(), 'dvars', struct(), 'accum', struct());
             obj.layer_nr = length(plan.layer) + 1;
+            obj.on_gpu = Val(json, 'on_gpu', plan.default_on_gpu);
             obj.name = Val(json, 'name', [json.type, num2str(obj.layer_nr)]);            
         end
         
@@ -156,15 +167,58 @@ classdef Layer < handle
                 return;
             end 
             momentum = plan.momentum;
-            f = fields(layer.cpu.dvars);
-            for i = 1:length(f)
-		if (strcmp(f{i}, 'X')) || (strcmp(f{i}, 'out'))
-		    continue;
-		end 
-		name = f{i};    
-		eval(sprintf('layer.cpu.accum.%s = (1 - momentum) * layer.cpu.dvars.%s / plan.input.batch_size + momentum * layer.cpu.accum.%s;', name, name, name));
-		eval(sprintf('layer.cpu.vars.%s = layer.cpu.vars.%s - lr * layer.cpu.accum.%s;', name, name, name));
-	    end 
+            if (~layer.on_gpu)
+                f = fields(layer.cpu.dvars);
+                for i = 1:length(f)
+                    if (strcmp(f{i}, 'X')) || (strcmp(f{i}, 'out'))
+                        continue;
+                    end
+                    name = f{i};                 
+                    eval(sprintf('layer.cpu.accum.%s = (1 - momentum) * layer.cpu.dvars.%s / plan.input.batch_size + momentum * layer.cpu.accum.%s;', name, name, name));
+                    eval(sprintf('layer.cpu.vars.%s = layer.cpu.vars.%s - lr * layer.cpu.accum.%s;', name, name, name));
+                end
+            else                
+                f = fields(layer.gpu.dvars);
+                for i = 1:length(f)
+                    if (strcmp(f{i}, 'X')) || (strcmp(f{i}, 'out')) || (strcmp(f{i}, 'max')) || (strcmp(f{i}, 'sum')) || (strcmp(f{i}, 'forward_act')) || (strcmp(f{i}, 'pred')) % Don't backprop sum and max (just temp vars) from softmax
+                        continue;
+                    end
+                    name = f{i};
+                    vars_gid = eval(sprintf('layer.gpu.vars.%s', name));
+                    dvars_gid = eval(sprintf('layer.gpu.dvars.%s', name));
+                    accum_gid = eval(sprintf('layer.gpu.accum.%s', name));
+                    
+                    % Copy back to cpu
+                    eval(sprintf('layer.cpu.vars.%s = C_(CopyFromGPU, vars_gid);', name));
+                    eval(sprintf('layer.cpu.dvars.%s = C_(CopyFromGPU, dvars_gid);', name));
+                    eval(sprintf('layer.cpu.accum.%s = C_(CopyFromGPU, accum_gid);', name));
+                    
+                    eval(sprintf('layer.cpu.accum.%s = (1 - momentum) * layer.cpu.dvars.%s / plan.input.batch_size + momentum * layer.cpu.accum.%s;', name, name, name));
+                    eval(sprintf('layer.cpu.vars.%s = layer.cpu.vars.%s - lr * layer.cpu.accum.%s;', name, name, name));
+                    
+                    eval(sprintf('C_(CopyToGPU, vars_gid, layer.cpu.vars.%s)', name));
+                    eval(sprintf('C_(CopyToGPU, dvars_gid, layer.cpu.dvars.%s)', name));
+                    eval(sprintf('C_(CopyToGPU, accum_gid, layer.cpu.accum.%s)', name));
+                    
+                    % accum = (1 - momentum) * dvars / bs + momentum * accum
+%                     C_(Scale, accum_gid, single(momentum), accum_gid);
+%                     C_(Scale, layer.gpu.vars.temp, single((1 - momentum) / plan.input.batch_size), dvars_gid);
+%                     C_(Add, accum_gid, layer.gpu.vars.temp, accum_gid);
+%                     
+%                     % vars = vars - lr * accum;
+%                     C_(Scale, accum_gid, single(lr), layer.gpu.vars.temp);
+%                     C_(Subtract, vars_gid, layer.gpu.vars.temp, vars_gid);
+                    
+                    C_(Scale, accum_gid, single(momentum), accum_gid);
+                    C_(Scale, dvars_gid, single((1 - momentum) / plan.input.batch_size), dvars_gid);
+                    C_(Add, accum_gid, dvars_gid, accum_gid);
+                    C_(Scale, dvars_gid, single(plan.input.batch_size / (1 - momentum)), dvars_gid); 
+                  
+                    C_(Scale, accum_gid, single(lr), accum_gid); % XXX : Fix it (lose of numerical precision.
+                    C_(Subtract, vars_gid, accum_gid, vars_gid);
+                    C_(Scale, accum_gid, single(1 / lr), accum_gid); % XXX : Fix it (lose of numerical precision.
+                end                
+            end
         end        
         
         function DisplayInfo(layer)
@@ -195,18 +249,37 @@ classdef Layer < handle
         end
                 
         function AddParam(obj, name, dims, includeDer)
+            obj.AddParamsOnlyCPU(name, dims, includeDer);
+            obj.AddParamsOnlyGPU(name, dims, includeDer);
+        end
+        
+        function AddParamsOnlyCPU(obj, name, dims, includeDer)
             global plan
             if (isempty(plan.all_uploaded_weights) || ~includeDer || strcmp(name, 'out') || strcmp(name, 'X'))
                 obj.RandomWeights(name, dims);
             else
-                eval(sprintf('obj.cpu.vars.%s = plan.all_uploaded_weights.plan.layer{length(plan.layer) + 1}.cpu.vars.%s;', name, name));
+                eval(sprintf('obj.cpu.vars.%s = single(plan.all_uploaded_weights.plan.layer{length(plan.layer) + 1}.cpu.vars.%s);', name, name));
             end
             plan.stats.total_vars = plan.stats.total_vars + prod(dims);
-            if (includeDer)
+            %if (includeDer)
                 plan.stats.total_learnable_vars = plan.stats.total_learnable_vars + prod(dims);
                 plan.stats.total_vars = plan.stats.total_vars + 2 * prod(dims);
                 eval(sprintf('obj.cpu.accum.%s = zeros(dims);', name, name));
                 eval(sprintf('obj.cpu.dvars.%s = zeros(dims);', name, name));
+            %end
+        end
+        
+        function AddParamsOnlyGPU(obj, name, dims, includeDer)
+            global plan
+            if (obj.on_gpu == 1)
+                vartype = {'vars', 'dvars', 'accum'};
+                for i = 1 : length(vartype)
+                    var = eval(sprintf('single(obj.cpu.%s.%s)', vartype{i}, name));
+                    eval(sprintf('obj.gpu.%s.%s = plan.GetGID();', vartype{i}, name));
+                    gid = eval(sprintf('obj.gpu.%s.%s', vartype{i}, name));                
+                    C_(CopyToGPU, gid, var);
+                    plan.stats.total_vars_gpu = plan.stats.total_vars_gpu + prod(dims);                    
+                end
             end
         end
 
@@ -214,10 +287,41 @@ classdef Layer < handle
             global plan
             obj.InitWeights();
             dims = [plan.input.batch_size, obj.dims];
-            obj.AddParam('out', dims, true);
+            obj.AddParamsOnlyCPU('out', dims, true);
             if (obj.layer_nr > 1)                
                 pobj = plan.layer{obj.layer_nr - 1};
-                obj.AddParam('X', [plan.input.batch_size, pobj.dims], true);                
+                obj.AddParamsOnlyCPU('X', [plan.input.batch_size, pobj.dims], true);                
+            end
+            if (obj.on_gpu)                
+                % vars.out corresponds to the next layer vars.X.
+                % dvars.X corrensponds to the previous layer dvars.out.
+                obj.gpu.vars.out = plan.GetGID();
+                C_(CopyToGPU, obj.gpu.vars.out, single(obj.cpu.vars.out));
+                plan.stats.total_vars_gpu = plan.stats.total_vars_gpu + prod(dims);               
+                
+                if (obj.layer_nr > 1)
+                    obj.gpu.dvars.X = plan.GetGID();
+                    C_(CopyToGPU, obj.gpu.dvars.X, single(obj.cpu.dvars.X));
+                    plan.stats.total_vars_gpu = plan.stats.total_vars_gpu + prod(dims);                   
+                    pobj = plan.layer{obj.layer_nr - 1};
+                    if (pobj.on_gpu)
+                        obj.gpu.vars.X = pobj.gpu.vars.out;
+                        pobj.gpu.dvars.out = obj.gpu.dvars.X;
+                    else
+                        obj.gpu.vars.X = plan.GetGID();
+                        C_(CopyToGPU, obj.gpu.vars.X, single(obj.cpu.vars.X));
+                        plan.stats.total_vars_gpu = plan.stats.total_vars_gpu + prod(dims);                                                
+                    end
+                end
+            else
+                if (obj.layer_nr > 1)       
+                    pobj = plan.layer{obj.layer_nr - 1};
+                    if (pobj.on_gpu)
+                        pobj.gpu.dvars.out = plan.GetGID();
+                        C_(CopyToGPU, pobj.gpu.dvars.out, single(pobj.cpu.dvars.out));
+                        plan.stats.total_vars_gpu = plan.stats.total_vars_gpu + prod(dims);                
+                    end
+                end
             end
             obj.DisplayInfo();
         end        

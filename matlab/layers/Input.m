@@ -14,10 +14,15 @@ classdef Input < Layer
             obj.step = 1;            
             obj.batch_size = Val(json, 'batch_size', 6);            
             obj.translate = Val(json, 'translate', 0);            
-            obj.max_repeat = 10000;    
+            obj.max_repeat = 10000; 
+            obj.gpu.vars.out = -1;
+            obj.gpu.vars.Y = -1;
             plan.input = obj;             
         end       
 
+        function FPgpu(obj) 
+        end 
+        
         function FPmatlab(obj) 
         end
         
@@ -26,6 +31,16 @@ classdef Input < Layer
             [X, Y, obj.step] = GetImage_(obj, obj.step, train);
             obj.cpu.vars.out = X;
             obj.cpu.vars.Y = Y;
+            if (obj.gpu.vars.out == -1)
+                obj.gpu.vars.out = plan.GetGID();
+            end
+            if (obj.gpu.vars.Y == -1)
+                obj.gpu.vars.Y = plan.GetGID();
+            end
+            if (obj.on_gpu)
+                C_(CopyToGPU, obj.gpu.vars.out, single(obj.cpu.vars.out(:, :)));
+                C_(CopyToGPU, obj.gpu.vars.Y, single(obj.cpu.vars.Y(:, :)));                
+            end
         end
     end
 end

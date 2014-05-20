@@ -14,11 +14,6 @@ classdef LRNormal < Layer
             obj.alpha = single(json.alpha);
             obj.beta = single(json.beta);
             obj.Finalize();
-            try
-                LRNormalCpp();
-            catch
-               fprintf('Unable to run cpp code.\n'); 
-            end
         end
         
         function FPgpu(obj)
@@ -37,7 +32,9 @@ classdef LRNormal < Layer
         end      
         
         function BPgpu(obj)
-            assert(0)
+            v = obj.gpu.vars;
+            d = obj.gpu.dvars;
+            C_(ConvResponseNormCrossMapUndo, v.X, v.denoms, d.X, d.out, v.out, obj.depth(), obj.n, obj.alpha, obj.beta);
         end
         
         function BP(obj)
@@ -64,7 +61,7 @@ classdef LRNormal < Layer
         
         function InitWeights(obj)
             global plan
-            obj.AddParam('denoms', [plan.input.batch_size, obj.dims], false);  % XXX: this is incorrect
+            obj.AddParam('denoms', [plan.input.batch_size, obj.dims], false);  % XXX: this is incorrect - size issue?
         end
     end
 end

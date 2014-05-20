@@ -10,9 +10,14 @@ classdef FC < Layer
         
         function FPgpu(obj)
             v = obj.gpu.vars;
-            C_(Mult, v.X, v.W, v.out);
-            C_(AddVector, v.out, v.B, v.out);
-            C_(obj.Fun_, v.out, v.out);
+            C_(Mult, v.X, v.W, v.forward_act);
+            C_(AddVector, v.forward_act, v.B, v.forward_act);
+            if (obj.Fun_ == ActLINEAR) % XXX : Fix this hack
+                temp = C_(CopyFromGPU, v.forward_act);
+                C_(CopyToGPU, v.out, temp);
+            else
+                C_(obj.Fun_, v.forward_act, v.out);
+            end
         end
         
         function FP(obj)
@@ -24,19 +29,21 @@ classdef FC < Layer
         end
         
         function BPgpu(obj)
-            dv = obj.gpu.dvars;
+            d = obj.gpu.dvars;
             v = obj.gpu.vars;
+            % dX = d.forward_act
             if (obj.dFun_ == dActLINEAR)
-                v.out = dv.out;
+                %v.out = d.out;
+                d.forward_act = d.out;
             else
-                C_(obj.dFun_, v.out, v.out);                      
-                C_(EltwiseMult, v.out, dv.out, v.out);  
+                C_(obj.dFun_, v.forward_act, d.forward_act);                      
+                C_(EltwiseMult, d.forward_act, d.out, d.forward_act);  
             end
-            C_(Sum, v.out, 0, dv.B);            
+            C_(Sum, d.forward_act, 0, d.B);            
             C_(Transpose, v.X);
-            C_(Mult, v.X, v.out, dv.W);
+            C_(Mult, v.X, d.forward_act, d.W);
             C_(Transpose, v.W);
-            C_(Mult, v.out, v.W, dv.X);
+            C_(Mult, d.forward_act, v.W, d.X);
             C_(Transpose, v.X);            
             C_(Transpose, v.W);      
         end
@@ -54,7 +61,8 @@ classdef FC < Layer
         
         function InitWeights(obj)
             obj.AddParam('B', [1, prod(obj.dims)], true);
-            obj.AddParam('W', [prod(obj.prev_dim()), prod(obj.dims)], true);            
+            obj.AddParam('W', [prod(obj.prev_dim()), prod(obj.dims)], true); 
+            obj.AddParam('forward_act', [obj.dims], false);
         end
     end
 end

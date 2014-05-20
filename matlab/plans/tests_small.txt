@@ -1,0 +1,66 @@
+[
+    {
+        "type": "FC",
+        "fully_connected": true,
+        "rows": 1,
+        "cols": 1,
+        "depth": 2,
+        "function": "LINEAR"
+    },
+
+    {
+        "type": "FC",
+        "fully_connected": true,
+        "rows": 2,
+        "cols": 1,
+        "depth": 2,
+        "function": "RELU"
+    },
+
+
+    {
+        "type": "Conv",
+        "local_2d_patch" : {
+           "patch_rows": 4,
+           "patch_cols": 4,
+           "stride_rows": 2,
+           "stride_cols": 2,
+           "padding_rows": 0,
+           "padding_cols": 0
+        },
+        "depth": 16,
+        "function": "LINEAR"
+    },
+
+    {
+        "type": "LRNormal",
+        "k": 3,
+        "n": 2,
+        "alpha": 0.01,
+        "beta": 0.5
+    },
+
+    {
+        "type": "MaxPooling",
+        "local_2d_patch" : {
+           "patch_rows": 4,
+           "patch_cols": 4,
+           "stride_rows": 2,
+           "stride_cols": 2
+        },
+    },    
+
+    {
+        "type": "Softmax",
+    },
+
+    {
+        "type": "FC",
+        "fully_connected": true,
+        "cols": 5,
+        "depth": 3,
+        "function": "RELU"
+    },
+
+
+]

@@ -36,7 +36,9 @@ classdef MaxPooling < Layer
         end    
         
         function BPgpu(obj)
-            assert(0)
+            v = obj.gpu.vars;
+            d = obj.gpu.dvars;
+            C_(MaxPoolingUndo, v.X, d.out, v.out, d.X, obj.patch(1), obj.stride(1), obj.dims(1));
         end
         
         function BP(obj)
@@ -55,10 +57,13 @@ classdef MaxPooling < Layer
                     sx = (b - 1) * obj.stride(1) + 1;
                     sy = (c - 1) * obj.stride(2) + 1;
                     tx = idx1(:, :, b, c) + sx;
-                    ty = idx2(:, :, b, c) + sy;                    
-                    idx_ = repmat(1:obj.depth(), bs, 1) + (tx - 1) * obj.depth() + (ty - 1) * obj.depth() * size(dX, 3);                    
+                    ty = idx2(:, :, b, c) + sy;        
+                    idx = logical(tx <= size(X, 2)) & logical(ty <= size(X, 3));
+                    tx = tx(idx);
+                    ty = ty(idx);
+                    idx_ = repmat(find(idx), bs, 1) + (tx - 1) * obj.depth() + (ty - 1) * obj.depth() * size(dX, 3);                    
                     idx_dX = (idx_ - 1) * bs + repmat((1:bs)', [1, size(idx_, 2)]);
-                    dX(idx_dX) = dX(idx_dX) + reshape(data(:, b, c, :), bs, dims(3));
+                    dX(idx_dX) = dX(idx_dX) + reshape(data(:, b, c, find(idx)), bs, sum(idx));
                 end
             end
             obj.cpu.dvars.X = permute(dX, [1, 3, 4, 2]);

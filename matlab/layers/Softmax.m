@@ -39,7 +39,10 @@ classdef Softmax < Layer
         end
         
         function BPgpu(obj)
-            assert(0)
+            assert(obj.beta == 1);
+            global plan
+            C_(Subtract, obj.gpu.vars.pred, plan.input.gpu.vars.Y, obj.gpu.dvars.X);
+            
         end
         
         function BP(obj)

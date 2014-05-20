@@ -6,11 +6,10 @@ for i = 1 : length(plan_json)
     if (strcmp(plan_json{i}.type, 'Softmax'))
         jsons{end + 1} = struct('batch_size', 3, 'rows', 1, 'cols', 1, 'depth', 4, 'type', 'TestInput');
     else
-        jsons{end + 1} = struct('batch_size', 3, 'rows', 8, 'cols', 10, 'depth', 4, 'type', 'TestInput');
+        jsons{end + 1} = struct('batch_size', 1, 'rows', 4, 'cols', 4, 'depth', 4, 'type', 'TestInput');
     end
     jsons{end + 1} = plan_json{i};
     plan = Plan(jsons);
-    plan.training = 0;
     fprintf('\n\nVerifing %d layer %s\n', i, plan.layer{end}.type);
     if (~VerifyLayer())
         assert(0);
@@ -34,7 +33,7 @@ if (strcmp(layer.type, 'Softmax'))
     back_in(:) = 1;
 end
 layer.cpu.vars = vars;
-layer.FPmatlab();
+layer.FP();
 if (~ismethod(layer, 'BP'))
     return;
 end
@@ -56,13 +55,13 @@ for i = 1:length(f)
         Vcopy_a = V;
         Vcopy_a(pos) = Vcopy_a(pos) - h;
         eval(sprintf('layer.cpu.vars.%s = Vcopy_a;', name));
-        layer.FPmatlab();
+        layer.FP();
         out_a = layer.cpu.vars.out;
         
         Vcopy_b = V;
         Vcopy_b(pos) = Vcopy_b(pos) + h;
         eval(sprintf('layer.cpu.vars.%s = Vcopy_b;', name));
-        layer.FPmatlab();
+        layer.FP();
         out_b = layer.cpu.vars.out;
         dV_num(pos) = dot((out_b(:) - out_a(:)) ./ (2 * h), back_in(:));
     end
