@@ -16,20 +16,20 @@ classdef MaxPooling < Layer
         function FP(obj)
             X = obj.cpu.vars.X;
             dims = obj.dims;
-            dims_prev = obj.prev_dim();
             bs = size(X, 1);
             out = zeros([bs, dims(3), dims(1), dims(2)], class(X));
             idx = zeros([bs, dims(3), dims(1), dims(2)], class(X));
             X = permute(X, [1, 4, 2, 3]);
-            X = reshape(X, [bs, dims_prev(3), dims_prev(1),  dims_prev(2)]);
+            X_ = zeros(size(X, 1), size(X, 2), size(X, 3) + obj.patch(1), size(X, 4) + obj.patch(2));
+            X_(:, :, 1:size(X, 3), 1:size(X, 4)) = X;
             for b = 1:dims(1)
                 for c = 1:dims(2)
                     sx = (b - 1) * obj.stride(1) + 1;
                     sy = (c - 1) * obj.stride(2) + 1;
-                    tmp = X(:, :, sx:min(sx + obj.patch(1) - 1, size(X, 3)), sy:min(sy + obj.patch(2) - 1, size(X, 4)));
+                    tmp = X_(:, :, sx:(sx + obj.patch(1) - 1), sy:(sy + obj.patch(2) - 1));
                     [out(:, :, b, c), idx(:, :, b, c)] = max(tmp(:, :, :), [], 3);
                 end
-            end         
+            end                     
             out = permute(out, [1, 3, 4, 2]);
             obj.cpu.vars.idx = idx;
             obj.cpu.vars.out = out;
@@ -58,15 +58,12 @@ classdef MaxPooling < Layer
                     sy = (c - 1) * obj.stride(2) + 1;
                     tx = idx1(:, :, b, c) + sx;
                     ty = idx2(:, :, b, c) + sy;        
-                    idx = logical(tx <= size(X, 2)) & logical(ty <= size(X, 3));
-                    tx = tx(idx);
-                    ty = ty(idx);
-                    idx_ = repmat(find(idx), bs, 1) + (tx - 1) * obj.depth() + (ty - 1) * obj.depth() * size(dX, 3);                    
-                    idx_dX = (idx_ - 1) * bs + repmat((1:bs)', [1, size(idx_, 2)]);
-                    dX(idx_dX) = dX(idx_dX) + reshape(data(:, b, c, find(idx)), bs, sum(idx));
+                    idx_ = repmat(1:obj.depth(), bs, 1) + (tx - 1) * obj.depth() + (ty - 1) * obj.depth() * size(dX, 3);                    
+                    idx_dX = (idx_ - 1) * bs + repmat((1:bs)', [1, size(idx_, 2)]);                    
+                    dX(idx_dX) = dX(idx_dX) + reshape(data(:, b, c, :), bs, dims(3));
                 end
             end
-            obj.cpu.dvars.X = permute(dX, [1, 3, 4, 2]);
+            obj.cpu.dvars.X = permute(dX(:, :, 1:size(X, 2), 1:size(X, 3)), [1, 3, 4, 2]);
         end        
         
         function InitWeights(obj)

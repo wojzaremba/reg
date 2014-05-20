@@ -6,7 +6,7 @@ for i = 1 : length(plan_json)
     if (strcmp(plan_json{i}.type, 'Softmax'))
         jsons{end + 1} = struct('batch_size', 3, 'rows', 1, 'cols', 1, 'depth', 4, 'type', 'TestInput');
     else
-        jsons{end + 1} = struct('batch_size', 1, 'rows', 4, 'cols', 4, 'depth', 4, 'type', 'TestInput');
+        jsons{end + 1} = struct('batch_size', 3, 'rows', 4, 'cols', 4, 'depth', 2, 'type', 'TestInput');
     end
     jsons{end + 1} = plan_json{i};
     plan = Plan(jsons);
