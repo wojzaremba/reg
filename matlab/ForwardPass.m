@@ -11,8 +11,8 @@ for i = 2:length(plan.layer)
       end 
       C_(StartTimer);
       obj.FPgpu();
-%       obj.cpu.vars.X = plan.layer{obj.layer_nr - 1}.cpu.vars.out; % XXX : remove
-%       obj.FP(); % XXX : remove
+      obj.cpu.vars.X = plan.layer{obj.layer_nr - 1}.cpu.vars.out; % XXX : remove
+      obj.FP(); % XXX : remove
       lapse = C_(StopTimer);
   else
       if (plan.layer{obj.layer_nr - 1}.on_gpu == 1)

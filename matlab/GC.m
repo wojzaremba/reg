@@ -6,7 +6,7 @@ for i = 1 : length(plan_json)
     if (strcmp(plan_json{i}.type, 'Softmax'))
         jsons{end + 1} = struct('batch_size', 3, 'rows', 1, 'cols', 1, 'depth', 4, 'type', 'TestInput');
     else
-        jsons{end + 1} = struct('batch_size', 3, 'rows', 4, 'cols', 4, 'depth', 2, 'type', 'TestInput');
+        jsons{end + 1} = struct('batch_size', 3, 'rows', 8, 'cols', 10, 'depth', 4, 'type', 'TestInput');
     end
     jsons{end + 1} = plan_json{i};
     plan = Plan(jsons);
@@ -28,6 +28,10 @@ eps = 1e-2;
 plan.input.GetImage(1);
 vars = layer.cpu.vars;
 vars.X = plan.input.cpu.vars.out;
+
+vars.X(randn(size(vars.X)) > 0.4) = 0; % Will cause Maxpool to fail
+%vars.X(1, 1, 1, 1) = 0; % Will cause Maxpool to fail
+
 back_in = randn([size(vars.X, 1), dims]);
 if (strcmp(layer.type, 'Softmax'))
     back_in(:) = 1;

@@ -1,7 +1,7 @@
 global plan;
 load_imagenet_model();
 min_layer = 13;
-plan.momentum = 0;
+plan.momentum = 0.9;
 plan.lr = 0.00001;
 
 plan.input.step = 1;
