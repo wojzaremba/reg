@@ -1,0 +1,17 @@
+\subsection{Fine-tunning}\label{sec:fine_tunning}
+
+Presented methods were applied to fully trained networks. Obviously, networks were not trained
+with constrains on connectivity or sparsity as are present in approximated network. This means 
+that agresive approximations, which can have much larger speedup are likely to give worse error score. 
+Training with new connectivity or sparsity constraint might be quite difficult. Constrains 
+comming from approximation would have to be included in optimization, and a lot of additional coding would be
+neccessary. We propose different strategy. 
+
+
+It is easy to decompose weights using any of our method, and then reconstruct them. Particularly,
+reconstructed weights can be approximated exactly with the same decomposition. Let's call this process
+projection. Proposed strategy is to take a fully trained network, and iterativelly repeat (1) apply projection, 
+(2) train for few epochs. Hopefuly, this way weights will become expressable in desired way, which can be speededup
+more than $2$ times, and prediction score would be preserved due to fine-tunning. From engineering perspective
+stage (1) can be implemented in any external easy environment (e.g. MATLAB), while stage can stay as it is. 
+Stage (1) is executed every few epochs, so it is not a computational bottle-neck.

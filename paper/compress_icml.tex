@@ -1,0 +1,75 @@
+\documentclass{article}
+
+\usepackage{graphicx} % more modern
+\usepackage{subfigure} 
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{array}
+
+
+% For citations
+\usepackage{natbib}
+
+% For algorithms
+\usepackage{comment}
+\usepackage{framed}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{amsmath}
+%\usepackage{algorithmicx}
+%\usepackage{algpseudocode}
+
+\usepackage{hyperref}
+
+\allowdisplaybreaks
+
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+%\usepackage[accepted]{icml2014}  % XXX : just set temporarly to print out authors corretly.
+\usepackage{icml2014}  
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\begin{document} 
+
+\icmltitle{Exploiting Linear Structure Within Convolutional Networks
+  for Efficient Evaluation}
+
+\icmlauthor{Emily Denton}{denton@cs.nyu.edu}
+\icmlauthor{Wojciech Zaremba}{zaremba@cs.nyu.edu}
+\icmlauthor{Joan Bruna}{bruna@cs.nyu.edu}
+\icmlauthor{Rob Fergus}{fergus@cs.nyu.edu}
+
+\icmlkeywords{machine learning, deep learning, speeding up forward pass, redundancies in neural networks}
+
+\input{intro_related}
+
+\input{low_rank}
+\input{monochromatic}
+\input{biclustering}
+\input{dist}
+\input{fine_tunning}
+\input{experiments}
+\input{discussion}
+
+\nocite{*}
+\bibliography{bibliography}
+\bibliographystyle{icml2014}
+
+
+\end{document}
+
+
+
+
+
+

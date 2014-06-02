@@ -1,0 +1,57 @@
+[    
+    {
+        "type" : "ImageInput",
+        "file_pattern": "~/data/cifar10/",
+        "batch_size": 128,
+        "rows": 32,
+        "cols": 32,
+        "depth" : 3,
+    },
+
+
+    {
+        "type": "Convreg",
+        "local_2d_patch" : {
+           "patch_rows": 10,
+           "patch_cols": 10,
+           "stride_rows": 2,
+           "stride_cols": 2,
+           "padding_rows": 0,
+           "padding_cols": 0
+        },
+        "depth": 50,
+        "function": "RELU"
+    },
+
+    {
+        "type": "MaxPooling",
+        "local_2d_patch" : {
+           "patch_rows": 4,
+           "patch_cols": 4,
+           "stride_rows": 2,
+           "stride_cols": 2
+        },
+    },
+
+    {
+        "type": "FCreg",
+        "depth": 100,
+        "function": "RELU"
+    },
+
+    {
+        "type": "FCreg",
+        "depth": 10,
+        "function": "LINEAR"
+    },
+    {
+        "type": "Softmax",
+        "depth": 10,
+    },
+
+    {
+      "type": "Spec",
+      "lr": 0.1,
+      "momentum": 0.9
+    }
+]

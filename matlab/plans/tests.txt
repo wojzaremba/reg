@@ -1,0 +1,13 @@
+[
+
+      {
+        "type": "MaxPooling",
+        "local_2d_patch" : {
+           "patch_rows": 3,
+           "patch_cols": 3,
+           "stride_rows": 2,
+           "stride_cols": 2
+        },
+    },
+
+]

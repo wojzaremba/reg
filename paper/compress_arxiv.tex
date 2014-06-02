@@ -1,0 +1,67 @@
+
+% last updated in April 2002 by Antje Endemann
+% Based on CVPR 07 and LNCS, with modifications by DAF, AZ and elle, 2008 and AA, 2010, and CC, 2011; TT, 2014
+
+\documentclass[runningheads]{llncs}
+\usepackage{graphicx}
+\usepackage{subfigure} 
+\usepackage{amsmath,amssymb} % define this before the line numbering.
+%\usepackage{ruler}
+\usepackage{color}
+\usepackage{comment}
+\usepackage[width=122mm,left=12mm,paperwidth=146mm,height=193mm,top=12mm,paperheight=217mm]{geometry}
+
+\newcommand{\eqn}[1]{Eqn.~\ref{eqn:#1}}
+\newcommand{\fig}[1]{Fig.~\ref{fig:#1}}
+\newcommand{\tab}[1]{Table~\ref{tab:#1}}
+\newcommand{\secc}[1]{Section~\ref{sec:#1}}
+\newcommand{\rob}[1]{\textbf{\textcolor{green}{#1}}}
+\newcommand{\wojciech}[1]{\textbf{\textcolor{blue}{#1}}}
+\newcommand{\emily}[1]{\textbf{\textcolor{red}{#1}}}
+\newcommand{\joan}[1]{\textbf{\textcolor{magenta}{#1}}}
+
+
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.15}
+\renewcommand{\floatpagefraction}{0.8}
+\renewcommand{\textfraction}{0.1}
+\setlength{\floatsep}{5pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{5pt plus 2pt minus 2pt}
+\setlength{\intextsep}{5pt plus 2pt minus 2pt}
+
+\def\etal{{\textit{et~al.~}}}
+
+\begin{document}
+\pagestyle{headings}
+\mainmatter
+\def\ECCV14SubNumber{966}  % Insert your submission number here
+
+\title{Exploiting Linear Structure Within Convolutional Networks
+  for Efficient Evaluation} % Replace with your title
+
+
+\author{Emily Denton$^1$, Wojciech Zaremba$^1$, Joan Bruna$^1$, \\
+Yann LeCun$^{12}$ and Rob Fergus$^{12}$}
+
+\institute{$^1$New York Univeristy \\
+$^2$Facebook AI Group}
+
+\maketitle
+\centerline{\email{\{denton, zaremba, bruna, lecun, fergus\}  @ cs.nyu.edu } }
+
+\input{intro_related}
+\input{low_rank}
+\input{distance}
+\input{experiments}
+\input{discussion}
+
+\clearpage
+
+\nocite{*}
+\bibliographystyle{splncs}
+\bibliography{bibliography}
+\end{document}
