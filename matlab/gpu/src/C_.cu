@@ -334,14 +334,22 @@ void StopTimer(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 	(*lapse) /= 1000.; // returned time is in ms.
 }
 
-const int fsize = 28; 
+void SetDevice(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
+	assert_((nrhs == 2) && (nlhs == 0));
+	int device = (int)mxGetScalar(prhs[1]);
+    cudaSetDevice(device);
+    printf("Running on device %d\n", device);
+}
+
+
+const int fsize = 29; 
 static void (*func[fsize]) (int, mxArray **, int, const mxArray **) = 
         {CopyToGPU, CopyFromGPU, AddVector, Scale, 
          ActRELU, dActRELU, ActLINEAR, dActLINEAR,
          ConvAct, Reshape, MaxPooling, PrintShape, ActEXP,
          Sum, Max, EltwiseDivideByVector, Mult, ConvResponseNormCrossMap, CleanGPU,
          StartTimer, StopTimer, EltwiseMult, Transpose, Add, Subtract, 
-         ConvActUndo, MaxPoolingUndo, ConvResponseNormCrossMapUndo};
+         ConvActUndo, MaxPoolingUndo, ConvResponseNormCrossMapUndo, SetDevice};
 
 // Entry point.
 void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {

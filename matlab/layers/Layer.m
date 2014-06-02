@@ -170,7 +170,7 @@ classdef Layer < handle
             if (~layer.on_gpu)
                 f = fields(layer.cpu.dvars);
                 for i = 1:length(f)
-                    if (strcmp(f{i}, 'X')) || (strcmp(f{i}, 'out'))
+                    if (strcmp(f{i}, 'mask')) || (strcmp(f{i}, 'X')) || (strcmp(f{i}, 'out')) || (strcmp(f{i}, 'max')) || (strcmp(f{i}, 'sum')) || (strcmp(f{i}, 'forward_act')) || (strcmp(f{i}, 'pred')) % Don't backprop sum and max (just temp vars) from softmax
                         continue;
                     end
                     name = f{i};                 
@@ -180,7 +180,7 @@ classdef Layer < handle
             else                
                 f = fields(layer.gpu.dvars);
                 for i = 1:length(f)
-                    if (strcmp(f{i}, 'X')) || (strcmp(f{i}, 'out')) || (strcmp(f{i}, 'max')) || (strcmp(f{i}, 'sum')) || (strcmp(f{i}, 'forward_act')) || (strcmp(f{i}, 'pred')) % Don't backprop sum and max (just temp vars) from softmax
+                    if (strcmp(f{i}, 'mask')) || (strcmp(f{i}, 'X')) || (strcmp(f{i}, 'out')) || (strcmp(f{i}, 'max')) || (strcmp(f{i}, 'sum')) || (strcmp(f{i}, 'forward_act')) || (strcmp(f{i}, 'pred')) % Don't backprop sum and max (just temp vars) from softmax
                         continue;
                     end
                     name = f{i};
@@ -304,7 +304,7 @@ classdef Layer < handle
                     C_(CopyToGPU, obj.gpu.dvars.X, single(obj.cpu.dvars.X));
                     plan.stats.total_vars_gpu = plan.stats.total_vars_gpu + prod(dims);                   
                     pobj = plan.layer{obj.layer_nr - 1};
-                    if (0) %(pobj.on_gpu)
+                    if (pobj.on_gpu)
                         obj.gpu.vars.X = pobj.gpu.vars.out;
                         pobj.gpu.dvars.out = obj.gpu.dvars.X;
                     else

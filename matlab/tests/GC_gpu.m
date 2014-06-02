@@ -32,8 +32,8 @@ function passed = VerifyLayer()
     eps = 1e-2;
     layer.gpu.dvars.out = Val(layer.gpu.dvars, 'out', plan.GetGID());
     plan.input.GetImage(1);
-    vars = layer.gpu.vars; %vars = layer.cpu.vars;
-    vars.X = plan.input.gpu.vars.out; %vars.X = plan.input.cpu.vars.out;
+    vars = layer.gpu.vars;
+    vars.X = plan.input.gpu.vars.out;    
     back_in = single(randn([size(plan.input.cpu.vars.out, 1), dims]));
     if (strcmp(layer.type, 'Softmax'))
         back_in(:) = 1;

@@ -26,7 +26,11 @@ classdef RawImageInput < Input
             from = ((step - 1) * obj.batch_size + 1);
             to = from + obj.batch_size - 1;
             for i = from : to
-                name = sprintf('%s/ILSVRC2012_val_%s.JPEG', obj.file_pattern, sprintf('%08d', i));
+                if (0) %i == 12870 
+                    name = sprintf('%s/ILSVRC2012_val_%s.JPEG', obj.file_pattern, sprintf('%08d', i - 1));
+                else
+                    name = sprintf('%s/ILSVRC2012_val_%s.JPEG', obj.file_pattern, sprintf('%08d', i));
+                end
                 idx = i - from + 1;
                 img = single(imread(name));
                 if (size(img, 1) == obj.dims(1) && size(img, 2) == obj.dims(2))
@@ -37,7 +41,7 @@ classdef RawImageInput < Input
                 end
                 Y(idx, obj.Y(i)) = 1;
             end
-            if (size(X, 2) == 221)
+            if (size(X, 2) == 221) % Pierre's model
                 X = single((X-118.380948) ./ 61.896913);
             else
                 X = X - repmat(reshape(obj.meanX, [1, obj.dims(1), obj.dims(2), obj.dims(3)]), [obj.batch_size, 1, 1, 1]);

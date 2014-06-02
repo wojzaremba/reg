@@ -3,7 +3,7 @@ global plan; load_imagenet_model('matthew', 1)
 global debug; debug = 4;
 randn('seed', 1);
 
-layer_nr = 11;
+layer_nr = 8;
 obj = plan.layer{layer_nr};
 
 obj.cpu.vars.X = single(randn(size(obj.cpu.vars.X)));
@@ -21,10 +21,10 @@ cpu_out = obj.cpu.vars.out;
 gpu_out = C_(CopyFromGPU, obj.gpu.vars.out);
 assert(norm(cpu_out(:) - gpu_out(:)) / norm(cpu_out(:)) < 1e-1);
 
-layer_nr = 12;
+layer_nr = 9;
 obj = plan.layer{layer_nr};
 
-obj.cpu.vars.X = cpu_out;% + 0.01*randn(size(cpu_out));
+obj.cpu.vars.X = cpu_out + 0.01*randn(size(cpu_out));
 C_(CopyToGPU, obj.gpu.vars.X, single(obj.cpu.vars.X));
 
 obj.FP();

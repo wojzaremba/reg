@@ -1,0 +1,77 @@
+\begin{thebibliography}{10}
+
+\bibitem{vanhoucke2011improving}
+Vanhoucke, V., Senior, A., Mao, M.Z.:
+\newblock Improving the speed of neural networks on cpus.
+\newblock In: Proc. Deep Learning and Unsupervised Feature Learning NIPS
+  Workshop. (2011)
+
+\bibitem{mathieu2013fast}
+Mathieu, M., Henaff, M., LeCun, Y.:
+\newblock Fast training of convolutional networks through ffts.
+\newblock arXiv preprint arXiv:1312.5851 (2013)
+
+\bibitem{denil2013predicting}
+Denil, M., Shakibi, B., Dinh, L., Ranzato, M., de~Freitas, N.:
+\newblock Predicting parameters in deep learning.
+\newblock arXiv preprint arXiv:1306.0543 (2013)
+
+\bibitem{imagenet}
+Deng, J., Dong, W., Socher, R., Li, L.J., Li, K., Fei-Fei, L.:
+\newblock {ImageNet: A Large-Scale Hierarchical Image Database}.
+\newblock In: CVPR09. (2009)
+
+\bibitem{sermanet2013overfeat}
+Sermanet, P., Eigen, D., Zhang, X., Mathieu, M., Fergus, R., LeCun, Y.:
+\newblock Overfeat: Integrated recognition, localization and detection using
+  convolutional networks.
+\newblock arXiv preprint arXiv:1312.6229 (2013)
+
+\bibitem{zeiler2013visualizing}
+Zeiler, M.D., Fergus, R.:
+\newblock Visualizing and understanding convolutional neural networks.
+\newblock arXiv preprint arXiv:1311.2901 (2013)
+
+\bibitem{eigenweb}
+Guennebaud, G., Jacob, B.,  et~al.:
+\newblock Eigen v3.
+\newblock http://eigen.tuxfamily.org (2010)
+
+\bibitem{zeiler2011adaptive}
+Zeiler, M.D., Taylor, G.W., Fergus, R.:
+\newblock Adaptive deconvolutional networks for mid and high level feature
+  learning.
+\newblock In: Computer Vision (ICCV), 2011 IEEE International Conference on,
+  IEEE (2011)  2018--2025
+
+\bibitem{LeNgiChenChiaKohNg10}
+Le, Q.V., Ngiam, J., Chen, Z., Chia, D., Koh, P.W., Ng, A.Y.:
+\newblock Tiled convolutional neural networks.
+\newblock In: Advances in Neural Information Processing Systems. (2010)
+
+\bibitem{le2011building}
+Le, Q.V., Ranzato, M., Monga, R., Devin, M., Chen, K., Corrado, G.S., Dean, J.,
+  Ng, A.Y.:
+\newblock Building high-level features using large scale unsupervised learning.
+\newblock arXiv preprint arXiv:1112.6209 (2011)
+
+\bibitem{lowe1999object}
+Lowe, D.G.:
+\newblock Object recognition from local scale-invariant features.
+\newblock In: Computer vision, 1999. The proceedings of the seventh IEEE
+  international conference on. Volume~2., Ieee (1999)  1150--1157
+
+\bibitem{hinton2012improving}
+Hinton, G.E., Srivastava, N., Krizhevsky, A., Sutskever, I., Salakhutdinov,
+  R.R.:
+\newblock Improving neural networks by preventing co-adaptation of feature
+  detectors.
+\newblock arXiv preprint arXiv:1207.0580 (2012)
+
+\bibitem{krizhevsky2012imagenet}
+Krizhevsky, A., Sutskever, I., Hinton, G.:
+\newblock Imagenet classification with deep convolutional neural networks.
+\newblock In: Advances in Neural Information Processing Systems 25. (2012)
+  1106--1114
+
+\end{thebibliography}

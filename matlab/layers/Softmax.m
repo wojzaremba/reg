@@ -20,6 +20,7 @@ classdef Softmax < Layer
             assert(obj.beta == 1);
             v = obj.gpu.vars;
             C_(Max, v.X, 1, v.max);
+            C_(Scale, v.max, -1, v.max);
             C_(AddVector, v.X, v.max, v.pred);
             C_(ActEXP, v.pred, v.pred);            
             C_(Sum, v.pred, 1, v.sum);

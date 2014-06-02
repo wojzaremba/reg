@@ -13,6 +13,8 @@ classdef Plan < handle
         all_uploaded_weights
         lr
         momentum
+        training
+        repeat
     end
 
     methods

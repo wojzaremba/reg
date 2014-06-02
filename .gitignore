@@ -1,4 +1,11 @@
-*.m~
-*.pyc
-.DS*
-*.swp
+*.aux 
+*.brf 
+*.pdf 
+*.log 
+*.bbl 
+*.blg 
+*.dvi 
+*.ps 
+*.out
+
+matlab/generated_mats/*

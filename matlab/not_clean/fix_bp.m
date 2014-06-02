@@ -1,12 +1,16 @@
 init
-global plan; load_imagenet_model('matthew', 1)
+C_(CleanGPU);
+clear all;
+C_(SetDevice, 1);
+global plan; load_imagenet_model('matthew_train', 1)
 global debug; debug = 4;
 plan.input.step = 1;
 plan.input.GetImage(1);
 %ForwardPass();
 plan.momentum = 0;
 plan.lr = 0.1;
-
+plan.training = 1;
+plan.repeat = 1;
 for i = 2:length(plan.layer)
   obj = plan.layer{i};
   printf(2, 'FP for %s ', obj.name);
@@ -47,7 +51,7 @@ for i = length(plan.layer) : -1 : 2
     obj.BP();
     obj.BPgpu();
     
-    fprintf('\nLayer %d:\n', i);
+    fprintf('\n%s %d:\n', obj.type, i);
     dX = obj.cpu.dvars.X;
     dX_gpu = C_(CopyFromGPU, obj.gpu.dvars.X);
     fprintf('dX : %f\n',norm(dX(:) - dX_gpu(:)) / norm(dX(:)));
@@ -64,6 +68,6 @@ for i = length(plan.layer) : -1 : 2
     
     obj.cpu.dvars.X = C_(CopyFromGPU, obj.gpu.dvars.X); 
     
-    plan.layer{i-1}.cpu.dvars.out = obj.cpu.dvars.X;
+    plan.layer{i-1}.cpu.dvars.out = reshape(obj.cpu.dvars.X, size(plan.layer{i-1}.cpu.dvars.out));
 	C_(CopyToGPU, plan.layer{i-1}.gpu.dvars.out, obj.cpu.dvars.X); 
 end

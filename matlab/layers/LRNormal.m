@@ -29,13 +29,6 @@ classdef LRNormal < Layer
             end            
             obj.cpu.vars.normal = normal;
             obj.cpu.vars.out = X ./ (normal .^ obj.beta);
-%             X = obj.cpu.vars.X;
-%             normal = zeros(size(X), class(X));
-%             for i = 1:obj.depth
-%                 normal(:, :, :, i) = obj.k + obj.alpha * sum(X(:, :, :, max(i - (obj.n - 1) / 2, 1):min(i + (obj.n - 1) / 2, obj.depth)) .^ 2, 4);
-%             end            
-%             obj.cpu.vars.normal = normal;
-%             obj.cpu.vars.out = X ./ (normal .^ obj.beta);
         end      
         
         function BPgpu(obj)
@@ -64,25 +57,6 @@ classdef LRNormal < Layer
                 end
             end
             obj.cpu.dvars.X = dX;
-%             v = obj.cpu.vars;
-%             data = obj.cpu.dvars.out;
-%             bs = size(data, 1);
-%             normal = obj.cpu.vars.normal;
-%             dX = zeros(size(v.X), class(v.X));            
-%             for b = 1:bs
-%                 for i = 1:obj.depth
-%                     dX(b, :, :, i) = ((normal(b, :, :, i) .^ obj.beta) - 2 .* (v.X(b, :, :, i) .^ 2) .* obj.alpha .* obj.beta .* (normal(b, :, :, i) .^ (obj.beta - 1))) ./ (normal(b, :, :, i) .^ (2 * obj.beta));
-%                     dX(b, :, :, i) = dX(b, :, :, i) .* data(b, :, :, i);
-%                     for j = max(i - (obj.n - 1) / 2, 1):min(i + (obj.n - 1) / 2, obj.depth)
-%                         if (j == i)
-%                             continue;
-%                         end
-%                         dX(b, :, :, i) = dX(b, :, :, i) - ...
-%                             data(b, :, :, j) .* (2 .* v.X(b, :, :, j) .* v.X(b, :, :, i) .* obj.alpha .* obj.beta .* (normal(b, :, :, j) .^ (obj.beta - 1))) ./ (normal(b, :, :, j) .^ (2 * obj.beta));
-%                     end
-%                 end
-%             end
-%             obj.cpu.dvars.X = dX;
         end        
         
         function InitWeights(obj)

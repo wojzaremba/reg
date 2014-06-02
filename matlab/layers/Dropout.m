@@ -11,7 +11,18 @@ classdef Dropout < Layer
         end
         
         function FPgpu(obj)
-            assert(0)
+            global plan;
+            v = obj.gpu.vars;
+            if (plan.training)
+                rand('seed', 100000 * plan.repeat + plan.input.step);
+                ran = rand(size(obj.cpu.vars.X));
+                mask = single(ran > obj.p);
+                C_(CopyToGPU, v.mask, mask);
+                C_(EltwiseMult, v.mask, v.X, v.out);
+            else
+               C_(Scale, v.X, (1 - obj.p), v.out);
+            end
+            
         end
         
         function FP(obj)
@@ -19,8 +30,7 @@ classdef Dropout < Layer
             vars = obj.cpu.vars;
             out = zeros(size(vars.X));
             if (plan.training)
-                input = plan.input;
-                rand('seed', 100000 * input.repeat + input.step);
+                rand('seed', 100000 * plan.repeat + plan.input.step);
                 ran = rand(size(vars.X));
                 idx = logical(ran > obj.p);
                 obj.cpu.vars.idx = idx;
@@ -32,7 +42,14 @@ classdef Dropout < Layer
         end
         
         function BPgpu(obj)
-            assort(0)
+            global plan;
+            v = obj.gpu.vars;
+            d = obj.gpu.dvars;
+            if plan.training
+                C_(EltwiseMult, d.out, v.mask, d.X);
+            else
+                C_(Scale, d.out, (1 - obj.p), d.X);                
+            end
         end
         
         function BP(obj)                
@@ -48,7 +65,8 @@ classdef Dropout < Layer
         end
         
         function InitWeights(obj)
-            obj.AddParam('out', [prod(obj.dims(1:2)), obj.depth()], false);             
+            obj.AddParam('out', [prod(obj.dims(1:2)), obj.depth()], false);
+            obj.AddParam('mask', [prod(obj.dims(1:2)), obj.depth()], false); 
         end        
         
     end

@@ -1,0 +1,29 @@
+\contentsline {title}{Exploiting Linear Structure Within Convolutional Networks for Efficient Evaluation}{1}
+\authcount {1}
+\contentsline {author}{Anonymous ECCV submission}{1}
+\contentsline {section}{\numberline {1}Introduction}{2}
+\contentsline {section}{\numberline {2}Related Work}{3}
+\contentsline {section}{\numberline {3}Framework}{4}
+\contentsline {section}{\numberline {4}Tensor approximation techniques}{4}
+\contentsline {subsection}{\numberline {4.1}Low-rank approximations}{5}
+\contentsline {subsubsection}{Singular value decomposition for matrices}{5}
+\contentsline {subsubsection}{Singular value decomposition for tensors}{6}
+\contentsline {subsubsection}{1-rank decomposition}{6}
+\contentsline {subsection}{\numberline {4.2}Sparsity enforcement}{7}
+\contentsline {subsection}{\numberline {4.3}Clustering}{7}
+\contentsline {subsubsection}{Clustering for structural sparsity}{7}
+\contentsline {subsubsection}{Bi-clustering}{7}
+\contentsline {subsubsection}{Algorithms}{7}
+\contentsline {section}{\numberline {5}Application to convolutional networks}{7}
+\contentsline {subsection}{\numberline {5.1}Monochromatic approximation}{8}
+\contentsline {subsection}{\numberline {5.2}Bi-clustering with SVD}{10}
+\contentsline {subsection}{\numberline {5.3}Bi-clustering with 1-rank decomposition}{10}
+\contentsline {subsection}{\numberline {5.4}Reconstruction metric}{11}
+\contentsline {subsection}{\numberline {5.5}Fine-tunning}{11}
+\contentsline {section}{\numberline {6}Experiments}{12}
+\contentsline {subsection}{\numberline {6.1}Monochromatic Filters}{13}
+\contentsline {subsubsection}{Reduction in memory overhead}{13}
+\contentsline {subsection}{\numberline {6.2}Bi-clustering}{13}
+\contentsline {subsubsection}{Speedup}{13}
+\contentsline {subsubsection}{Reduction in memory overhead}{13}
+\contentsline {section}{\numberline {7}Discussion}{14}

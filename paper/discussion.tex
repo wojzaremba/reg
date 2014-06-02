@@ -1,0 +1,86 @@
+
+\section{Discussion}
+
+In this paper we have presented techniques that can speed up the
+bottleneck convolution operations in the first layers of a convolutional network by a factor $1.6-2$, with a
+moderate loss of performance ($\sim1\%$). The empirical speedups
+achieved are still some way short of the theoretical gains, thus
+further improvements might be expected with further engineering effort. 
+Moreover, the techniques are orthogonal
+to other approaches for efficient evaluation, such as quantization or
+working in the Fourier domain. Hence, they can potentially be used
+together to obtain further gains. 
+
+Given the widespread use of neural networks in large scale industrial
+settings, the speed gains we demonstrate have significant economic
+value. Companies such as Google or Facebook process $10^8$ images/day,
+requiring many thousands of machines. Our speed gains mean that the
+number of machines dedicated to running convolutional networks could be roughly halved, so saving millions of
+dollars, as well as a significant reduction in environmental impact.
+
+
+We also show that our methods reduce the memory footprint of weights
+in the first two layers by factor of $2-3\times$. When applied to the whole network,
+this would translate into a significant savings, which would facilitate mobile deployment
+of convolutional networks.
+
+Our approximations are applied to fully trained networks. The
+small performance drops that result could well be mitigated by further
+training the network after applying the approximation. By alternating
+these two steps, we could potentially achieve further gains in
+speed-up for a modest performance drop.
+
+
+Another aspect of our technique is regularization. It seems that
+approximated filters look cleaner, and that sporadically we get better
+test error (e.g.~bottom left of Figure
+\ref{fig:biclustering_theory}(left)). We would like to experiment with
+low-rank projections during training as a regularization
+technique. Effectively it decreases number of learnable parameters,
+so it might improve generalization, a major issue with large convolutional networks.
+  
+
+
+% Presented methods were applied to fully trained networks. Obviously, networks were not trained
+% with constrains on connectivity or sparsity as are present in approximated network. This means 
+% that agresive approximations, which can have much larger speedup are likely to give worse error score. 
+% Training with new connectivity or sparsity constraint might be quite difficult. Constrains 
+% comming from approximation would have to be included in optimization, and a lot of additional coding would be
+% neccessary. We propose different strategy. 
+
+
+% It is easy to decompose weights using any of our method, and then reconstruct them. Particularly,
+% reconstructed weights can be approximated exactly with the same decomposition. Let's call this process
+% projection. Proposed strategy is to take a fully trained network, and iterativelly repeat (1) apply projection, 
+% (2) train for few epochs. Hopefuly, this way weights will become expressable in desired way, which can be speededup
+% more than $2$ times, and prediction score would be preserved due to fine-tunning. From engineering perspective
+% stage (1) can be implemented in any external easy environment (e.g. MATLAB), while stage can stay as it is. 
+% Stage (1) is executed every few epochs, so it is not a computational bottle-neck.
+
+
+
+% and thus our speed gains 
+
+% the speed gains we demonstrate have 
+% Speeding up the evaluation of neural networks has a high industrial impact. Computation
+% of forward pass on all public internet available images (billions of images), or
+% on all social media data cost in milions of dollars for a single pass. High costs
+% of evaluation limits use of neural networks, and might forces companies to rely
+% on inferior object recognition techniques which are much cheaper in evaluation 
+% (e.g. SIFT features). 
+
+
+
+% Presented in this paper techniques show how to achieve speedup by the factor of $2$,
+% with moderate loss of performance ($< 1\%$). Moreover, they are ortogonal 
+% to previously developed techniques like quantization, or working in Fourier domain, and
+% can be used together to further boost evaluation speed. Finally, we believe that fine-tunning
+% technique described in Section \ref{sec:fine_tunning} can enable even further 
+% agresive approximations, and give a higher boost.
+
+
+
+%\input{fine_tunning}
+
+
+
