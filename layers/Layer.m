@@ -109,10 +109,16 @@ classdef Layer < handle
         end
         
         function ret = GAUSSIAN(obj, dim, mult, bias)
+		s = RandStream('mt19937ar','Seed','shuffle');
+		RandStream.setGlobalStream(s);
+		bub=randn;
+		fprintf('this should be random : %f \n', bub)
             ret = randn(dim) * mult + bias;
         end
         
         function ret = UNIFORM(obj, dim, mult, bias)
+		s = RandStream('mt19937ar','Seed','shuffle');
+		RandStream.setGlobalStream(s);
             ret = rand(dim) * mult + bias;
         end
         

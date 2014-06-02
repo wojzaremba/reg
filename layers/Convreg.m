@@ -66,9 +66,11 @@ classdef Convreg < Layer
             end
             obj.cpu.dvars.X = dX_(:, (obj.padding(1) + 1):(obj.padding(1) + size(X, 2)), (obj.padding(2) + 1):(obj.padding(2) + size(X, 3)), :);                
             obj.cpu.dvars.W = reshape(pact(:, :) * stacked, size(W));
-            if mod(plan.input.step,plan.regu.regepoch)==1
-                [~,dW]=convbound(W);
-                obj.cpu.dvars.W = obj.cpu.dvars.W + plan.regu.betareg * dW ;
+            if mod(plan.input.step,plan.regu.regepoch)==0
+                %[value,dW]=convbound(W);
+		obj.cpu.vars.W = convshrink(W,.5);
+		%fprintf('sup norm %f \n', value);
+                %obj.cpu.dvars.W = obj.cpu.dvars.W + plan.regu.betareg * dW ;
             end
             obj.cpu.dvars.B = reshape(sum(pact(:, :), 2), size(v.B));            
         end        
