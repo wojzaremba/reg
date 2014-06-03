@@ -1,11 +1,11 @@
 C_(CleanGPU);
 clear all;
-C_(SetDevice, 2);
+C_(SetDevice, 1);
 global plan;
 randn('seed', 1);
 load_imagenet_model('matthew', 128);
 
-num_colors = 16;
+num_colors = 6;
 if 0
   fname = sprintf('monochromatic%d_finetuneall_alternate', num_colors);
   load_weights(fname, 1);

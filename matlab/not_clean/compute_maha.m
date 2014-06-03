@@ -18,14 +18,14 @@ plan.input.step = 1;
 plan.momentum = 0;
 plan.lr = 0;
 
-D = 2;
+D = 3;
 
 conv1_maha = zeros(size(plan.layer{2}.cpu.vars.W));
 conv2_maha = zeros(size(plan.layer{5}.cpu.vars.W));
 conv1_maha_grads = [];
 conv2_maha_grads = [];
 
-nbatches = 500;
+nbatches = 6000;
 normalizer = 1;
 for b = 1 : nbatches
     plan.input.GetImage(1);
@@ -55,12 +55,7 @@ conv2_maha = sqrt(conv2_maha) / normalizer;
 
 mean1 = mean(conv1_maha_grads);
 conv1_maha_grads_cen = bsxfun(@minus, conv1_maha_grads, mean1);
-conv1_maha_cov = conv1_maha_grads_cen * conv1_maha_grads_cen';
+conv1_maha_cov = conv1_maha_grads_cen * conv1_maha_grads_cen' / D * nbatches;
 
-mean2 = mean(conv2_maha_grads);
-conv2_maha_grads_cen = bsxfun(@minus, conv2_maha_grads, mean1);
-conv2_maha_cov = conv2_maha_grads_cen * conv2_maha_grads_cen';
-
-
-save('/misc/vlgscratch3/FergusGroup/denton/mahalanobis_distance_approx.mat', 'conv1_maha', 'conv2_maha');
-save('/misc/vlgscratch3/FergusGroup/denton/mahalanobis_distance_cov.mat', 'conv1_maha_cov', 'conv2_maha_cov');
+save('/misc/vlgscratch3/FergusGroup/denton/mahalanobis_distance_approx.mat', 'conv1_maha', 'conv2_maha', 'D', 'nbatches');
+save('/misc/vlgscratch3/FergusGroup/denton/mahalanobis_distance_cov.mat', 'conv1_maha_cov', 'D', 'nbatches');

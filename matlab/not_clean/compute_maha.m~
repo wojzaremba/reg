@@ -57,10 +57,5 @@ mean1 = mean(conv1_maha_grads);
 conv1_maha_grads_cen = bsxfun(@minus, conv1_maha_grads, mean1);
 conv1_maha_cov = conv1_maha_grads_cen * conv1_maha_grads_cen' / D * nbatches;
 
-mean2 = mean(conv2_maha_grads);
-conv2_maha_grads_cen = bsxfun(@minus, conv2_maha_grads, mean2);
-conv2_maha_cov = conv2_maha_grads_cen * conv2_maha_grads_cen' / d * nbaches;
-
-
 save('/misc/vlgscratch3/FergusGroup/denton/mahalanobis_distance_approx.mat', 'conv1_maha', 'conv2_maha');
-save('/misc/vlgscratch3/FergusGroup/denton/mahalanobis_distance_cov.mat', 'conv1_maha_cov', 'conv2_maha_cov');
+save('/misc/vlgscratch3/FergusGroup/denton/mahalanobis_distance_cov.mat', 'conv1_maha_cov');

@@ -13,10 +13,9 @@ if 0
 end
 
 W = plan.layer{2}.cpu.vars.W;
-metric = load('/misc/vlgscratch3/FergusGroup/denton/mahalanobis_distance_approx.mat');
-epsilon = 0.5 ;
-sigmas = epsilon + metric.conv1_maha;
-WW = W .* sigmas;
+tmp = load('/misc/vlgscratch3/FergusGroup/denton/conv1_data_cov.mat');
+[cova, icova] = covroot(tmp.conv1_cov);
+WW = cov_tensor_transf(double(W), cova);
 
 % Compute approximation
 fprintf('||W|| = %f \n', norm(W(:)));
@@ -26,9 +25,9 @@ args.num_colors = num_colors;
 args.even = 1;
 [Wapprox, Wmono, colors, perm] = monochromatic_approx(double(WW), args);
 L2_err = norm(WW(:) - Wapprox(:)) / norm(WW(:));
-fprintf('||WW - Wapprox|| / ||WW|| = %f\n', L2_err);
+fprintf('||WW - WWapprox|| / ||WW|| = %f\n', L2_err);
 
-Wapprox = Wapprox ./ sigmas;
+Wapprox = cov_tensor_transf(Wapprox, icova);
 L2_err = norm(W(:) - Wapprox(:)) / norm(W(:));
 fprintf('||W - Wapprox|| / ||W|| = %f\n', L2_err);
 
@@ -51,13 +50,13 @@ for i = 1:nbatches
     error = error + e;
     fprintf('(%d) %d / %d = %f     (%d / %d = %f)\n', i, e,  plan.input.batch_size, e /  plan.input.batch_size, error, i * plan.input.batch_size, error / (i * plan.input.batch_size));
 end
-% 
-% load generated_mats/monochromatic_finetuned_error.mat
-% idx = find(num_colors_list == num_colors);
-% if isempty(idx)
-%     num_colors_list(end+1) = num_colors;
-%     errors(end+1) =  error / (i * plan.input.batch_size);
-% else
-%     errors(idx) =  error / (i * plan.input.batch_size);
-% end
-% save('generated_mats/monochromatic_finetuned_error.mat', 'errors', 'num_colors_list');
+
+load generated_mats/monochromatic_error_datacov.mat
+idx = find(num_colors_list == num_colors);
+if isempty(idx)
+    num_colors_list(end+1) = num_colors;
+    errors(end+1) =  error / (i * plan.input.batch_size);
+else
+    errors(idx) =  error / (i * plan.input.batch_size);
+end
+save('generated_mats/monochromatic_error_datacov.mat', 'errors', 'num_colors_list');

@@ -1,6 +1,6 @@
 C_(CleanGPU);
 clear all;
-C_(SetDevice, 3);
+C_(SetDevice, 1);
 global plan;
 randn('seed', 1);
 load_imagenet_model;
@@ -14,7 +14,7 @@ end
 
 W = plan.layer{5}.cpu.vars.W;
 
-metric = load('/misc/vlgscratch3/FergusGroup/denton/mahalanobis_distance.mat');
+metric = load('/misc/vlgscratch3/FergusGroup/denton/mahalanobis_distance_approx.mat');
 epsilon = 0.5 ;
 sigmas = epsilon + metric.conv2_maha;
 WW = W .* reshape(sigmas, size(W));
