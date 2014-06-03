@@ -173,12 +173,22 @@ approximation methods. Table \ref{table:ops} shows a breakdown of the number of 
 }
 \hspace{5mm}
 \subfigure[][]{
-  \includegraphics[width=0.35\linewidth]{img/bicluster_illustration.pdf} 
+  \includegraphics[width=0.35\linewidth]{img/bicluster_illustration.png} 
   \label{fig:biclustering}
 }
 }
 \vspace{-3mm}
-\caption{ A visualization of monochromatic and biclustering approximation structures. {\bf (a)}: The monochromatic approximation, used for the first layer. Input color channels are projected by a set of intermediate color channels. After this transformation, output features need only to look at one intermediate color channel. This sparsity structure is what makes the speedups feasible. {\bf (b)}: The biclustering approximation, used for higher convolution layers. Input and output features are clustered into equal sized groups. The weight tensor corresponding to each pair of input and output clusters is then approximated.}
+\caption{A visualization of convolution sparsity structures. The edges depict connections between input and
+  output feature planes (the spatial extent of the planes are not
+  shown). {\bf (a):} regular convolution, where all input/output planes
+  connect to one another. {\bf (b):} The monochromatic
+  approximation, used in the 1st layer. The input colors are projected
+  to a set of intermediate color spaces, which are then shared by the
+  output channels. Note the sparsity structure between the
+  intermediate and output maps, which makes speedups feasible. {\bf
+   (c):} The biclustering procedure used for higher layers. Input
+ and output planes are clustered into groups. Each group of planes is
+ then approximated using a low-rank projection.}
 \end{figure}
 
 \subsection{Monochromatic Approximation}\label{subsec:monochromatic}

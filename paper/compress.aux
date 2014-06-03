@@ -44,13 +44,11 @@
 \newlabel{sec:application}{{4}{4}{Application to Convolutional Networks}{section.4}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Monochromatic Approximation}{4}{subsection.4.1}}
 \newlabel{subsec:monochromatic}{{4.1}{4}{Monochromatic Approximation}{subsection.4.1}{}}
-\newlabel{fig:common_convolution}{{1(a)}{5}{Subfigure 1(a)}{subfigure.1.1}{}}
-\newlabel{sub@fig:common_convolution}{{(a)}{5}{Subfigure 1(a)\relax }{subfigure.1.1}{}}
-\newlabel{fig:monochromatic}{{1(b)}{5}{Subfigure 1(b)}{subfigure.1.2}{}}
-\newlabel{sub@fig:monochromatic}{{(b)}{5}{Subfigure 1(b)\relax }{subfigure.1.2}{}}
-\newlabel{fig:biclustering}{{1(c)}{5}{Subfigure 1(c)}{subfigure.1.3}{}}
-\newlabel{sub@fig:biclustering}{{(c)}{5}{Subfigure 1(c)\relax }{subfigure.1.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces A visualization of convolution sparsity structures. The edges depict connections between input and output feature planes (the spatial extent of the planes are not shown). {\bf  (a):} regular convolution, where all input/output planes connect to one another. {\bf  (b):} The monochromatic approximation, used in the 1st layer. The input colors are projected to a set of intermediate color spaces, which are then shared by the output channels. Note the sparsity structure between the intermediate and output maps, which makes speedups feasible. {\bf  (c):} The biclustering procedure used for higher layers. Input and output planes are clustered into groups. Each group of planes is then approximated using a low-rank projection.}}{5}{figure.1}}
+\newlabel{fig:monochromatic}{{1(a)}{5}{Subfigure 1(a)}{subfigure.1.1}{}}
+\newlabel{sub@fig:monochromatic}{{(a)}{5}{Subfigure 1(a)\relax }{subfigure.1.1}{}}
+\newlabel{fig:biclustering}{{1(b)}{5}{Subfigure 1(b)}{subfigure.1.2}{}}
+\newlabel{sub@fig:biclustering}{{(b)}{5}{Subfigure 1(b)\relax }{subfigure.1.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  A visualization of monochromatic and biclustering approximation structures. {\bf  (a)}: The monochromatic approximation, used for the first layer. Input color channels are projected by a set of intermediate color channels. After this transformation, output features need only to look at one intermediate color channel. This sparsity structure is what makes the speedups feasible. {\bf  (b)}: The biclustering approximation, used for higher convolution layers. Input and output features are clustered into equal sized groups. The weight tensor corresponding to each pair of input and output clusters is then approximated.}}{5}{figure.1}}
 \newlabel{blo1}{{5}{5}{Monochromatic Approximation}{equation.4.5}{}}
 \newlabel{blo2}{{6}{5}{Monochromatic Approximation}{equation.4.6}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Number of operations required for verious approximation methods.}}{6}{table.1}}
