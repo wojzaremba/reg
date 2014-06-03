@@ -1,0 +1,117 @@
+[    
+    {
+        "type" : "ImageInput",
+        "file_pattern": "~/data/cifar10/",
+        "batch_size": 128,
+        "rows": 32,
+        "cols": 32,
+        "depth" : 3,
+    },
+
+
+    {
+        "type": "Convreg",
+        "local_2d_patch" : {
+           "patch_rows": 5,
+           "patch_cols": 5,
+           "stride_rows": 1,
+           "stride_cols": 1,
+           "padding_rows": 2,
+           "padding_cols": 2
+        },
+        "depth": 32,
+        "function": "RELU"
+    },
+
+    {
+        "type": "MaxPooling",
+        "local_2d_patch" : {
+           "patch_rows": 3,
+           "patch_cols": 3,
+           "stride_rows": 2,
+           "stride_cols": 2
+        },
+    },
+
+    {
+        "type": "LRNormal",
+        "one2one": true,
+        "k": 2,
+        "n": 3,
+        "alpha": 2e-5,
+        "beta": 0.75
+    },
+
+    {
+        "type": "Convreg",
+        "local_2d_patch" : {
+           "patch_rows": 5,
+           "patch_cols": 5,
+           "stride_rows": 1,
+           "stride_cols": 1,
+           "padding_rows": 2,
+           "padding_cols": 2
+        },
+        "depth": 32,
+        "function": "RELU"
+    },
+
+    {
+        "type": "MaxPooling",
+        "local_2d_patch" : {
+           "patch_rows": 3,
+           "patch_cols": 3,
+           "stride_rows": 2,
+           "stride_cols": 2
+        },
+    },
+
+    {
+        "type": "LRNormal",
+        "one2one": true,
+        "k": 2,
+        "n": 3,
+        "alpha": 2e-5,
+        "beta": 0.75
+    },
+
+    {
+        "type": "Convreg",
+        "local_2d_patch" : {
+           "patch_rows": 5,
+           "patch_cols": 5,
+           "stride_rows": 1,
+           "stride_cols": 1,
+           "padding_rows": 2,
+           "padding_cols": 2
+        },
+        "depth": 64,
+        "function": "RELU"
+    },
+
+    {
+        "type": "MaxPooling",
+        "local_2d_patch" : {
+           "patch_rows": 3,
+           "patch_cols": 3,
+           "stride_rows": 2,
+           "stride_cols": 2
+        },
+    },
+
+    {
+        "type": "FC",
+        "depth": 10,
+        "function": "LINEAR"
+    },
+    {
+        "type": "Softmax",
+        "depth": 10,
+    },
+
+    {
+      "type": "Spec",
+      "lr": 0.1,
+      "momentum": 0.9
+    }
+]

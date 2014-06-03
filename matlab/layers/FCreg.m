@@ -24,9 +24,10 @@ classdef FCreg < Layer
             act = obj.dF(act);
             dX = act .* reshape(obj.cpu.dvars.out, size(act));      
             obj.cpu.dvars.W = X(:, :)' * dX; 
-            if mod(plan.input.step,plan.regu.regepoch)==1
+            if mod(plan.input.step,plan.regu.regepoch)==0
                 [u,s,v]=svds(double(W),1);
                 dW = W * v * v';
+		%fprintf('sup norm FP %f \n', s(1))
                 obj.cpu.dvars.W = obj.cpu.dvars.W + plan.regu.betareg * dW ;
             end
             obj.cpu.dvars.B = sum(dX, 1);
