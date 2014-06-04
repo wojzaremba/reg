@@ -6,10 +6,10 @@ randn('seed', 1);
 load_imagenet_model;
 
 num_colors = 6;
-rank = 8;
+rank = 6;
 
 if 1
-    fname = sprintf('monochromatic%d_finetuneall', num_colors);
+    fname = sprintf('/misc/vlgscratch3/FergusGroup/denton/monochromatic%d_finetuneall', num_colors);
     load_weights(fname, 1);
     fprintf('\nLoading weights from %s\n\n', fname);
     fname = sprintf('momochromatic%d_layer2_bisubspace_48_2_%d_finetuneall', num_colors, rank);

@@ -1,7 +1,10 @@
 function [] = load_weights(fname, start_layer)
     global plan
-    load(sprintf('generated_mats/%s.mat', fname));
-    
+    if isempty(findstr(fname, 'scratch'))
+        load(sprintf('generated_mats/%s.mat', fname));
+    else
+        load(fname);
+    end
     weighted_layers = [5, 8, 10, 11, 13, 14, 15];
     for i = start_layer : length(weighted_layers)
        layer_nr = weighted_layers(i);

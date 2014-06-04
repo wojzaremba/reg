@@ -1,22 +1,40 @@
-load generated_mats/mattnet_fp_results_maha.mat
-load generated_mats/layer2_speedup_vs_rank_gpu.mat
+clear all
 
-baseline = 0.176025;
-err = [];
-for rank = 8:16
-   val = fp_results_maha(sprintf('48_2_%d', rank)); 
-   err(end+1) = val(1);
+baseline = 0.177604;
+ranks_to_plot = [6, 8, 10, 12, 14, 16];
+load generated_mats/layer2_bisubspace_48_2_error.mat
+rank_list_err = rank_list;
+load generated_mats/layer2_speedup_vs_rank_gpu.mat 
+rank_list_time = rank_list;
+
+error_inc = [];
+mean_speedup_to_plot = [];
+std_speedup_to_plot = [];
+for  nc = 1 : length(ranks_to_plot)
+    idx = find(rank_list_err == ranks_to_plot(nc));
+    if isempty(idx)
+        continue
+    else
+        error_inc(nc) = errors(idx);
+    end
+    idx = find(rank_list_time == ranks_to_plot(nc));
+    if isempty(idx)
+        continue
+    else
+        mean_speedup_to_plot(nc) = mean_speedup(idx);
+        std_speedup_to_plot(nc) = std_speedup(idx);
+    end
 end
 
-error_increase = err - baseline;
+error_inc = error_inc - baseline;
 
-mean_speedup = mean(speedup_vs_rank');
-std_speedup = std(speedup_vs_rank');
+figure1 = figure('Position', [0, 0, 700, 500]);
 
-figure1 = figure('Position', [0, 0, 700, 600]);
+set(gca,'Fontsize',16);
 
+errorbar(error_inc * 100, mean_speedup_to_plot, std_speedup_to_plot, 'bx', 'linewidth', 2);
+grid on;
 
-errorbar(error_increase * 100, mean_speedup, std_speedup, 'bx', 'linewidth', 2); grid on;
 set(gca,'Fontsize',16);
 xlabel('Percent loss in performance', 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
 ylabel('Empirical gain in speed on GPU', 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
@@ -24,20 +42,17 @@ title(sprintf('MattNet second layer approximation: \nPerformance loss vs. empiri
 legend1 = legend('G = 48; H = 2');
 set(legend1, 'Position',[0.151428571428572 0.855666666666668 0.215714285714286 0.0433333333333333], 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
 
-ranks = 8:16;
-for r = 1 : length(ranks)
-    if (ranks(r) < 10)
-        offset = 0.25;
+for  r = 1 : length(ranks_to_plot)
+    if ranks_to_plot(r) == 6
+        offset = -1;
     else
-        offset= 0.28;
+        offset = 0.2;
+        
     end
-    if (ranks(r) == 15 || ranks(r) == 13)
-        offset = -0.06;
-    end
-   text(double(error_increase(r) * 100 - offset), double(mean_speedup(r)), sprintf('rank = %d', ranks(r)), 'FontSize', 10, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
-end
-set(gca,'XTick',[0.5:0.5:3.5]);
+    offset_vert = 0;
+    text(double(error_inc(r) * 100 + offset), double(mean_speedup_to_plot(r)) + offset_vert, sprintf('rank = %d', ranks_to_plot(r)), 'FontSize', 14, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
 
+end
 set(gcf, 'Color', 'w');
-export_fig 'paper/img/layer2_GPUspeedup_vs_performance_loss' -pdf
-saveas(figure1, 'paper/img/layer2_GPUspeedup_vs_performance_loss', 'epsc');
+export_fig '../paper/img/layer2_GPUspeedup_vs_performance_loss_finetune_and_orig' -pdf
+saveas(figure1, '../paper/img/layer2_GPUspeedup_vs_performance_loss_finetune_and_orig', 'epsc');

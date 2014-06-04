@@ -1,17 +1,22 @@
 C_(CleanGPU);
 clear all;
-C_(SetDevice, 3);
+C_(SetDevice, 2);
 global plan;
 randn('seed', 1);
 load_imagenet_model('matthew_train', 128);
-Worig = plan.layer{5}.cpu.vars.W;
-
 plan.training = 1;
 
-iclust = 48;
+approx_layer = 5;
+W = plan.layer{approx_layer}.cpu.vars.W;
+
+iclust = 2;
 oclust = 2;
-rank = 5;
-fname = sprintf('layer2_bisubspace_%d_%d_%d_finetuneall', iclust, oclust, rank);
+oratio = 0.35; % (0.6 --> 76), (0.5 --> 64)
+iratio = 0.4;  % (0.6 --> 78), (0.5 --> 24), (0.4 --> 19)
+odegree = floor(size(W, 1) * oratio / oclust);
+idegree = floor(size(W, 4) * iratio / iclust);
+
+fname = sprintf('layer2_svd_%d_%d_%d_%d_finetuneall', iclust, oclust, idegree, odegree);
 
 
 restart = 1;
@@ -21,19 +26,15 @@ if ~restart
 end
 
 % Replace second conv layer with approximated weights
-approx_layer = 5;
-W = plan.layer{approx_layer}.cpu.vars.W;
-args.iclust = iclust;
-args.oclust = oclust;
-args.cluster_type = 'kmeans';
-args.k = rank;
-args.in_s = 55;
-args.out_s = 51;
 
-[Wapprox, F, C, XY, perm_in, perm_out, num_weights] = bisubspace_lowrank_approx_nosep(double(W), args);
+
+in_s = 55;
+out_s = 51;
+
+[Wapprox, C, Z, F, idx_input, idx_output] = bispace_svd(W, iclust, iratio, oclust, oratio, 0, in_s, out_s);
 
 L2_err = norm(W(:) - Wapprox(:)) / norm(W(:));
-fprintf(' ||W - Wapprox|| / ||W|| = %f\n', L2_err);
+fprintf('||W - Wapprox|| / ||W|| = %f\n', L2_err);
 C_(CopyToGPU, plan.layer{approx_layer}.gpu.vars.W, single(Wapprox));
 plan.layer{approx_layer}.cpu.vars.W = single(Wapprox);
 
@@ -58,7 +59,7 @@ for epoch = 1 : nepoch
     error = 0;
     for b = 1 : ntrain_batches
         
-        if b > 1000 
+        if b > 2000 
             plan.lr = 0.0001;
         end
         
