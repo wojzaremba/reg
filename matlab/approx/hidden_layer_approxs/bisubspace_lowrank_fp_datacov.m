@@ -14,10 +14,9 @@ end
 
 W = plan.layer{5}.cpu.vars.W;
 
-metric = load('/misc/vlgscratch3/FergusGroup/denton/mahalanobis_distance_approx.mat');
-epsilon = 0.5 ;
-sigmas = epsilon + metric.conv2_maha;
-WW = W .* reshape(sigmas, size(W));
+tmp = load('/misc/vlgscratch3/FergusGroup/denton/conv2_data_cov.mat');
+[cova, icova] = covroot(tmp.conv2_cov);
+WW = cov_tensor_transf(double(W), cova);
 
 fprintf('||W|| = %f \n', norm(W(:)));
 fprintf('||WW|| = %f \n', norm(WW(:)));
@@ -35,7 +34,7 @@ args.cluster_type = 'kmeans';
 L2_err = norm(WW(:) - Wapprox(:)) / norm(WW(:));
 fprintf('||WW - Wapprox|| / ||WW|| = %f\n', L2_err);
 
-Wapprox = Wapprox ./ reshape(sigmas, size(WW));
+Wapprox = cov_tensor_transf(Wapprox, icova);
 L2_err = norm(W(:) - Wapprox(:)) / norm(W(:));
 fprintf('||W - Wapprox|| / ||W|| = %f\n', L2_err);
 
