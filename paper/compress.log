@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2012.2.2)  4 JUN 2014 16:02
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2012.2.2)  4 JUN 2014 16:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -433,11 +433,7 @@ line 372.
 LaTeX Warning: Reference `subsec:monochromatic' on page 5 undefined on input li
 ne 438.
 
-
-LaTeX Warning: Reference `subsubsec:biclustering' on page 5 undefined on input 
-line 448.
-
-[5]) (./distance.tex) (./experiments.tex
+) (./distance.tex) (./experiments.tex [5]
 
 LaTeX Warning: Reference `sec:application' on page 6 undefined on input line 7.
 
@@ -446,6 +442,7 @@ LaTeX Warning: Reference `sec:application' on page 6 undefined on input line 7.
 LaTeX Warning: Reference `sec:application' on page 6 undefined on input line 11
 3.
 
+[6]
 Package epstopdf Info: Source file: <img/RGB_components_matthew_3d.eps>
 (epstopdf)                    date: 2014-06-04 09:19:57
 (epstopdf)                    size: 143264 bytes
@@ -458,7 +455,7 @@ _3d-eps-converted-to.pdf img/RGB_components_matthew_3d.eps>
 (epstopdf)             \includegraphics on input line 128.
 Package epstopdf Info: Output file is already uptodate.
 
-<img/RGB_components_matthew_3d-eps-converted-to.pdf, id=165, 492.84125pt x 405.
+<img/RGB_components_matthew_3d-eps-converted-to.pdf, id=179, 492.84125pt x 405.
 515pt>
 File: img/RGB_components_matthew_3d-eps-converted-to.pdf Graphic file (type pdf
 )
@@ -480,7 +477,7 @@ _3d.eps>
 (epstopdf)             \includegraphics on input line 130.
 Package epstopdf Info: Output file is already uptodate.
 
-<img/monochromatic_RGB_components_matthew_3d-eps-converted-to.pdf, id=166, 492.
+<img/monochromatic_RGB_components_matthew_3d-eps-converted-to.pdf, id=180, 492.
 84125pt x 405.515pt>
 File: img/monochromatic_RGB_components_matthew_3d-eps-converted-to.pdf Graphic 
 file (type pdf)
@@ -494,13 +491,13 @@ Overfull \hbox (21.90002pt too wide) in paragraph at lines 128--131
 [][]   [] 
  []
 
-<img/denoising_combined.pdf, id=167, 204.06238pt x 48.06828pt>
+<img/denoising_combined.pdf, id=181, 204.06238pt x 48.06828pt>
 File: img/denoising_combined.pdf Graphic file (type pdf)
 
 <use img/denoising_combined.pdf>
 Package pdftex.def Info: img/denoising_combined.pdf used on input line 142.
 (pdftex.def)             Requested size: 357.73405pt x 84.27917pt.
- [6]
+
 <img/layer1_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf, id=185, 606.2
 65pt x 488.82625pt>
 File: img/layer1_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf Graphic f
@@ -529,9 +526,13 @@ Overfull \hbox (21.90002pt too wide) in paragraph at lines 183--186
 LaTeX Warning: Reference `sec:application' on page 7 undefined on input line 19
 4.
 
-[7 <./img/RGB_components_matthew_3d-eps-converted-to.pdf> <./img/monochromatic_
-RGB_components_matthew_3d-eps-converted-to.pdf>]
-<img/layer2_theoreticalspeedup_vs_performance_loss.pdf, id=208, 608.2725pt x 48
+
+Underfull \vbox (badness 1360) has occurred while \output is active []
+
+ [7 <./img/RGB_components_matthew_3d-eps-converted-to.pdf> <./img/monochromatic
+_RGB_components_matthew_3d-eps-converted-to.pdf> <./img/denoising_combined.pdf>
+]
+<img/layer2_theoreticalspeedup_vs_performance_loss.pdf, id=222, 608.2725pt x 48
 8.82625pt>
 File: img/layer2_theoreticalspeedup_vs_performance_loss.pdf Graphic file (type 
 pdf)
@@ -540,7 +541,7 @@ Package pdftex.def Info: img/layer2_theoreticalspeedup_vs_performance_loss.pdf
 used on input line 211.
 (pdftex.def)             Requested size: 149.05687pt x 119.78212pt.
 
-<img/layer2_theoreticalspeedup_vs_performance_loss_pierre.pdf, id=209, 602.25pt
+<img/layer2_theoreticalspeedup_vs_performance_loss_pierre.pdf, id=223, 602.25pt
  x 488.82625pt>
 File: img/layer2_theoreticalspeedup_vs_performance_loss_pierre.pdf Graphic file
  (type pdf)
@@ -555,7 +556,7 @@ Overfull \hbox (21.90002pt too wide) in paragraph at lines 211--214
  []
 
 
-<img/layer2_CPUspeedup_vs_performance_loss.pdf, id=210, 608.2725pt x 578.16pt>
+<img/layer2_CPUspeedup_vs_performance_loss.pdf, id=224, 608.2725pt x 578.16pt>
 File: img/layer2_CPUspeedup_vs_performance_loss.pdf Graphic file (type pdf)
 
 <use img/layer2_CPUspeedup_vs_performance_loss.pdf>
@@ -563,7 +564,7 @@ Package pdftex.def Info: img/layer2_CPUspeedup_vs_performance_loss.pdf used on
 input line 222.
 (pdftex.def)             Requested size: 149.05687pt x 141.67249pt.
 
-<img/layer2_GPUspeedup_vs_performance_loss.pdf, id=211, 608.2725pt x 578.16pt>
+<img/layer2_GPUspeedup_vs_performance_loss.pdf, id=225, 608.2725pt x 578.16pt>
 File: img/layer2_GPUspeedup_vs_performance_loss.pdf Graphic file (type pdf)
 
 <use img/layer2_GPUspeedup_vs_performance_loss.pdf>
@@ -575,14 +576,18 @@ Overfull \hbox (21.90002pt too wide) in paragraph at lines 222--225
 [][]   [] 
  []
 
-) (./discussion.tex [8 <./img/denoising_combined.pdf>]) (./compress.bbl
-[9 <./img/layer1_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf> <./img/l
-ayer1_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf> <./img/layer2_theor
-eticalspeedup_vs_performance_loss.pdf> <./img/layer2_theoreticalspeedup_vs_perf
-ormance_loss_pierre.pdf>])
+[8 <./img/layer1_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf> <./img/l
+ayer1_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf>]) (./discussion.tex
+
+Underfull \vbox (badness 4048) has occurred while \output is active []
+
+ [9 <./img/layer2_theoreticalspeedup_vs_performance_loss.pdf> <./img/layer2_the
+oreticalspeedup_vs_performance_loss_pierre.pdf> <./img/layer2_CPUspeedup_vs_per
+formance_loss.pdf> <./img/layer2_GPUspeedup_vs_performance_loss.pdf>]) (./compr
+ess.bbl
+[10])
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 53.
- [10 <./img/layer2_CPUspeedup_vs_performance_loss.pdf> <./img/layer2_GPUspeedup
-_vs_performance_loss.pdf>] [11]
+ [11]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 53.
  (./compress.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 53.
@@ -598,11 +603,11 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 53.
 Here is how much of TeX's memory you used:
  6400 strings out of 493633
  93636 string characters out of 3143378
- 186535 words of memory out of 3000000
+ 187534 words of memory out of 3000000
  9523 multiletter control sequences out of 15000+200000
  25542 words of font info for 59 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
- 30i,11n,28p,740b,415s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 30i,11n,28p,740b,417s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
 xlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/tex
@@ -623,9 +628,9 @@ ype1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/ur
 w/times/utmb8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/urw/times/ut
 mr8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
 
-Output written on compress.pdf (11 pages, 675048 bytes).
+Output written on compress.pdf (11 pages, 674521 bytes).
 PDF statistics:
- 390 PDF objects out of 1000 (max. 8388607)
+ 389 PDF objects out of 1000 (max. 8388607)
  313 compressed objects within 4 object streams
  63 named destinations out of 1000 (max. 500000)
  160 words of extra memory for PDF output out of 10000 (max. 10000000)

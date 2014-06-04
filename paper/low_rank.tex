@@ -443,14 +443,13 @@ with a subspace projection distance.
 %Equal size of clusters simplifies coding of approximations dramatically and enables a
 %significant speedup. 
 
-The number of  input and output feature planes is large for all layers
-beyond the first. As described in Section
-\ref{subsubsec:biclustering} we cluster input and output features and then, 
-
+%The number of  input and output feature planes is large for all layers
+%beyond the first. As described in Section
+%\ref{subsubsec:biclustering} we cluster input and output features and then, 
+%
 We then find low-rank approximations of each input-output subtensor $W_{C_i, F_j}$.
 For that purpose, we explore two different approximations previously described: (i) SVD by folding the tensor into a matrix,
 and (ii) outer product decomposition.
-
 Using these approximations on the convolutional weights, the target
 output can be computed with significantly fewer operations. The number
 of operations required is a function of both the number
