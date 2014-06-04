@@ -1,11 +1,15 @@
-This is BibTeX, Version 0.99d (TeX Live 2013)
+This is BibTeX, Version 0.99d (TeX Live 2011)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: compress.aux
 The style file: splncs.bst
 Database file #1: bibliography.bib
+Warning--I didn't find a database entry for "overfeat"
+Warning--I didn't find a database entry for "hintonseparable"
+Warning--I didn't find a database entry for "zisserman14"
+Warning--I didn't find a database entry for "rankonetensors"
 You've used 13 entries,
             2087 wiz_defined-function locations,
-            553 strings with 6165 characters,
+            557 strings with 6213 characters,
 and the built_in function-call counts, 3411 in all, are:
 = -- 302
 > -- 187
@@ -44,3 +48,4 @@ warning$ -- 0
 while$ -- 22
 width$ -- 15
 write$ -- 138
+(There were 4 warnings)
