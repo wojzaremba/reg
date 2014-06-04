@@ -27,7 +27,7 @@ plan.layer{2}.cpu.vars.W = single(Wapprox);
 % Finetuning parameters
 min_layer = 3;
 plan.momentum = 0.9;
-plan.lr = 0.0001;
+plan.lr = 0.00001;
 
 nimg = length(plan.input.Y);
 bs = plan.input.batch_size;

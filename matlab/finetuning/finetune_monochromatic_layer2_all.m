@@ -19,6 +19,12 @@ fprintf('\nLoading weights from %s\n\n', fname);
 
 fname = sprintf('monochromatic%d_layer2_bisubspace_%d_%d_%d_finetuneall', num_colors, iclust, oclust, rank);
 
+restart = 0;
+if ~restart
+  load_weights_training(fname, 2);
+  fprintf('\nLoading weights from %s\n\n', fname);
+end
+
 % Replace first conv layer with approximated weights
 W = plan.layer{2}.cpu.vars.W;
 fprintf('Conv 1: ||W|| = %f \n', norm(W(:)));
@@ -54,7 +60,7 @@ plan.layer{approx_layer}.cpu.vars.W = single(Wapprox);
 % Finetuning parameters
 min_layer = 6;
 plan.momentum = 0.9;
-plan.lr = 0.001;
+plan.lr = 0.00001;
 
 nimg = length(plan.input.Y);
 bs = plan.input.batch_size;
@@ -71,9 +77,7 @@ for epoch = 1 : nepoch
     plan.repeat = epoch;
     error = 0;
     for b = 1 : ntrain_batches
-        if b > 2000
-            plan.lr = 0.0001;
-        end
+        
         plan.input.GetImage(1);
         ForwardPass();
         e = plan.classifier.GetScore(5);

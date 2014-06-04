@@ -50,7 +50,7 @@ for  r = 1 : length(ranks_to_plot)
         
     end
     offset_vert = 0;
-    text(double(error_inc(r) * 100 + offset), double(mean_speedup_to_plot(r)) + offset_vert, sprintf('rank = %d', ranks_to_plot(r)), 'FontSize', 14, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+    text(double(error_inc(r) * 100 + offset), double(mean_speedup_to_plot(r)) + offset_vert, sprintf('K = %d', ranks_to_plot(r)), 'FontSize', 14, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
 
 end
 set(gcf, 'Color', 'w');

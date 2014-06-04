@@ -66,14 +66,14 @@ for i = 1:nbatches
 end
 
 
-% 
-% load generated_mats/layer2_bisubspace_finetuned_error.mat
-% idx = find(rank_list == rank);
-% if isempty(idx)
-%     rank_list(end+1) = rank;
-%     errors(end+1) =  error / (i * plan.input.batch_size);
-% else
-%     errors(idx) =  error / (i * plan.input.batch_size);
-% end
-% save('generated_mats/layer2_bisubspace_finetuned_error.mat', 'errors', 'rank_list');
+
+load generated_mats/monochromatic6_layer2_bisubspace_finetuned_error.mat
+idx = find(rank_list == rank);
+if isempty(idx)
+    rank_list(end+1) = rank;
+    errors(end+1) =  error / (i * plan.input.batch_size);
+else
+    errors(idx) =  error / (i * plan.input.batch_size);
+end
+save('generated_mats/monochromatic6_layer2_bisubspace_finetuned_error.mat', 'errors', 'rank_list');
 

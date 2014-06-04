@@ -11,8 +11,8 @@ fprintf('||W|| = %f \n', norm(W(:)));
 
 iclust = 2;
 oclust = 2;
-oratio = 0.5; % (0.6 --> 76), (0.5 --> 64)
-iratio = 0.4;  % (0.6 --> 78), (0.5 --> 24), (0.4 --> 19)
+oratio = 0.4; % (0.6 --> 76), (0.5 --> 64)
+iratio = 0.35;  % (0.6 --> 78), (0.5 --> 24), (0.4 --> 19)
 odegree = floor(size(W, 1) * oratio / oclust);
 idegree = floor(size(W, 4) * iratio / iclust);
 code = sprintf('in%d_out%d', idegree, odegree);
@@ -45,7 +45,7 @@ for i = 1:nbatches
     fprintf('(%d) %d / %d = %f     (%d / %d = %f)\n', i, e,  plan.input.batch_size, e /  plan.input.batch_size, error, i * plan.input.batch_size, error / (i * plan.input.batch_size));
 end
 % 
-% load 'generated_mats/layer2_bisubspace_svd_2_2_error.mat'
+% load 'generated_mats/layer2_bisubspace_svd_2_2_finetuned_error.mat'
 % idx = find(ismember(rank_codes, code));
 % if isempty(idx)
 %     rank_codes{end+1} = code;
@@ -54,5 +54,5 @@ end
 %     errors(idx) = error / (i * plan.input.batch_size);
 % end
 % 
-% save('generated_mats/layer2_bisubspace_svd_2_2_error.mat', 'errors', 'rank_codes');
-% 
+% save('generated_mats/layer2_bisubspace_svd_2_2_finetuned_error.mat', 'errors', 'rank_codes');
+
