@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  4 JUN 2014 13:00
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  4 JUN 2014 15:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -373,70 +373,114 @@ File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 (./intro_related.tex
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1.
+
+
+LaTeX Warning: Citation `overfeat' on page 1 undefined on input line 34.
+
+
+LaTeX Warning: Citation `hintonseparable' on page 1 undefined on input line 36.
+
+
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 54.
+(/usr/local/texlive/2013/texmf-dist/tex/latex/psnfss/omsptm.fd
+File: omsptm.fd 
+)
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 54.
  [1{/usr/local/texlive/2013/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
-]) (./low_rank.tex [2] [3]
+]
 
-LaTeX Warning: Reference `subsubsec:biclustering' on page 4 undefined on input 
-line 146.
+LaTeX Warning: Citation `zisserman14' on page 2 undefined on input line 140.
 
-<img/monochromatic_illustration.pdf, id=123, 705.63625pt x 441.65pt>
-File: img/monochromatic_illustration.pdf Graphic file (type pdf)
+) (./low_rank.tex [2]
 
-<use img/monochromatic_illustration.pdf>
-Package pdftex.def Info: img/monochromatic_illustration.pdf used on input line 
-164.
-(pdftex.def)             Requested size: 158.99156pt x 99.50847pt.
+LaTeX Warning: Citation `zisserman14' on page 3 undefined on input line 104.
 
-<img/bicluster_illustration.pdf, id=124, 680.5425pt x 345.29pt>
-File: img/bicluster_illustration.pdf Graphic file (type pdf)
-
-<use img/bicluster_illustration.pdf>
-Package pdftex.def Info: img/bicluster_illustration.pdf used on input line 164.
-
-(pdftex.def)             Requested size: 139.12216pt x 70.58469pt.
-
-Underfull \vbox (badness 1348) has occurred while \output is active []
-
- [4 <./img/monochromatic_illustration.pdf> <./img/bicluster_illustration.pdf
-
-pdfTeX warning: pdflatex (file ./img/bicluster_illustration.pdf): PDF inclusion
-: multiple pdfs with page group included in a single page
->]
-
-LaTeX Warning: Reference `subsubsec:biclustering' on page 5 undefined on input 
-line 200.
-
-
-LaTeX Warning: Reference `subsubsec:biclustering' on page 5 undefined on input 
-line 232.
-
-) (./distance.tex [5]
-<img/biclustering_L2_vs_testerr_matt.pdf, id=181, 609.27625pt x 488.82625pt>
+<img/biclustering_L2_vs_testerr_matt.pdf, id=90, 609.27625pt x 488.82625pt>
 File: img/biclustering_L2_vs_testerr_matt.pdf Graphic file (type pdf)
 
 <use img/biclustering_L2_vs_testerr_matt.pdf>
 Package pdftex.def Info: img/biclustering_L2_vs_testerr_matt.pdf used on input 
-line 63.
+line 123.
 (pdftex.def)             Requested size: 149.05687pt x 119.58818pt.
 
-<img/biclustering_L2_vs_testerr_maha_matt.pdf, id=182, 609.27625pt x 488.82625p
-t>
+<img/biclustering_L2_vs_testerr_maha_matt.pdf, id=91, 609.27625pt x 488.82625pt
+>
 File: img/biclustering_L2_vs_testerr_maha_matt.pdf Graphic file (type pdf)
  <use img/biclustering_L2_vs_testerr_maha_matt.pdf>
 Package pdftex.def Info: img/biclustering_L2_vs_testerr_maha_matt.pdf used on i
-nput line 65.
+nput line 125.
 (pdftex.def)             Requested size: 149.05687pt x 119.58818pt.
 
-Overfull \hbox (21.90002pt too wide) in paragraph at lines 63--66
+Overfull \hbox (21.90002pt too wide) in paragraph at lines 123--126
 [][]   [] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-) (./experiments.tex [6] [7 <./img/biclustering_L2_vs_testerr_matt.pdf> <./img/
-biclustering_L2_vs_testerr_maha_matt.pdf>]
+[3]
+
+LaTeX Warning: Citation `rankonetensors' on page 4 undefined on input line 204.
+
+
+
+LaTeX Warning: Citation `rankonetensors' on page 4 undefined on input line 214.
+
+
+<img/monochromatic_illustration.pdf, id=106, 705.63625pt x 441.65pt>
+File: img/monochromatic_illustration.pdf Graphic file (type pdf)
+
+<use img/monochromatic_illustration.pdf>
+Package pdftex.def Info: img/monochromatic_illustration.pdf used on input line 
+336.
+(pdftex.def)             Requested size: 158.99156pt x 99.50847pt.
+
+<img/bicluster_illustration.pdf, id=107, 680.5425pt x 345.29pt>
+File: img/bicluster_illustration.pdf Graphic file (type pdf)
+
+<use img/bicluster_illustration.pdf>
+Package pdftex.def Info: img/bicluster_illustration.pdf used on input line 336.
+
+(pdftex.def)             Requested size: 139.12216pt x 70.58469pt.
+ [4 <./img/biclustering_L2_vs_testerr_matt.pdf> <./img/biclustering_L2_vs_teste
+rr_maha_matt.pdf>]
+
+LaTeX Warning: Reference `subsubsec:biclustering' on page 5 undefined on input 
+line 371.
+
+[5 <./img/monochromatic_illustration.pdf> <./img/bicluster_illustration.pdf
+
+pdfTeX warning: pdflatex (file ./img/bicluster_illustration.pdf): PDF inclusion
+: multiple pdfs with page group included in a single page
+>]
+
+LaTeX Warning: Reference `subsec:monochromatic' on page 6 undefined on input li
+ne 435.
+
+
+LaTeX Warning: Reference `subsubsec:biclustering' on page 6 undefined on input 
+line 446.
+
+
+LaTeX Warning: Reference `subsubsec:svd_tensor' on page 6 undefined on input li
+ne 447.
+
+
+LaTeX Warning: Reference `subsubsec:outer' on page 6 undefined on input line 44
+8.
+
+) (./distance.tex) (./experiments.tex
+
+LaTeX Warning: Reference `sec:application' on page 6 undefined on input line 7.
+
+
+[6]
+
+LaTeX Warning: Reference `sec:application' on page 7 undefined on input line 11
+3.
+
 Package epstopdf Info: Source file: <img/RGB_components_matthew_3d.eps>
 (epstopdf)                    date: 2014-05-29 19:29:59
 (epstopdf)                    size: 143264 bytes
@@ -449,7 +493,7 @@ _3d-eps-converted-to.pdf img/RGB_components_matthew_3d.eps>
 (epstopdf)             \includegraphics on input line 128.
 Package epstopdf Info: Output file is already uptodate.
 
-<img/RGB_components_matthew_3d-eps-converted-to.pdf, id=235, 492.84125pt x 405.
+<img/RGB_components_matthew_3d-eps-converted-to.pdf, id=200, 492.84125pt x 405.
 515pt>
 File: img/RGB_components_matthew_3d-eps-converted-to.pdf Graphic file (type pdf
 )
@@ -471,7 +515,7 @@ _3d.eps>
 (epstopdf)             \includegraphics on input line 130.
 Package epstopdf Info: Output file is already uptodate.
 
-<img/monochromatic_RGB_components_matthew_3d-eps-converted-to.pdf, id=236, 492.
+<img/monochromatic_RGB_components_matthew_3d-eps-converted-to.pdf, id=201, 492.
 84125pt x 405.515pt>
 File: img/monochromatic_RGB_components_matthew_3d-eps-converted-to.pdf Graphic 
 file (type pdf)
@@ -485,14 +529,18 @@ Overfull \hbox (21.90002pt too wide) in paragraph at lines 128--131
 [][]   [] 
  []
 
-<img/denoising_combined.pdf, id=237, 204.06238pt x 48.06828pt>
+<img/denoising_combined.pdf, id=202, 204.06238pt x 48.06828pt>
 File: img/denoising_combined.pdf Graphic file (type pdf)
 
 <use img/denoising_combined.pdf>
 Package pdftex.def Info: img/denoising_combined.pdf used on input line 142.
 (pdftex.def)             Requested size: 357.73405pt x 84.27917pt.
 
-<img/layer1_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf, id=241, 606.2
+Underfull \vbox (badness 2717) has occurred while \output is active []
+
+ [7 <./img/RGB_components_matthew_3d-eps-converted-to.pdf> <./img/monochromatic
+_RGB_components_matthew_3d-eps-converted-to.pdf>]
+<img/layer1_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf, id=224, 606.2
 65pt x 488.82625pt>
 File: img/layer1_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf Graphic f
 ile (type pdf)
@@ -502,7 +550,7 @@ Package pdftex.def Info: img/layer1_CPUspeedup_vs_performance_loss_finetune_and
 _orig.pdf used on input line 183.
 (pdftex.def)             Requested size: 149.05687pt x 120.18489pt.
 
-<img/layer1_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf, id=242, 606.2
+<img/layer1_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf, id=225, 606.2
 65pt x 488.82625pt>
 File: img/layer1_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf Graphic f
 ile (type pdf)
@@ -516,9 +564,12 @@ Overfull \hbox (21.90002pt too wide) in paragraph at lines 183--186
 [][]   [] 
  []
 
-[8 <./img/RGB_components_matthew_3d-eps-converted-to.pdf> <./img/monochromatic_
-RGB_components_matthew_3d-eps-converted-to.pdf>]
-<img/layer2_theoreticalspeedup_vs_performance_loss.pdf, id=264, 608.2725pt x 48
+
+LaTeX Warning: Reference `sec:application' on page 8 undefined on input line 19
+4.
+
+
+<img/layer2_theoreticalspeedup_vs_performance_loss.pdf, id=228, 608.2725pt x 48
 8.82625pt>
 File: img/layer2_theoreticalspeedup_vs_performance_loss.pdf Graphic file (type 
 pdf)
@@ -527,7 +578,7 @@ Package pdftex.def Info: img/layer2_theoreticalspeedup_vs_performance_loss.pdf
 used on input line 211.
 (pdftex.def)             Requested size: 149.05687pt x 119.78212pt.
 
-<img/layer2_theoreticalspeedup_vs_performance_loss_pierre.pdf, id=265, 602.25pt
+<img/layer2_theoreticalspeedup_vs_performance_loss_pierre.pdf, id=229, 602.25pt
  x 488.82625pt>
 File: img/layer2_theoreticalspeedup_vs_performance_loss_pierre.pdf Graphic file
  (type pdf)
@@ -542,7 +593,7 @@ Overfull \hbox (21.90002pt too wide) in paragraph at lines 211--214
  []
 
 
-<img/layer2_CPUspeedup_vs_performance_loss.pdf, id=266, 608.2725pt x 578.16pt>
+<img/layer2_CPUspeedup_vs_performance_loss.pdf, id=230, 608.2725pt x 578.16pt>
 File: img/layer2_CPUspeedup_vs_performance_loss.pdf Graphic file (type pdf)
 
 <use img/layer2_CPUspeedup_vs_performance_loss.pdf>
@@ -550,7 +601,7 @@ Package pdftex.def Info: img/layer2_CPUspeedup_vs_performance_loss.pdf used on
 input line 222.
 (pdftex.def)             Requested size: 149.05687pt x 141.67249pt.
 
-<img/layer2_GPUspeedup_vs_performance_loss.pdf, id=267, 608.2725pt x 578.16pt>
+<img/layer2_GPUspeedup_vs_performance_loss.pdf, id=231, 608.2725pt x 578.16pt>
 File: img/layer2_GPUspeedup_vs_performance_loss.pdf Graphic file (type pdf)
 
 <use img/layer2_GPUspeedup_vs_performance_loss.pdf>
@@ -562,25 +613,20 @@ Overfull \hbox (21.90002pt too wide) in paragraph at lines 222--225
 [][]   [] 
  []
 
-) (./discussion.tex
-Underfull \vbox (badness 2302) has occurred while \output is active []
-
- [9 <./img/denoising_combined.pdf>]) (./compress.bbl
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [10 <./img/layer1_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf> <./img
-/layer1_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf> <./img/layer2_the
-oreticalspeedup_vs_performance_loss.pdf> <./img/layer2_theoreticalspeedup_vs_pe
-rformance_loss_pierre.pdf>] [11 <./img/layer2_CPUspeedup_vs_performance_loss.pd
-f> <./img/layer2_GPUspeedup_vs_performance_loss.pdf>])
+[8 <./img/denoising_combined.pdf>]) (./discussion.tex [9 <./img/layer1_CPUspeed
+up_vs_performance_loss_finetune_and_orig.pdf> <./img/layer1_GPUspeedup_vs_perfo
+rmance_loss_finetune_and_orig.pdf> <./img/layer2_theoreticalspeedup_vs_performa
+nce_loss.pdf> <./img/layer2_theoreticalspeedup_vs_performance_loss_pierre.pdf>]
+) (./compress.bbl [10 <./img/layer2_CPUspeedup_vs_performance_loss.pdf> <./img/
+layer2_GPUspeedup_vs_performance_loss.pdf>])
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 53.
- [12]
+ [11]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 53.
  (./compress.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 53.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 53.
 Package rerunfilecheck Info: File `compress.out' has not changed.
-(rerunfilecheck)             Checksum: 8074F7723A1EEAC4F1185FBD2436F8C0;1259.
+(rerunfilecheck)             Checksum: A9BBFF6425EE39403C48CF7582C68F7E;851.
 
 
 LaTeX Warning: There were undefined references.
@@ -588,13 +634,13 @@ LaTeX Warning: There were undefined references.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 53.
  ) 
 Here is how much of TeX's memory you used:
- 6547 strings out of 493315
- 96276 string characters out of 6137904
- 190118 words of memory out of 5000000
- 9814 multiletter control sequences out of 15000+600000
+ 6559 strings out of 493315
+ 96488 string characters out of 6137904
+ 188848 words of memory out of 5000000
+ 9828 multiletter control sequences out of 15000+600000
  25542 words of font info for 59 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 30i,11n,28p,766b,421s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 30i,11n,28p,766b,419s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
 xlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/tex
@@ -615,10 +661,10 @@ ype1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/ur
 w/times/utmb8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/times/ut
 mr8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
 
-Output written on compress.pdf (12 pages, 694028 bytes).
+Output written on compress.pdf (11 pages, 691078 bytes).
 PDF statistics:
- 444 PDF objects out of 1000 (max. 8388607)
- 363 compressed objects within 4 object streams
- 69 named destinations out of 1000 (max. 500000)
- 210 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 408 PDF objects out of 1000 (max. 8388607)
+ 328 compressed objects within 4 object streams
+ 64 named destinations out of 1000 (max. 500000)
+ 170 words of extra memory for PDF output out of 10000 (max. 10000000)
 

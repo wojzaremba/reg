@@ -1,6 +1,6 @@
 C_(CleanGPU);
 clear all;
-C_(SetDevice, 2);
+C_(SetDevice, 0);
 global plan;
 randn('seed', 1);
 load_imagenet_model;
@@ -60,7 +60,7 @@ end
 
 
 % 
-% load generated_mats/layer2_bisubspace_finetuned_error.mat
+% load generated_mats/layer2_bisubspace_maha_error.mat
 % idx = find(rank_list == rank);
 % if isempty(idx)
 %     rank_list(end+1) = rank;
@@ -68,5 +68,5 @@ end
 % else
 %     errors(idx) =  error / (i * plan.input.batch_size);
 % end
-% save('generated_mats/layer2_bisubspace_finetuned_error.mat', 'errors', 'rank_list');
+% save('generated_mats/layer2_bisubspace_maha_error.mat', 'errors', 'rank_list');
 

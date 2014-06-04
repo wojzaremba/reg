@@ -1,5 +1,10 @@
 \begin{thebibliography}{10}
 
+\bibitem{denil2013predicting}
+Denil, M., Shakibi, B., Dinh, L., Ranzato, M., de~Freitas, N.:
+\newblock Predicting parameters in deep learning.
+\newblock arXiv preprint arXiv:1306.0543 (2013)
+
 \bibitem{vanhoucke2011improving}
 Vanhoucke, V., Senior, A., Mao, M.Z.:
 \newblock Improving the speed of neural networks on cpus.
@@ -10,11 +15,6 @@ Vanhoucke, V., Senior, A., Mao, M.Z.:
 Mathieu, M., Henaff, M., LeCun, Y.:
 \newblock Fast training of convolutional networks through ffts.
 \newblock arXiv preprint arXiv:1312.5851 (2013)
-
-\bibitem{denil2013predicting}
-Denil, M., Shakibi, B., Dinh, L., Ranzato, M., de~Freitas, N.:
-\newblock Predicting parameters in deep learning.
-\newblock arXiv preprint arXiv:1306.0543 (2013)
 
 \bibitem{imagenet}
 Deng, J., Dong, W., Socher, R., Li, L.J., Li, K., Fei-Fei, L.:

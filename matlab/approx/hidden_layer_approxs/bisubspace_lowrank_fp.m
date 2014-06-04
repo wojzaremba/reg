@@ -5,7 +5,7 @@ global plan;
 randn('seed', 1);
 load_imagenet_model('matthew', 128);
 
-rank = 8;
+rank = 6;
 if 1
   fname = sprintf('layer2_bisubspace_48_2_%d_finetuneall', rank);
   load_weights(fname, 2);

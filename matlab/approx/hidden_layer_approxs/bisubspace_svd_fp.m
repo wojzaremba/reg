@@ -44,15 +44,15 @@ for i = 1:nbatches
     error = error + e;
     fprintf('(%d) %d / %d = %f     (%d / %d = %f)\n', i, e,  plan.input.batch_size, e /  plan.input.batch_size, error, i * plan.input.batch_size, error / (i * plan.input.batch_size));
 end
-% 
-% load 'generated_mats/layer2_bisubspace_svd_2_2_finetuned_error.mat'
-% idx = find(ismember(rank_codes, code));
-% if isempty(idx)
-%     rank_codes{end+1} = code;
-%     errors(end+1) = error / (i * plan.input.batch_size);
-% else
-%     errors(idx) = error / (i * plan.input.batch_size);
-% end
-% 
-% save('generated_mats/layer2_bisubspace_svd_2_2_finetuned_error.mat', 'errors', 'rank_codes');
+
+load 'generated_mats/layer2_bisubspace_svd_2_2_finetuned_error.mat'
+idx = find(ismember(rank_codes, code));
+if isempty(idx)
+    rank_codes{end+1} = code;
+    errors(end+1) = error / (i * plan.input.batch_size);
+else
+    errors(idx) = error / (i * plan.input.batch_size);
+end
+
+save('generated_mats/layer2_bisubspace_svd_2_2_finetuned_error.mat', 'errors', 'rank_codes');
 

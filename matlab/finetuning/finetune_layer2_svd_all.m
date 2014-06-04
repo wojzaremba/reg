@@ -1,6 +1,6 @@
 C_(CleanGPU);
 clear all;
-C_(SetDevice, 2);
+C_(SetDevice, 1);
 global plan;
 randn('seed', 1);
 load_imagenet_model('matthew_train', 128);
@@ -12,7 +12,7 @@ W = plan.layer{approx_layer}.cpu.vars.W;
 iclust = 2;
 oclust = 2;
 oratio = 0.4; % (0.6 --> 76), (0.5 --> 64)
-iratio = 0.35;  % (0.6 --> 78), (0.5 --> 24), (0.4 --> 19)
+iratio = 0.4;  % (0.6 --> 78), (0.5 --> 24), (0.4 --> 19)
 odegree = floor(size(W, 1) * oratio / oclust);
 idegree = floor(size(W, 4) * iratio / iclust);
 
@@ -61,6 +61,9 @@ for epoch = 1 : nepoch
         
         if b > 2000 
             plan.lr = 0.0001;
+        end
+        if b > 4000
+            plan.lr = 0.00001;
         end
         
         plan.input.GetImage(1);
