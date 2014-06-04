@@ -227,6 +227,32 @@ by adding more terms in the separable approximations.
 As opposed to the SVD for matrices, the rank-1 tensors are not orthogonal in general. 
 
 
+%<<<<<<< HEAD
+%=======
+%\subsection{Clustering}\label{subsec:clustering}
+%Another form of structure within the 4-D weight tensors that can be exploited is the similarity between different filters. 
+%We can capture this by first splitting the filters into groups and then approximating the weights within a group using a low-rank factorization method.  
+%We found it to be most efficient to independently cluster
+%over both input and output feature channels. We start by clustering the
+%rows of $W_C \in \mathbb{R}^{C \times (XYF)}$, which results in
+%clusters $C_1, \dots, C_a$. Then we cluster the columns of $W_F  \in
+%\mathbb{R}^{(CXY) \times F}$. This procedure returns clusters $F_1,
+%\dots, F_b$. These two operations break the original weight tensor $W$
+%into $ab$ sub-tensors $\{W_{C_i, F_j}\}_{i = 1, \dots, a, j = 1,
+%  \dots, b}$ as shown in Figure \ref{fig:biclustering}). Each
+%sub-tensor contains similar elements making this approach more
+%efficient than attempting to fit a low rank approximation to all
+%filters.
+%
+%In order to efficiently exploit the parallelism inherent in CPU and GPU
+%architectures it is useful to constrain clusters to be of equal sizes. 
+%We therefore perform the biclustering operations (or clustering 
+%for monochromatic filters \ref{subsec:monochromatic}) using a modified
+%version of the k-means algorithms which balances the cluster count at
+%each iteration
+%It is implemented with the Floyd algorithm, by modifying the Euclidean distance
+%with a subspace projection distance.
+%>>>>>>> FETCH_HEAD
 
 %The first convolutional layer in the standard architecture receives
 %three color channels, typically in RGB or YUV space, as input whereas
