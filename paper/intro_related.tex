@@ -1,12 +1,12 @@
 \begin{abstract}
   We present techniques for speeding up the test-time evaluation of
   large convolutional networks, designed for object recognition
-  tasks. These models deliver impressive accuracy but each image
+  tasks. These models deliver impressive accuracy, but each image
   evaluation requires millions of floating point operations, making
   their deployment on smartphones and Internet-scale clusters
   problematic. The computation is dominated by the convolution
-  operations in the lower layers of the model. We exploit the linear
-  structure present within the convolutional filters to derive
+  operations in the lower layers of the model. We exploit the redundancy
+  present within the convolutional filters to derive
   approximations that significantly reduce the required
   computation. Using large state-of-the-art models, we demonstrate
   speedups by a factor of $2\times$, while keeping the accuracy
@@ -16,49 +16,94 @@
 \section{Introduction}
 
 Large neural networks have recently demonstrated impressive
-performance on a range of speech and vision tasks. However the size of
+performance on a range of speech and vision tasks. However, the size of
 these models can make their deployment at test time problematic. For
 example, mobile computing platforms are limited in their CPU speed,
 memory and battery life. At the other end of the spectrum,
 Internet-scale deployment of these models requires thousands of
 servers to process the 100's of millions of images per day. The
 electrical and cooling costs of these servers required is significant.
-
 Training large neural networks can take weeks, or even
 months. This hinders research and consequently there have been
 extensive efforts devoted to speeding up training procedure.  However,
 there are relatively few efforts aimed at improving the {\em test-time}
 performance of the models. 
 
-In this paper we focus on speeding up the evaluation of {\em trained}
-networks, with minimal compromise to performance. We consider
-convolutional neural networks used for computer vision tasks, since
-they are large and widely used in commercial applications. Within
-these models, most of the time ($\sim90\%$) is spent in the
-convolution operations in the lower layers of the model. The remaining
-operations: pooling, contrast normalization and the upper
-fully-connected layers collectively take up the remaning $10\%$.
+ We consider convolutional neural networks used for computer vision tasks, since
+they are large and widely used in commercial applications. 
+These networks typically require a huge number of parameters ($\sim 10^{7}$ in \cite{overfeat})
+to produce state-of-the-art results. This redundancy seems necessary in order
+to overcome a highly non-convex optimization \cite{denil2013predicting, hintonseparable}, 
+but as a byproduct the resulting network wastes computing resources.
+In this paper we show that this redundancy can be 
+exploited with linear compression techniques,
+resulting in significant speedups for the evaluation of {\em trained}
+large scale networks, with minimal compromise to performance.
+In particular, we concentrate in the lower convolutional layers, which 
+typically dominate the evaluation cost. 
 
-We present several novel methods for speeding up the convolution
-operations. They are based on various low-dimensional approximations of convolution
-operators (which are 4-dimensional tensors), and exploit sparsity to
-deliver speedups in performance. Viability of methods is architecture 
-dependent, and speedup by factor of $2$ is quite achievable without fine-tuning.
-However, a much larger speedup should be attainable if the models were
-trained for a few more epochs after imposing the filter approximation.
+We follow a relatively simple strategy: we start by compressing each 
+convolutional layer by finding an appropriate low-rank approximation, 
+and then we fine-tune the upper layers until the prediction performance 
+is restored. We consider several elementary tensor decompositions based 
+on singular value decompositions, as well as vector quantization to 
+also exploit nonlinear approximation. 
 
-Neural networks are stacked linear transforms alternated with simple
-point-wise non-linearities. From mathematical perspective, we have a good understanding
-of linear operators, however properties of composed operators are much more
-difficult to understand. Our studies of filter compressibility reveal some of underlying
-low-dimensional structure. Effectively, it decreases number of parameters, and
-potentially might lead to better model generalization if used during training.
-We observe some indications that it is indeed feasible. In particular,
-the first layer filters look ``cleaner'' after approximation and can,
-on occasion, yield a slightly lower test error than the original versions,
-provided the approximations are mild. 
+In summary, our main contributions are:
+\begin{itemize}
+\item We present a generic method to exploit the redundancy inherent in deep convolutional networks.
+\item We report experiments on state-of-the-art Imagenet CNNs, showing $2\times$ speedups on each 
+	convolutional layer with less than $1\%$ drop in performance, both in GPU and CPU implementations.
+\end{itemize}
+
+
+%Within these models, most of the time ($\sim90\%$) is spent in the
+%convolution operations in the lower layers of the model. The remaining
+%operations: pooling, contrast normalization and the upper
+%fully-connected layers collectively take up the remaning $10\%$.
+
+%We present several novel methods for speeding up the convolution
+%operations. They are based on various low-dimensional approximations of convolution
+%operators (which are 4-dimensional tensors), and exploit sparsity to
+%deliver speedups in performance. Viability of methods is architecture 
+%dependent, and speedup by factor of $2$ is quite achievable without fine-tuning.
+%However, a much larger speedup should be attainable if the models were
+%trained for a few more epochs after imposing the filter approximation.
+
+%Neural networks are stacked linear transforms alternated with simple
+%point-wise non-linearities. From mathematical perspective, we have a good understanding
+%of linear operators, however properties of composed operators are much more
+%difficult to understand. Our studies of filter compressibility reveal some of underlying
+%low-dimensional structure. Effectively, it decreases number of parameters, and
+%potentially might lead to better model generalization if used during training.
+%We observe some indications that it is indeed feasible. In particular,
+%the first layer filters look ``cleaner'' after approximation and can,
+%on occasion, yield a slightly lower test error than the original versions,
+%provided the approximations are mild. 
+
+ \noindent \textbf{Notation:} Convolution weights can be described as
+ a $4$-dimensional tensor: $W \in \mathbb{R}^{C \times X \times Y
+   \times F}$. $C$ is the number of number of input channels, $X$ and
+ $Y$ are the spatial dimensions of the kernel, and $F$ is the target
+ number of feature maps. 
+ It is common for the first convolutional layer to have a stride associated with the kernel. 
+ We denote the stride by $\Delta$.  Let $I \in \mathbb{R}^{C \times N \times M}$
+ denote an input signal where $C$ is the number of input maps, and $N$
+ and $M$ are the spatial dimensions of the maps.  The target value, $T
+ = I \ast W$, of a generic convolutional layer, with $\Delta = 1$, for a particular output
+ feature, $f$, and spatial location, $(x, y)$, is
+\begin{align*}
+\label{convlayereq}
+T(f,x,y) = \sum_{c=1}^C \sum_{x'=1}^{X} \sum_{y'=1}^{Y} I(c,x-x',y-y') W(c,x',y',f)
+\end{align*}
+Moreover, we define $W_C \in \mathbb{R}^{C \times (XYF)}$, and $W_F \in \mathbb{R}^{(CXY) \times F}$, 
+and $W_S \in \mathbb{R}^{C \times (XY) \times F}$ to be the folded, with respect to different dimensions, versions of $W$.
+
+If $X$ is a tensor, $\|X \|$ denotes its operator norm, and $\|X \|_F$ denotes its Frobenius norm.
+If $v$ is a vector, $\|v \|$ denotes its Euclidean norm.
 
 \section{Related Work}
+\label{relwork}
 
 Vanhoucke \etal \cite{vanhoucke2011improving} explored the
 properties of CPUs to speed up execution.  They present many solutions
@@ -73,7 +118,6 @@ similar in spirit to our approach, but differs in that it is applied
 to each weight element independently. By contrast, our approximation approach models
 the structure within each filter. Potentially, the two approaches
 could be used in conjunction. 
-
 
 The most expensive operations in convolutional networks are the
 convolutions in the first few layers. The complexity of this operation
@@ -92,3 +136,11 @@ accurately predicted from a small (e.g. $\sim 5\%$) subset of them. This
 indicates that neural networks are heavily over-parametrized.  All the
 methods presented here focus on exploiting the linear structure of this
 over-parametrization.
+
+Finally, a recent preprint \cite{zisserman14} also exploits low-rank decompositions
+of convolutional tensors to speed up the evaluation of convolutional neural networks, applied to scene text character
+recognition. This work was developed simultaneously with ours, and provides 
+further evidence that such techniques can be applied to a variety of architectures 
+and tasks.
+
+
