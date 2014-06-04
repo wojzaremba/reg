@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2012.2.2)  4 JUN 2014 15:07
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2012.2.2)  4 JUN 2014 16:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -400,29 +400,6 @@ LaTeX Warning: Citation `zisserman14' on page 2 undefined on input line 140.
 
 LaTeX Warning: Citation `zisserman14' on page 3 undefined on input line 104.
 
-<img/biclustering_L2_vs_testerr_matt.pdf, id=90, 609.27625pt x 488.82625pt>
-File: img/biclustering_L2_vs_testerr_matt.pdf Graphic file (type pdf)
-
-<use img/biclustering_L2_vs_testerr_matt.pdf>
-Package pdftex.def Info: img/biclustering_L2_vs_testerr_matt.pdf used on input 
-line 123.
-(pdftex.def)             Requested size: 149.05687pt x 119.58818pt.
-
-<img/biclustering_L2_vs_testerr_maha_matt.pdf, id=91, 609.27625pt x 488.82625pt
->
-File: img/biclustering_L2_vs_testerr_maha_matt.pdf Graphic file (type pdf)
- <use img/biclustering_L2_vs_testerr_maha_matt.pdf>
-Package pdftex.def Info: img/biclustering_L2_vs_testerr_maha_matt.pdf used on i
-nput line 125.
-(pdftex.def)             Requested size: 149.05687pt x 119.58818pt.
-
-Overfull \hbox (21.90002pt too wide) in paragraph at lines 123--126
-[][]   [] 
- []
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
 [3]
 
 LaTeX Warning: Citation `rankonetensors' on page 4 undefined on input line 204.
@@ -432,52 +409,41 @@ LaTeX Warning: Citation `rankonetensors' on page 4 undefined on input line 204.
 LaTeX Warning: Citation `rankonetensors' on page 4 undefined on input line 214.
 
 
-<img/monochromatic_illustration.pdf, id=106, 705.63625pt x 441.65pt>
+<img/monochromatic_illustration.pdf, id=102, 705.63625pt x 441.65pt>
 File: img/monochromatic_illustration.pdf Graphic file (type pdf)
 
 <use img/monochromatic_illustration.pdf>
 Package pdftex.def Info: img/monochromatic_illustration.pdf used on input line 
-261.
+336.
 (pdftex.def)             Requested size: 158.99156pt x 99.50847pt.
 
-<img/bicluster_illustration.pdf, id=107, 680.5425pt x 345.29pt>
+<img/bicluster_illustration.pdf, id=103, 680.5425pt x 345.29pt>
 File: img/bicluster_illustration.pdf Graphic file (type pdf)
 
 <use img/bicluster_illustration.pdf>
-Package pdftex.def Info: img/bicluster_illustration.pdf used on input line 261.
+Package pdftex.def Info: img/bicluster_illustration.pdf used on input line 336.
 
 (pdftex.def)             Requested size: 139.12216pt x 70.58469pt.
- [4 <./img/biclustering_L2_vs_testerr_matt.pdf> <./img/biclustering_L2_vs_teste
-rr_maha_matt.pdf>]
+ [4 <./img/monochromatic_illustration.pdf> <./img/bicluster_illustration.pdf>]
 
 LaTeX Warning: Reference `subsubsec:biclustering' on page 5 undefined on input 
-line 296.
-
-[5 <./img/monochromatic_illustration.pdf> <./img/bicluster_illustration.pdf>]
-
-LaTeX Warning: Reference `subsec:monochromatic' on page 6 undefined on input li
-ne 360.
+line 372.
 
 
-LaTeX Warning: Reference `subsubsec:biclustering' on page 6 undefined on input 
-line 371.
+LaTeX Warning: Reference `subsec:monochromatic' on page 5 undefined on input li
+ne 438.
 
 
-LaTeX Warning: Reference `subsubsec:svd_tensor' on page 6 undefined on input li
-ne 372.
+LaTeX Warning: Reference `subsubsec:biclustering' on page 5 undefined on input 
+line 448.
 
-
-LaTeX Warning: Reference `subsubsec:outer' on page 6 undefined on input line 37
-3.
-
-) (./distance.tex) (./experiments.tex
+[5]) (./distance.tex) (./experiments.tex
 
 LaTeX Warning: Reference `sec:application' on page 6 undefined on input line 7.
 
 
-[6]
 
-LaTeX Warning: Reference `sec:application' on page 7 undefined on input line 11
+LaTeX Warning: Reference `sec:application' on page 6 undefined on input line 11
 3.
 
 Package epstopdf Info: Source file: <img/RGB_components_matthew_3d.eps>
@@ -492,7 +458,7 @@ _3d-eps-converted-to.pdf img/RGB_components_matthew_3d.eps>
 (epstopdf)             \includegraphics on input line 128.
 Package epstopdf Info: Output file is already uptodate.
 
-<img/RGB_components_matthew_3d-eps-converted-to.pdf, id=200, 492.84125pt x 405.
+<img/RGB_components_matthew_3d-eps-converted-to.pdf, id=165, 492.84125pt x 405.
 515pt>
 File: img/RGB_components_matthew_3d-eps-converted-to.pdf Graphic file (type pdf
 )
@@ -514,7 +480,7 @@ _3d.eps>
 (epstopdf)             \includegraphics on input line 130.
 Package epstopdf Info: Output file is already uptodate.
 
-<img/monochromatic_RGB_components_matthew_3d-eps-converted-to.pdf, id=201, 492.
+<img/monochromatic_RGB_components_matthew_3d-eps-converted-to.pdf, id=166, 492.
 84125pt x 405.515pt>
 File: img/monochromatic_RGB_components_matthew_3d-eps-converted-to.pdf Graphic 
 file (type pdf)
@@ -528,43 +494,44 @@ Overfull \hbox (21.90002pt too wide) in paragraph at lines 128--131
 [][]   [] 
  []
 
-<img/denoising_combined.pdf, id=202, 204.06238pt x 48.06828pt>
+<img/denoising_combined.pdf, id=167, 204.06238pt x 48.06828pt>
 File: img/denoising_combined.pdf Graphic file (type pdf)
 
 <use img/denoising_combined.pdf>
 Package pdftex.def Info: img/denoising_combined.pdf used on input line 142.
 (pdftex.def)             Requested size: 357.73405pt x 84.27917pt.
+ [6]
+<img/layer1_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf, id=185, 606.2
+65pt x 488.82625pt>
+File: img/layer1_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf Graphic f
+ile (type pdf)
 
-Underfull \vbox (badness 2717) has occurred while \output is active []
+<use img/layer1_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf>
+Package pdftex.def Info: img/layer1_CPUspeedup_vs_performance_loss_finetune_and
+_orig.pdf used on input line 183.
+(pdftex.def)             Requested size: 149.05687pt x 120.18489pt.
 
- [7 <./img/RGB_components_matthew_3d-eps-converted-to.pdf> <./img/monochromatic
-_RGB_components_matthew_3d-eps-converted-to.pdf>]
-<img/layer1_CPUspeedup_vs_performance_loss.pdf, id=225, 608.2725pt x 488.82625p
-t>
-File: img/layer1_CPUspeedup_vs_performance_loss.pdf Graphic file (type pdf)
- <use img/layer1_CPUspeedup_vs_performance_loss.pdf>
-Package pdftex.def Info: img/layer1_CPUspeedup_vs_performance_loss.pdf used on 
-input line 183.
-(pdftex.def)             Requested size: 149.05687pt x 119.78212pt.
+<img/layer1_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf, id=186, 606.2
+65pt x 488.82625pt>
+File: img/layer1_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf Graphic f
+ile (type pdf)
 
-<img/layer1_GPUspeedup_vs_performance_loss.pdf, id=226, 608.2725pt x 488.82625p
-t>
-File: img/layer1_GPUspeedup_vs_performance_loss.pdf Graphic file (type pdf)
- <use img/layer1_GPUspeedup_vs_performance_loss.pdf>
-Package pdftex.def Info: img/layer1_GPUspeedup_vs_performance_loss.pdf used on 
-input line 185.
-(pdftex.def)             Requested size: 149.05687pt x 119.78212pt.
+<use img/layer1_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf>
+Package pdftex.def Info: img/layer1_GPUspeedup_vs_performance_loss_finetune_and
+_orig.pdf used on input line 185.
+(pdftex.def)             Requested size: 149.05687pt x 120.18489pt.
 
 Overfull \hbox (21.90002pt too wide) in paragraph at lines 183--186
 [][]   [] 
  []
 
 
-LaTeX Warning: Reference `sec:application' on page 8 undefined on input line 19
+LaTeX Warning: Reference `sec:application' on page 7 undefined on input line 19
 4.
 
-
-<img/layer2_theoreticalspeedup_vs_performance_loss.pdf, id=229, 608.2725pt x 48
+[7 <./img/RGB_components_matthew_3d-eps-converted-to.pdf> <./img/monochromatic_
+RGB_components_matthew_3d-eps-converted-to.pdf>]
+<img/layer2_theoreticalspeedup_vs_performance_loss.pdf, id=208, 608.2725pt x 48
 8.82625pt>
 File: img/layer2_theoreticalspeedup_vs_performance_loss.pdf Graphic file (type 
 pdf)
@@ -573,7 +540,7 @@ Package pdftex.def Info: img/layer2_theoreticalspeedup_vs_performance_loss.pdf
 used on input line 211.
 (pdftex.def)             Requested size: 149.05687pt x 119.78212pt.
 
-<img/layer2_theoreticalspeedup_vs_performance_loss_pierre.pdf, id=230, 602.25pt
+<img/layer2_theoreticalspeedup_vs_performance_loss_pierre.pdf, id=209, 602.25pt
  x 488.82625pt>
 File: img/layer2_theoreticalspeedup_vs_performance_loss_pierre.pdf Graphic file
  (type pdf)
@@ -588,7 +555,7 @@ Overfull \hbox (21.90002pt too wide) in paragraph at lines 211--214
  []
 
 
-<img/layer2_CPUspeedup_vs_performance_loss.pdf, id=231, 608.2725pt x 578.16pt>
+<img/layer2_CPUspeedup_vs_performance_loss.pdf, id=210, 608.2725pt x 578.16pt>
 File: img/layer2_CPUspeedup_vs_performance_loss.pdf Graphic file (type pdf)
 
 <use img/layer2_CPUspeedup_vs_performance_loss.pdf>
@@ -596,7 +563,7 @@ Package pdftex.def Info: img/layer2_CPUspeedup_vs_performance_loss.pdf used on
 input line 222.
 (pdftex.def)             Requested size: 149.05687pt x 141.67249pt.
 
-<img/layer2_GPUspeedup_vs_performance_loss.pdf, id=232, 608.2725pt x 578.16pt>
+<img/layer2_GPUspeedup_vs_performance_loss.pdf, id=211, 608.2725pt x 578.16pt>
 File: img/layer2_GPUspeedup_vs_performance_loss.pdf Graphic file (type pdf)
 
 <use img/layer2_GPUspeedup_vs_performance_loss.pdf>
@@ -608,20 +575,20 @@ Overfull \hbox (21.90002pt too wide) in paragraph at lines 222--225
 [][]   [] 
  []
 
-[8 <./img/denoising_combined.pdf>]) (./discussion.tex [9 <./img/layer1_CPUspeed
-up_vs_performance_loss.pdf> <./img/layer1_GPUspeedup_vs_performance_loss.pdf> <
-./img/layer2_theoreticalspeedup_vs_performance_loss.pdf> <./img/layer2_theoreti
-calspeedup_vs_performance_loss_pierre.pdf>]) (./compress.bbl [10 <./img/layer2_
-CPUspeedup_vs_performance_loss.pdf> <./img/layer2_GPUspeedup_vs_performance_los
-s.pdf>])
+) (./discussion.tex [8 <./img/denoising_combined.pdf>]) (./compress.bbl
+[9 <./img/layer1_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf> <./img/l
+ayer1_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf> <./img/layer2_theor
+eticalspeedup_vs_performance_loss.pdf> <./img/layer2_theoreticalspeedup_vs_perf
+ormance_loss_pierre.pdf>])
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 53.
- [11]
+ [10 <./img/layer2_CPUspeedup_vs_performance_loss.pdf> <./img/layer2_GPUspeedup
+_vs_performance_loss.pdf>] [11]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 53.
  (./compress.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 53.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 53.
 Package rerunfilecheck Info: File `compress.out' has not changed.
-(rerunfilecheck)             Checksum: A9BBFF6425EE39403C48CF7582C68F7E;851.
+(rerunfilecheck)             Checksum: 6F60DE80A5E0E76BE082A6886706BA46;841.
 
 
 LaTeX Warning: There were undefined references.
@@ -629,13 +596,13 @@ LaTeX Warning: There were undefined references.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 53.
  ) 
 Here is how much of TeX's memory you used:
- 6414 strings out of 493633
- 93974 string characters out of 3143378
- 188180 words of memory out of 3000000
- 9534 multiletter control sequences out of 15000+200000
+ 6400 strings out of 493633
+ 93636 string characters out of 3143378
+ 186535 words of memory out of 3000000
+ 9523 multiletter control sequences out of 15000+200000
  25542 words of font info for 59 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
- 30i,11n,28p,766b,415s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 30i,11n,28p,740b,415s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
 xlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/tex
@@ -656,10 +623,10 @@ ype1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/ur
 w/times/utmb8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/urw/times/ut
 mr8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
 
-Output written on compress.pdf (11 pages, 690361 bytes).
+Output written on compress.pdf (11 pages, 675048 bytes).
 PDF statistics:
- 410 PDF objects out of 1000 (max. 8388607)
- 326 compressed objects within 4 object streams
- 64 named destinations out of 1000 (max. 500000)
- 170 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 390 PDF objects out of 1000 (max. 8388607)
+ 313 compressed objects within 4 object streams
+ 63 named destinations out of 1000 (max. 500000)
+ 160 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -35,22 +35,20 @@
 \newlabel{subsec:low_rank}{{3.2}{3}{Low-rank Tensor Approximations\relax }{subsection.3.2}{}}
 \citation{rankonetensors}
 \citation{rankonetensors}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces $\ell _2$ reconstruction error of approximated weights in the original space (left) and the reweighted space (designed to match output error, see \ref  {poormansmaha}) (right), versus decrease in peformance for a range of different approximation hyperparameters. Markers with the same color use the same settings for $G,H$ but vary the approximation rank. The reweighted space makes the correlation between $l_2$ and classification error more linear (e.g.\nobreakspace  {}the red circles are well approximated by a line, but no so for the red crosses). Furthermore, for a given $l_2$ error, the performance loss is lower for the reweighted space. }}{4}{figure.1}}
-\newlabel{fig:components}{{1}{4}{$\ell _2$ reconstruction error of approximated weights in the original space (left) and the reweighted space (designed to match output error, see \ref {poormansmaha}) (right), versus decrease in peformance for a range of different approximation hyperparameters. Markers with the same color use the same settings for $G,H$ but vary the approximation rank. The reweighted space makes the correlation between $l_2$ and classification error more linear (e.g.~the red circles are well approximated by a line, but no so for the red crosses). Furthermore, for a given $l_2$ error, the performance loss is lower for the reweighted space}{figure.1}{}}
 \newlabel{svdapprox}{{4}{4}{Low-rank Tensor Approximations\relax }{equation.3.4}{}}
 \newlabel{svdapproxerr}{{5}{4}{Low-rank Tensor Approximations\relax }{equation.3.5}{}}
 \newlabel{eq:rank1}{{6}{4}{Low-rank Tensor Approximations\relax }{equation.3.6}{}}
 \newlabel{eq:rankK}{{7}{4}{Low-rank Tensor Approximations\relax }{equation.3.7}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Monochromatic Convolution Approximation}{4}{subsubsection.3.2.1}}
-\newlabel{fig:monochromatic}{{2(a)}{5}{Subfigure 2(a)\relax }{subfigure.2.1}{}}
-\newlabel{sub@fig:monochromatic}{{(a)}{5}{Subfigure 2(a)\relax }{subfigure.2.1}{}}
-\newlabel{fig:biclustering}{{2(b)}{5}{Subfigure 2(b)\relax }{subfigure.2.2}{}}
-\newlabel{sub@fig:biclustering}{{(b)}{5}{Subfigure 2(b)\relax }{subfigure.2.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces  A visualization of monochromatic and biclustering approximation structures. {\bf  (a)}: The monochromatic approximation, used for the first layer. Input color channels are projected by a set of intermediate color channels. After this transformation, output features need only to look at one intermediate color channel. This sparsity structure is what makes the speedups feasible. {\bf  (b)}: The biclustering approximation, used for higher convolution layers. Input and output features are clustered into equal sized groups. The weight tensor corresponding to each pair of input and output clusters is then approximated.}}{5}{figure.2}}
+\newlabel{fig:monochromatic}{{1(a)}{4}{Subfigure 1(a)\relax }{subfigure.1.1}{}}
+\newlabel{sub@fig:monochromatic}{{(a)}{4}{Subfigure 1(a)\relax }{subfigure.1.1}{}}
+\newlabel{fig:biclustering}{{1(b)}{4}{Subfigure 1(b)\relax }{subfigure.1.2}{}}
+\newlabel{sub@fig:biclustering}{{(b)}{4}{Subfigure 1(b)\relax }{subfigure.1.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  A visualization of monochromatic and biclustering approximation structures. {\bf  (a)}: The monochromatic approximation, used for the first layer. Input color channels are projected by a set of intermediate color channels. After this transformation, output features need only to look at one intermediate color channel. This sparsity structure is what makes the speedups feasible. {\bf  (b)}: The biclustering approximation, used for higher convolution layers. Input and output features are clustered into equal sized groups. The weight tensor corresponding to each pair of input and output clusters is then approximated.}}{4}{figure.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Monochromatic Convolution Approximation}{4}{subsection.3.3}}
 \newlabel{blo1}{{8}{5}{Monochromatic Convolution Approximation\relax }{equation.3.8}{}}
 \newlabel{blo2}{{9}{5}{Monochromatic Convolution Approximation\relax }{equation.3.9}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Tensor Vector Quantization}{5}{subsection.3.3}}
-\newlabel{subsec:clustering}{{3.3}{5}{Tensor Vector Quantization\relax }{subsection.3.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Tensor Vector Quantization}{5}{subsection.3.4}}
+\newlabel{subsec:clustering}{{3.4}{5}{Tensor Vector Quantization\relax }{subsection.3.4}{}}
 \citation{imagenet}
 \citation{sermanet2013overfeat}
 \citation{zeiler2013visualizing}
@@ -60,41 +58,41 @@
 \@writefile{toc}{\contentsline {section}{\numberline {4}Experiments}{6}{section.4}}
 \newlabel{sec:experiments}{{4}{6}{Experiments\relax }{section.4}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Speedup}{6}{subsection.4.1}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.1}First Layer}{6}{subsubsection.4.1.1}}
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Evaluation time in seconds per layer of MattNet on CPU (left) and GPU (right) with batch size of 128. Results are averaged over 8 runs.}}{7}{table.2}}
 \newlabel{evaluation_time}{{2}{7}{Evaluation time in seconds per layer of MattNet on CPU (left) and GPU (right) with batch size of 128. Results are averaged over 8 runs}{table.2}{}}
 \newlabel{fig:RGB_components}{{4.1.1}{7}{First Layer\relax }{subsubsection.4.1.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Visualization of the 1st layer filters in MattNet. Each component of the 96 7x7 filters is plotted in RGB space. Points are colored based on the output filter they belong to. Hence, there are 96 colors and $7^2$ points of each color. ({\bf  Left}) Shows the original filters and ({\bf  Right}) shows the filters after the monochromatic approximation, where each filter has been projected down to a line in colorspace.}}{7}{figure.3}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.1}First Layer}{7}{subsubsection.4.1.1}}
-\newlabel{fig:denoising}{{4.1.1}{8}{First Layer\relax }{figure.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Original and approximate versions (using 12 colors) of 1st later filters from MattNet.}}{8}{figure.4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Visualization of the 1st layer filters in MattNet. Each component of the 96 7x7 filters is plotted in RGB space. Points are colored based on the output filter they belong to. Hence, there are 96 colors and $7^2$ points of each color. ({\bf  Left}) Shows the original filters and ({\bf  Right}) shows the filters after the monochromatic approximation, where each filter has been projected down to a line in colorspace.}}{7}{figure.2}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.2}Second Layer}{7}{subsubsection.4.1.2}}
+\newlabel{fig:denoising}{{4.1.1}{8}{First Layer\relax }{figure.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Original and approximate versions (using 12 colors) of 1st later filters from MattNet.}}{8}{figure.3}}
 \@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Performance of MattNet when first layer weights are replaced with monochromatic approximation and the corresponding theoretical speedup. Classification error on 8K validation images tends to increase as the approximation becomes harsher (i.e. fewer colors are used). Theoretical speedups vary only slightly as the number of colors used increases since the color transformation contributes relatively little to the total number of operations.}}{8}{table.3}}
 \newlabel{table:mono_perf}{{3}{8}{Performance of MattNet when first layer weights are replaced with monochromatic approximation and the corresponding theoretical speedup. Classification error on 8K validation images tends to increase as the approximation becomes harsher (i.e. fewer colors are used). Theoretical speedups vary only slightly as the number of colors used increases since the color transformation contributes relatively little to the total number of operations}{table.3}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.2}Second Layer}{8}{subsubsection.4.1.2}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Empirical speedups on ({\bf  Left}) CPU and ({\bf  Right}) GPU for the first layer of MattNet.}}{9}{figure.5}}
-\newlabel{fig:mono_speedups}{{5}{9}{Empirical speedups on ({\bf Left}) CPU and ({\bf Right}) GPU for the first layer of MattNet}{figure.5}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Theoretically achievable speedups with various biclustering approximations applied to ({\bf  Left}) MattNet and ({\bf  Right}) PierreNet.}}{9}{figure.6}}
-\newlabel{fig:biclustering_theory}{{6}{9}{Theoretically achievable speedups with various biclustering approximations applied to ({\bf Left}) MattNet and ({\bf Right}) PierreNet}{figure.6}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Reduction in memory overhead}{9}{subsection.4.2}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion}{9}{section.5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Reduction in memory overhead}{8}{subsection.4.2}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion}{8}{section.5}}
 \citation{*}
 \bibstyle{splncs}
 \bibdata{bibliography}
 \bibcite{denil2013predicting}{1}
 \bibcite{vanhoucke2011improving}{2}
 \bibcite{mathieu2013fast}{3}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Empirical speedups on ({\bf  Left}) CPU and ({\bf  Right}) GPU for the first layer of MattNet.}}{9}{figure.4}}
+\newlabel{fig:mono_speedups}{{4}{9}{Empirical speedups on ({\bf Left}) CPU and ({\bf Right}) GPU for the first layer of MattNet}{figure.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Theoretically achievable speedups with various biclustering approximations applied to ({\bf  Left}) MattNet and ({\bf  Right}) PierreNet.}}{9}{figure.5}}
+\newlabel{fig:biclustering_theory}{{5}{9}{Theoretically achievable speedups with various biclustering approximations applied to ({\bf Left}) MattNet and ({\bf Right}) PierreNet}{figure.5}{}}
 \bibcite{imagenet}{4}
 \bibcite{sermanet2013overfeat}{5}
 \bibcite{zeiler2013visualizing}{6}
 \bibcite{eigenweb}{7}
 \bibcite{zeiler2011adaptive}{8}
 \bibcite{LeNgiChenChiaKohNg10}{9}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Empirical speedups on ({\bf  Left}) CPU and ({\bf  Right}) GPU for the second layer of MattNet.}}{10}{figure.7}}
-\newlabel{fig:biclust_speedups}{{7}{10}{Empirical speedups on ({\bf Left}) CPU and ({\bf Right}) GPU for the second layer of MattNet}{figure.7}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Number of parameters expressed as a function of hyperparameters for various approximation methods.}}{10}{table.4}}
-\newlabel{table:memory_theory}{{4}{10}{Number of parameters expressed as a function of hyperparameters for various approximation methods}{table.4}{}}
 \bibcite{le2011building}{10}
 \bibcite{lowe1999object}{11}
 \bibcite{hinton2012improving}{12}
 \bibcite{krizhevsky2012imagenet}{13}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Empirical speedups on ({\bf  Left}) CPU and ({\bf  Right}) GPU for the second layer of MattNet.}}{10}{figure.6}}
+\newlabel{fig:biclust_speedups}{{6}{10}{Empirical speedups on ({\bf Left}) CPU and ({\bf Right}) GPU for the second layer of MattNet}{figure.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Number of parameters expressed as a function of hyperparameters for various approximation methods.}}{10}{table.4}}
+\newlabel{table:memory_theory}{{4}{10}{Number of parameters expressed as a function of hyperparameters for various approximation methods}{table.4}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Empirical reduction in parameters for first two layers of MattNet with corresponding network performance.}}{11}{table.5}}
 \newlabel{table:memory_empirical}{{5}{11}{Empirical reduction in parameters for first two layers of MattNet with corresponding network performance}{table.5}{}}

@@ -1,10 +1,11 @@
+
 \section{Convolutional Tensor Compression}\label{sec:approx_tech}
 %In typical object recognition architectures, the weights of
 %convolutional layers at the end of training exhibit strong redundancy
 %and regularity across all dimensions. 
 In this section we describe
 techniques to compress the
-4 dimensional weight tensors into a representation that permits
+4 dimensional convolutional weight tensors into a representation that permits
 efficient computation. 
 Section \ref{reconstr_sect} describes how to construct good approximation 
 criteria. Sections \ref{subsec:low_rank} and \ref{subsec:clustering} 
@@ -33,15 +34,14 @@ approximations and vector quantization.
 \subsection{Approximation Metric}
 \label{reconstr_sect}
 
-Each convolutional layer is described with a 4-tensor $W$. 
-The goal is to find an approximation $\widetilde{W}$  of $W$ 
+The goal is to find an approximation $\widetilde{W}$ of a convolutional tensor $W$ 
 which is cheaper to compute and such that the resulting network
 has similar prediction performance. Which metric should be used
 as approximation criteria?
 
 A natural choice is to search for approximations such that 
-$\| \widetilde{W} - W \|_F$ is small, since this metric yields 
-efficient compression schemes from linear algebra, and also controls
+$\| \widetilde{W} - W \|_F$ is small, since this criteria yields 
+efficient compression schemes using elementary linear algebra, and also controls
 the operator norm of each linear convolutional layer.
 %
 %Euclidean distance has the advantage that then finding low-rank 
@@ -60,7 +60,7 @@ keeping the same efficient approximation algorithms.
 
 %One may ask  whether there exists a better criterion to guide the approximation than 
 %the $L_2$ norm. 
-We propose here a simple modification of the metric of the form 
+We propose here a simple modification of the metric, of the form 
 \begin{equation}
 \label{poormansmaha}
 \| W \|_\alpha^2 := \sum_p \alpha_p^2 W(p)^2 ~,
@@ -91,7 +91,7 @@ where $\delta(i-l)$ is the dirac distribution centered at $l$.
 In other words, for each input we back-propagate the difference between the current prediction and the 
 $h$ ``most dangerous" mistakes. 
 The resulting weights $\alpha_p$ are then obtained by computing the average energy in the tensors $d_{n,l,s}$:
-$$\alpha_p = \Big( \sum_{n,l} d_{n,l,s}(p)^2 \Big)^{1/2}~.$$
+$\alpha_p = \Big( \sum_{n,l} d_{n,l,s}(p)^2 \Big)^{1/2}~.$
 
 An even better metric can be obtained by considering the Mahalanobis distance defined from the covariance of 
 $d$: $\| W \|_{maha}^2 = w \Sigma^{-1} w^T~,$
@@ -117,34 +117,34 @@ where $W_f$ is the matrix obtained by folding the first three dimensions of $W$.
 % performance loss. Consequently, optimizing the reweighted distance
 % reduces the performance drop, for a given $\ell_2$ reconstruction error.
 %
-\begin{figure}[h]
-\centering
-\begin{minipage}{0.75\textwidth}
-  \includegraphics[width=0.5\linewidth]{img/biclustering_L2_vs_testerr_matt.pdf} 
-\quad\quad
-  \includegraphics[width=0.5\linewidth]{img/biclustering_L2_vs_testerr_maha_matt.pdf} 
-\end{minipage}
-\vspace{-3mm}
-\caption{$\ell_2$ reconstruction error of approximated weights in the
-  original space (left) and the reweighted space (designed to match
-  output error, see
-  \ref{poormansmaha}) (right), versus decrease in peformance for a
-  range of different approximation hyperparameters. Markers with the
-  same color use the same settings for $G,H$ but vary the
-  approximation rank. The reweighted space makes the correlation
-  between $l_2$ and classification error more linear (e.g.~the red
-  circles are well approximated by a line, but no so for the red
-  crosses). Furthermore, for a given $l_2$ error, the performance loss
-  is lower for the reweighted space. }
-\label{fig:components}
-\end{figure}
+%\begin{figure}[h]
+%\centering
+%\begin{minipage}{0.75\textwidth}
+%  \includegraphics[width=0.5\linewidth]{img/biclustering_L2_vs_testerr_matt.pdf} 
+%\quad\quad
+%  \includegraphics[width=0.5\linewidth]{img/biclustering_L2_vs_testerr_maha_matt.pdf} 
+%\end{minipage}
+%\vspace{-3mm}
+%\caption{$\ell_2$ reconstruction error of approximated weights in the
+%  original space (left) and the reweighted space (designed to match
+%  output error, see
+%  \ref{poormansmaha}) (right), versus decrease in peformance for a
+%  range of different approximation hyperparameters. Markers with the
+%  same color use the same settings for $G,H$ but vary the
+%  approximation rank. The reweighted space makes the correlation
+%  between $l_2$ and classification error more linear (e.g.~the red
+%  circles are well approximated by a line, but no so for the red
+%  crosses). Furthermore, for a given $l_2$ error, the performance loss
+%  is lower for the reweighted space. }
+%\label{fig:components}
+%\end{figure}
 %
 
 %\subsection{kk}\label{subsec:monochromatic}
 
 \subsection{Low-rank Tensor Approximations}\label{subsec:low_rank}
 
-A particularly simple way to exploit the regularity present in trained convolutional network weights is to 
+A particularly simple strategy to exploit the redundancy present in trained convolutional network weights is to 
 linearly compress the tensors, which amounts to finding low-rank approximations. 
 %In this section we describe two different techniques for expressing matrices and tensors as a product of matrices or vectors of smaller size. 
 
@@ -338,11 +338,12 @@ As opposed to the SVD for matrices, the rank-1 tensors are not orthogonal in gen
 \caption{ A visualization of monochromatic and biclustering approximation structures. {\bf (a)}: The monochromatic approximation, used for the first layer. Input color channels are projected by a set of intermediate color channels. After this transformation, output features need only to look at one intermediate color channel. This sparsity structure is what makes the speedups feasible. {\bf (b)}: The biclustering approximation, used for higher convolution layers. Input and output features are clustered into equal sized groups. The weight tensor corresponding to each pair of input and output clusters is then approximated.}
 \end{figure}
 
-\subsubsection{Monochromatic Convolution Approximation}
+\subsection{Monochromatic Convolution Approximation}
 Let $W \in \mathbb{R}^{C \times X \times Y \times F}$ denote the
 weights of the first convolutional layer of a trained network.  The
 number of input channels, $C$, corresponds to a different color
-component (either RGB or YUV).  We found that the color components of trained convolutional neural networks we considered (see
+component (either RGB or YUV).  
+We found that the color components of trained convolutional neural networks we considered (see
 section \ref{sec:experiments}) tend to have low dimensional structure. In
 particular, the weights can be well approximated by projecting the
 color dimension down to a 1D subspace, i.e. a single color
@@ -354,27 +355,27 @@ been projected into 1D lines.
 The monochromatic approximation exploits this structure and is computed as follows.
 First, for every output feature, $f$, we consider consider the matrix $W_f \in \mathbb{R}^{C \times (X\cdot Y) }$, 
 where the spatial dimensions of the filter corresponding to the output feature have been combined, and find the singular value decomposition, 
-\begin{equation*}
-	W_f = U_f S_f V_f^{\top}
-\end{equation*}
-where $U_f \in \mathbb{R}^{C \times C}, S_f \in \mathbb{R}^{C \times XY}, V_f \in \mathbb{R}^{XY \times XY}$. 
-We then take the rank $1$ approximation to $W_f$ 
+$W_f = U_f S_f V_f^{\top}$,
+%\begin{equation*}
+%	W_f = U_f S_f V_f^{\top}
+%\end{equation*}
+where $U_f \in \mathbb{R}^{C \times C}, S_f \in \mathbb{R}^{C \times XY}$, and $V_f \in \mathbb{R}^{XY \times XY}$. 
+We then take the rank $1$ approximation of $W_f$: 
 \begin{equation}
 \label{blo1}
-	\tilde{W}_f = \tilde{U}_f \tilde{S}_f \tilde{V}_f^{\top}
+	\tilde{W}_f = \tilde{u}_f \tilde{s}_f \tilde{v}_f^{\top} ~,
 \end{equation}
-where $\tilde{U}_f \in \mathbb{R}^{C \times 1}, \tilde{S}_f \in \mathbb{R}, \tilde{V}_f \in \mathbb{R}^{1 \times XY}$.
-
-This approximation corresponds to shifting from $C$ color channels to $1$ color channel for each output feature. 
+where $\tilde{u}_f \in \mathbb{R}^{C \times 1}, \tilde{s}_f \in \mathbb{R}, \tilde{v}_f \in \mathbb{R}^{1 \times XY}$.
+This approximation corresponds to using a single color channel for each output feature. 
 We can further exploit the regularity in the weights by sharing the color component basis between different output features. 
-We do this by clustering the $F$ left singular vectors, $\tilde{U}_f$, of each output feature $f$ into $C'$ clusters, 
+We do this by clustering the $F$ left singular vectors, $\tilde{u}_f$, of each output feature $f$ into $C'$ clusters, 
 where $C'$ is much smaller than $F$. We constrain the clusters to be of equal size as discussed in section \ref{subsubsec:biclustering}.  
 Then, for each of the $\frac{F}{C'}$ output features $f$ that is assigned to cluster $c_f$, we can approximate $W_f$ with
 \begin{equation}
 \label{blo2}
-	\tilde{W}_f = U_{c_f} \tilde{S}_f \tilde{V}_f^{\top}
+	\tilde{W}_f = u_{c_f} \tilde{s}_f \tilde{v}_f^{\top}
 \end{equation}
-where $U_{c_f} \in \mathbb{R}^{C \times 1}$ is the cluster center for cluster $c_f$ and $\tilde{S}_f$ and $\tilde{V}_f$ as as before. 
+where $u_{c_f} \in \mathbb{R}^{C \times 1}$ is the cluster center for cluster $c_f$ and $\tilde{s}_f$ and $\tilde{v}_f$ as as before. 
 
 
 %By decomposing the approximated weights into two tensors, this low-rank approximation
@@ -396,10 +397,12 @@ where $U_{c_f} \in \mathbb{R}^{C \times 1}$ is the cluster center for cluster $c
 %between the input and output maps, when projected into the new color basis. 
 %If the color transformation is computed once at the outset, then the
 %number of operations performed is significantly reduced. 
+This monochromatic approximation is illustrated in the left panel of Figure \ref{fig:monochromatic}).
 Table \ref{table:ops} shows the number of operations required for the standard and monochromatic versions.
 
 %\subsection{Biclustering Approximations}
 \subsection{Tensor Vector Quantization}\label{subsec:clustering}
+
 Another source of redundancy within the 4-D weight tensors that can be exploited 
 is the similarity between different filters. 
 It can be efficiently captured by clustering the filters, such that each cluster can
@@ -437,15 +440,16 @@ version of the k-means algorithms which balances the cluster count at
 each iteration. 
 It is implemented with the Floyd algorithm, by modifying the Euclidean distance
 with a subspace projection distance.
-Equal size of clusters simplifies coding of approximations dramatically and enables a
-significant speedup. 
-
+%Equal size of clusters simplifies coding of approximations dramatically and enables a
+%significant speedup. 
 
 The number of  input and output feature planes is large for all layers
 beyond the first. As described in Section
-\ref{subsubsec:biclustering} we cluster input and output features and then, for each input-output pair,approximate the resulting sub-tensor separately. We explore two different approximations
-for each sub-tensor: (i) SVD (see Section \ref{subsubsec:svd_tensor}),
-and (ii) outer product decomposition (see Section \ref{subsubsec:outer}).
+\ref{subsubsec:biclustering} we cluster input and output features and then, 
+
+We then find low-rank approximations of each input-output subtensor $W_{C_i, F_j}$.
+For that purpose, we explore two different approximations previously described: (i) SVD by folding the tensor into a matrix,
+and (ii) outer product decomposition.
 
 Using these approximations on the convolutional weights, the target
 output can be computed with significantly fewer operations. The number
