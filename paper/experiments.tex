@@ -111,9 +111,9 @@ Total & 1.1752 & \\
 The first convolutional layer has 3 input channels, 96
 output channels and 7x7 filters.  We approximated the weights in this
 layer using the monochromatic approximation described in section
-\ref{sec:application}. The monochromatic approximation works well if
+\ref{sec:monochromatic}. The monochromatic approximation works well if
 the color components span a small number of one dimensional
-subspaces. Figure \ref{fig:RGB_components} illustrates that by plotting the RGB components of the original filters and the filters after
+subspaces. Figure \ref{fig:RGB_components} illustrates the RGB components of the original filters and the filters after
 projecting onto one dimensional subspaces. Figure \ref{fig:denoising} gives an alternate
 presentation of this approximation, showing the original first layer
 filters beside their monochromatic approximations.  Interestingly, we
@@ -124,27 +124,27 @@ cleaning up or denoising weights after training, potentially improving generaliz
 
 \begin{figure}[t]
 \centering
-\begin{minipage}{0.75\textwidth}
-	\includegraphics[width=0.5\linewidth]{img/RGB_components_matthew_3d.eps}
-	\quad\quad
-	\includegraphics[width=0.5\linewidth]{img/monochromatic_RGB_components_matthew_3d.eps} 
+\begin{minipage}{\textwidth}
+	\includegraphics[width=0.5\linewidth]{img/RGB_components_stacked.pdf}
+	\quad
+	\includegraphics[width=0.5\linewidth]{img/denoised_stacked.pdf} 
 \end{minipage}
 \vspace{-3mm}
 \label{fig:RGB_components}
-\caption{Visualization of the 1st layer filters in MattNet. Each component of the 96 7x7 filters is plotted in RGB space. Points are colored based on the output filter they belong to. Hence, there are 96 colors and $7^2$ points of each color. ({\bf Left}) Shows the
-  original filters and ({\bf Right}) shows the filters after the monochromatic approximation, where each filter has been projected down to a line in colorspace.}
+\caption{Visualization of the 1st layer filters. Each component of the 96 7x7 filters is plotted in RGB space. Points are colored based on the output filter they belong to. Hence, there are 96 colors and $7^2$ points of each color. {\bf (Left)} Shows the
+  original filters and {\bf (Middle)} shows the filters after the monochromatic approximation, where each filter has been projected down to a line in colorspace. {\bf (Right)} Original and approximate versions of a selection of 1st layer filters.}
 \end{figure}
 
 
 
-\begin{figure}[t]
-\begin{center}
-      \includegraphics[width=0.9\linewidth]{img/denoising_combined.pdf}
-\end{center}
-\label{fig:denoising}
-\vspace{-6mm}
-\caption{Original and approximate versions (using 12 colors) of 1st later filters from MattNet.}
-\end{figure}
+%\begin{figure}[t]
+%\begin{center}
+%      \includegraphics[width=0.9\linewidth]{img/denoising_combined.pdf}
+%\end{center}
+%\label{fig:denoising}
+%\vspace{-6mm}
+%\caption{Original and approximate versions (using 12 colors) of 1st later filters from MattNet.}
+%\end{figure}
 
 We evaluated the network on 20K validation images from the ImageNet12 dataset using various monochromatic approximations for the first layer weights. 
 The only parameter in the approximation is $C'$, the number of color channels used for the intermediate representation. As expected, the network performance begins to degrade as $C'$ decreases. 
@@ -176,60 +176,58 @@ The only parameter in the approximation is $C'$, the number of color channels us
 %The majority of the operations result from the convolution part of the computation. In comparison, the number of operations required for the color transformation is negligible. Thus, the theoretically achievable speedup decreases only slightly as the number of color components used is increased. 
 
 The number of FLOPS required to compute the output of the monochromatic convolution is reduced by a factor of $2-3\times$, with the larger gain resulting for small $C'$. 
-The majority of the operations result from the convolution part of the computation. In comparison, the number of operations required for the color transformation is negligible.
-Thus, the theoretically achievable speedup decreases only slightly as the number of color components used is increased.
-In practice, we found it difficult to optimize the monochromatic convolution routines as for large $C'$. Less work can be shared amongst output filters when $C'$ is large making it challenging to parallelize.
-Figure \ref{fig:mono_speedups} shows the empirical speedups we acheived on CPU (left) and GPU (right) and the corresponding network performance for various numbers of colors used in the monochromatic approximation.   
+Since the majority of the operations result from the convolution part of the computation, rather than the color transform,
+the theoretically achievable speedup decreases only slightly as $C'$ is increased.
+In practice, we found it difficult to optimize the monochromatic convolution routines as for large $C'$ since less work can be shared amongst output filters making it challenging to parallelize.
+Figure \ref{fig:mono_speedups} shows the empirical speedups we achieved on CPU and GPU and the corresponding network performance for various numbers of colors used in the monochromatic approximation.   
 Our CPU and GPU implementations achieve empirical speedups of $2-2.5\times$ relative to the baseline with less than 1\% drop in classification performance. 
 
 \begin{figure}[t]
 \centering
-\begin{minipage}{0.75\textwidth}
+\begin{minipage}{0.9\textwidth}
       \includegraphics[width=0.5\linewidth]{img/layer1_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf}
 	\quad\quad
       \includegraphics[width=0.5\linewidth]{img/layer1_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf}
 \end{minipage}
-\caption{Empirical speedups on ({\bf Left}) CPU and ({\bf Right}) GPU for the first layer. The number beside each point indicates the number of colors, $C'$, used in the approximation.}
+\caption{Empirical speedups on ({\bf Left}) CPU and ({\bf Right}) GPU for the first layer. $C'$ is the number of colors used in the approximation.}
 \label{fig:mono_speedups}
 \end{figure}
 
 \subsubsection{Second Layer}
 The second convolutional layer has 96 input channels, 256 output channels and 5x5 filters. 
 We approximated the weights using the techniques described in section \ref{subsec:clustering}. 
-outer product decomposition described in section \ref{sec:application}.
 We evaluated the original and approximate convolution operation in
 this layer using 20K validation images from the ImageNet12 dataset. 
-We explored various configurations of the approximations by varying the number of input clusters $G$, the number of output clusters $H$ and the rank of the approximation (denoted by $K1$ and $K2$ for the SVD decomposition and $K$ for the outer product decomposition). 
+We explored various configurations of the approximations by varying the number of input clusters $G$, the number of output clusters $H$ and the rank of the approximation (denoted by $K_1$ and $K_2$ for the SVD decomposition and $K$ for the outer product decomposition). 
 
-We can measure the theoretically achievable speedups for a particular approximation in terms of the number of floating point operations required to compute the output of the convolution. 
-Figure \ref{fig:biclustering_theory} plots the theoretically achievable speedups against the drop in classification performance for various configurations of the biclustering with outer product decomposition technique.  
-For a given setting of input and output clusters numbers, the performance tends to degrade as the rank is decreased. 
+%We can measure the theoretically achievable speedups for a particular approximation in terms of the number of floating point operations required to compute the output of the convolution. 
+%Figure \ref{fig:biclustering_theory} plots the theoretically achievable speedups against the drop in classification performance for various configurations of the biclustering with outer product decomposition technique.  
+%For a given setting of input and output clusters numbers, the performance tends to degrade as the rank is decreased. 
 
-In practice we found it difficult to achieve speedups close to theoretically optimal levels. 
-However, we achieved promising results and present speedups of $2-2.5\times$ relative to the baseline with less than a 1\% drop in performance.
+%In practice we found it difficult to achieve speedups close to theoretically optimal levels. 
 Figure \ref{fig:biclust_speedups} shows our empirical speedups on CPU
-(left) and GPU (right) and the corresponding network performance for
-various approximation configurations. For the CPU implementation we used the biclustering with SVD decomposition approximation. For the GPU implementation we using the biclustering with outer product decomposition approximation.  
+and GPU and the corresponding network performance for
+various approximation configurations. For the CPU implementation we used the biclustering with SVD approximation. For the GPU implementation we using the biclustering with outer product decomposition approximation.  
+We achieved promising results and present speedups of $2-2.5\times$ relative to the baseline with less than a 1\% drop in performance.
+%\begin{figure}[t]
+%\centering
+%\begin{minipage}{0.75\textwidth}
+%  \includegraphics[width=0.5\linewidth]{img/layer2_theoreticalspeedup_vs_performance_loss.pdf} 
+%  \quad\quad
+%  \includegraphics[width=0.5\linewidth]{img/layer2_theoreticalspeedup_vs_performance_loss_pierre.pdf} 
+%\end{minipage}
+%\caption{Theoretically achievable speedups with various biclustering approximations applied to ({\bf Left}) MattNet and ({\bf Right}) PierreNet.}
+%\label{fig:biclustering_theory}
+%\end{figure}
 
 \begin{figure}[t]
 \centering
-\begin{minipage}{0.75\textwidth}
-  \includegraphics[width=0.5\linewidth]{img/layer2_theoreticalspeedup_vs_performance_loss.pdf} 
-  \quad\quad
-  \includegraphics[width=0.5\linewidth]{img/layer2_theoreticalspeedup_vs_performance_loss_pierre.pdf} 
-\end{minipage}
-\caption{Theoretically achievable speedups with various biclustering approximations applied to ({\bf Left}) MattNet and ({\bf Right}) PierreNet.}
-\label{fig:biclustering_theory}
-\end{figure}
-
-\begin{figure}[t]
-\centering
-\begin{minipage}{0.75\textwidth}
+\begin{minipage}{0.9\textwidth}
       \includegraphics[width=0.5\linewidth]{img/layer2_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf}
       \quad\quad
       \includegraphics[width=0.5\linewidth]{img/layer2_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf}
 \end{minipage}
-\caption{Empirical speedups for second convolutional layer. ({\bf Left}) Speedups on CPU using biclustered ($G = 2$ and $h = 2$) with SVD approximation.({\bf Right}) peedups on GPU using biclustered ($G = 48$ and $h = 2$) with outer product decomposition approximation.}
+\caption{Empirical speedups for second convolutional layer. ({\bf Left}) Speedups on CPU using biclustered ($G = 2$ and $H = 2$) with SVD approximation.({\bf Right}) peedups on GPU using biclustered ($G = 48$ and $h = 2$) with outer product decomposition approximation.}
 \label{fig:biclust_speedups}
 \end{figure}
 
@@ -245,35 +243,43 @@ product.
 In addition to requiring fewer operations, our approximations
 require significantly fewer parameters when compared to the original
 model. 
-Since the majority of parameters come from the fully connected layers, we include these layers in our analysis of memory overhead. 
-Table \ref{table:memory_theory} shows the number of parameters for
-various approximation methods as a function of hyperparameters for the approximation techniques. 
-Table \ref{table:memory_empirical} shows the empirical reduction of parameters and the corresponding network performance.
+Since the majority of parameters come from the fully connected layers, we include these layers in our analysis of memory overhead. We compress the fully connected layers using standard SVD as described in \ref{subsubsec:svd_tensor}. We use $K$ to denote the rank of the approximation.
+ 
+Table \ref{table:memory} shows the number of parameters for
+various approximation methods as a function of hyperparameters for the approximation techniques.
+The table also shows the empirical reduction of parameters and the corresponding network performance for specific instantiations of the approximation parameters.
 
 \begin{table}[t]
 \tiny
 \centering
-\begin{tabular}{lcccc}
+\begin{tabular}{|l|c|c|c|c|}
 \hline
 {\bf Approximation method} & {\bf Number of parameters} & {\bf Approximation} & {\bf Reduction} & {\bf Increase in}\\ 
 & & {\bf hyperparameters} &  {\bf in weights} & {\bf test error}\\
 \hline
 \hline
-No approximation & $C \cdot X \cdot Y \cdot F$ & & &\\
+Standard colvolution & $CXYF$ & & &\\
 \hline
-Layer 1: Monochromatic & $C \cdot C' + X \cdot Y \cdot F$ & $C' = 48$ & 2.9109$\times$ & 0.5249\%\\
+Conv layer 1: Monochromatic & $CC' + XYF$ & $C' = 6$ & $3\times$ & 0.43\%\\
 \hline
-Layer 2: Biclustering & $G \cdot H \cdot K (\frac{C}{G} + X \cdot Y + \frac{F}{H})$ & $G = 48$ & 3.7537$\times$ & 0.8789\%\\
-	    + outer product decomposition  & & $H = 2$  & &\\
-			& & $K = 11$  & &\\
+Conv layer 2: Biclustering & $GHK (\frac{C}{G} + XY + \frac{F}{H})$ & $G = 48$; $H = 2$; $K = 6$ & 5.3$\times$ & 0.68\%\\
+	    + outer product decomposition  & &  & &\\
 \hline
-Layer 2: Biclustering & $G \cdot H \cdot (\frac{C}{G} \cdot K_1 + K_1 \cdot X \cdot Y \cdot K_2 + K_2 \cdot \frac{F}{H})$ & $G = 2$ & 2.0386$\times$ & 0.8057\% \\
-	  + SVD & & $H = 2$ & & \\
-										& & $K_1 = 28$  &  &\\
-										& & $K_2 = 76$ & &\\
+Conv layer 2: Biclustering + SVD& $G H (\frac{C}{G}K_1 + K_1 X Y K_2 + K_2 \frac{F}{H})$ & $G = 2; H = 2$; $K_1 = 19$; $K_2 = 24$ & $3.9\times$ & 0.9\% \\
+\hline
+Standard FC & $N M$ & & &\\
+\hline
+FC layer 1: Matrix SVD & $NK + KM$ & $K = 250$ & $13.4\times$ & 0.8394\%\\
+                      & & $K = 950$ & $3.5\times$ & 0.09\%\\
+\hline 
+FC layer 2: Matrix SVD & $NK + KM$ & $K = 350 $ & $5.8\times$ & 0.19\%\\
+                      & & $K = 650$ & $3.14\times$ & 0.06\%\\
+\hline 
+FC layer 3: Matrix SVD & $NK + KM$ & $K = 250$ & $8.1\times$ & 0.67\%\\
+                      & & $K = 850$ & $2.4\times$ & 0.02\%\\
 \hline 
 \end{tabular}
 \caption{Number of parameters expressed as a function of hyperparameters for various approximation methods and empirical reduction in parameters with corresponding network performance.} 
-\label{table:memory_empirical}
+\label{table:memory}
 \end{table}
 

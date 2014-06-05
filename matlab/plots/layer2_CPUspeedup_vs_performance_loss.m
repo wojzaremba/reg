@@ -1,6 +1,6 @@
 clear all
 baseline_err = 0.177604;
-figure1 = figure('Position', [0, 0, 700, 600]); hold on;
+figure1 = figure('Position', [0, 0, 900, 600]); hold on;
 hold on;
 
 % Load the baseline time
@@ -48,7 +48,12 @@ for i = 1 : length(rank_codes_times)
    if strcmp(code, 'in28_out64')
        continue;
    end
-   text(double(error_increase(i) * 100) + offset,  double(mean_speedup(i)), sprintf('K_1 = %s\nK_2 = %s', code(3:4), code(9:10)), 'FontSize', 12, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+   if strcmp(code, 'in19_out51')
+       vert_offset = -0.08;
+   else
+       vert_offset = 0;
+   end
+   text(double(error_increase(i) * 100) + offset,  double(mean_speedup(i)) + vert_offset, sprintf('K_1 = %s\nK_2 = %s', code(3:4), code(9:10)), 'FontSize', 12, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
 end
 
 
@@ -89,11 +94,16 @@ set(hplot,'MarkerSize',30);
 for i = 1 : length(rank_codes_times)
    code = rank_codes_times{i};
    if strcmp(code, 'in28_out64') || strcmp(code, 'in28_out76')
-       offset = -0.85;
+       offset = -0.7;
    else
      offset = 0.1;
    end
-   text(double(error_increase(i) * 100) + offset,  double(mean_speedup(i)), sprintf('K_1 = %s\nK_2 = %s', code(3:4), code(9:10)), 'FontSize', 12, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+   if strcmp(code, 'in16_out51')
+       vert_offset = 0.1;
+   else 
+       vert_offset = 0;
+   end
+   text(double(error_increase(i) * 100) + offset,  double(mean_speedup(i)) + vert_offset, sprintf('K_1 = %s\nK_2 = %s', code(3:4), code(9:10)), 'FontSize', 12, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
 end
 
 % Finetuned
@@ -134,11 +144,11 @@ for i = 1 : length(rank_codes_times)
    code = rank_codes_times{i};
    offset_vert = 0;
    if strcmp(code, 'in28_out64')
-       offset = -0.76;
+       offset = -0.65;
    elseif strcmp(code, 'in16_out51') || strcmp(code, 'in19_out51')
-       offset = -0.82;
+       offset = -0.7;
    elseif strcmp(code, 'in19_out64')
-       offset = -0.8;
+       offset = -0.65;
        offset_vert = 0.14;
    else
      offset = 0.1;
@@ -155,8 +165,8 @@ xlabel('Percent loss in performance', 'FontSize', 15, 'FontName', 'TimesNewRoman
 ylabel('Empirical gain in speed on CPU', 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
 title(sprintf('Second layer approximation: \nEmpirical CPU speedup vs. performance loss'), 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
 
-legend1 = legend('Original', '\Sigma_{data} distance metric', 'Finetuned');
-set(legend1, 'Position',[0.552857142857143 0.145166666666668 0.321428571428571 0.128333333333333], 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+legend1 = legend('Original', '||W||_{data} distance metric', 'Finetuned');
+set(legend1, 'Position',[0.5899999515594 0.146666666666667 0.287777777777778 0.211666666666666], 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
 
 
 set(gcf, 'Color', 'w');
