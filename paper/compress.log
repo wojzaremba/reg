@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  5 JUN 2014 18:11
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  5 JUN 2014 18:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -409,23 +409,188 @@ File: img/monochromatic_illustration.pdf Graphic file (type pdf)
 
 <use img/monochromatic_illustration.pdf>
 Package pdftex.def Info: img/monochromatic_illustration.pdf used on input line 
-313.
+314.
 (pdftex.def)             Requested size: 119.2467pt x 74.63472pt.
 
 <img/bicluster_illustration.pdf, id=115, 434.62375pt x 349.305pt>
 File: img/bicluster_illustration.pdf Graphic file (type pdf)
 
 <use img/bicluster_illustration.pdf>
-Package pdftex.def Info: img/bicluster_illustration.pdf used on input line 313.
+Package pdftex.def Info: img/bicluster_illustration.pdf used on input line 314.
 
 (pdftex.def)             Requested size: 119.2467pt x 95.83797pt.
 
 <img/tensor_sum.pdf, id=116, 332.24126pt x 144.54pt>
 File: img/tensor_sum.pdf Graphic file (type pdf)
  <use img/tensor_sum.pdf>
-Package pdftex.def Info: img/tensor_sum.pdf used on input line 313.
+Package pdftex.def Info: img/tensor_sum.pdf used on input line 314.
 (pdftex.def)             Requested size: 119.2467pt x 51.87776pt.
 
 [4 <./img/monochromatic_illustration.pdf> <./img/bicluster_illustration.pdf
 
-pdfTeX warning: pdflatex (file ./
+pdfTeX warning: pdflatex (file ./img/bicluster_illustration.pdf): PDF inclusion
+: multiple pdfs with page group included in a single page
+> <./img/tensor_sum.pdf
+
+pdfTeX warning: pdflatex (file ./img/tensor_sum.pdf): PDF inclusion: multiple p
+dfs with page group included in a single page
+>]
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 427.
+) (./distance.tex) (./experiments.tex
+
+LaTeX Warning: Reference `sec:application' on page 5 undefined on input line 7.
+
+
+[5]
+
+LaTeX Warning: Reference `sec:monochromatic' on page 6 undefined on input line 
+114.
+
+
+LaTeX Warning: Reference `fig:denoising' on page 6 undefined on input line 117.
+
+
+<img/RGB_components_stacked.pdf, id=195, 732.7375pt x 294.09875pt>
+File: img/RGB_components_stacked.pdf Graphic file (type pdf)
+
+<use img/RGB_components_stacked.pdf>
+Package pdftex.def Info: img/RGB_components_stacked.pdf used on input line 128.
+
+(pdftex.def)             Requested size: 198.7425pt x 79.76672pt.
+
+<img/denoised_stacked.pdf, id=196, 732.7375pt x 294.09875pt>
+File: img/denoised_stacked.pdf Graphic file (type pdf)
+
+<use img/denoised_stacked.pdf>
+Package pdftex.def Info: img/denoised_stacked.pdf used on input line 130.
+(pdftex.def)             Requested size: 198.7425pt x 79.76672pt.
+
+Overfull \hbox (11.90002pt too wide) in paragraph at lines 128--131
+[][]  [] 
+ []
+
+[6 <./img/RGB_components_stacked.pdf> <./img/denoised_stacked.pdf
+
+pdfTeX warning: pdflatex (file ./img/denoised_stacked.pdf): PDF inclusion: mult
+iple pdfs with page group included in a single page
+>]
+<img/layer1_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf, id=217, 839.1
+35pt x 578.16pt>
+File: img/layer1_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf Graphic f
+ile (type pdf)
+
+<use img/layer1_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf>
+Package pdftex.def Info: img/layer1_CPUspeedup_vs_performance_loss_finetune_and
+_orig.pdf used on input line 188.
+(pdftex.def)             Requested size: 178.86702pt x 123.23451pt.
+
+<img/layer1_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf, id=218, 839.1
+35pt x 578.16pt>
+File: img/layer1_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf Graphic f
+ile (type pdf)
+
+<use img/layer1_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf>
+Package pdftex.def Info: img/layer1_GPUspeedup_vs_performance_loss_finetune_and
+_orig.pdf used on input line 190.
+(pdftex.def)             Requested size: 178.86702pt x 123.23451pt.
+
+Overfull \hbox (21.90001pt too wide) in paragraph at lines 188--191
+[][]   [] 
+ []
+
+
+<img/layer2_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf, id=221, 757.8
+3125pt x 578.16pt>
+File: img/layer2_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf Graphic f
+ile (type pdf)
+
+<use img/layer2_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf>
+Package pdftex.def Info: img/layer2_CPUspeedup_vs_performance_loss_finetune_and
+_orig.pdf used on input line 226.
+(pdftex.def)             Requested size: 178.86702pt x 136.45868pt.
+
+<img/layer2_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf, id=222, 765.8
+6125pt x 578.16pt>
+File: img/layer2_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf Graphic f
+ile (type pdf)
+
+<use img/layer2_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf>
+Package pdftex.def Info: img/layer2_GPUspeedup_vs_performance_loss_finetune_and
+_orig.pdf used on input line 228.
+(pdftex.def)             Requested size: 178.86702pt x 135.0207pt.
+
+Overfull \hbox (21.90001pt too wide) in paragraph at lines 226--229
+[][]   [] 
+ []
+
+
+Overfull \hbox (7.0317pt too wide) in paragraph at lines 255--282
+ [][] 
+ []
+
+[7 <./img/layer1_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf> <./img/l
+ayer1_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf>]) (./discussion.tex
+
+LaTeX Warning: Reference `fig:biclustering_theory' on page 8 undefined on input
+ line 36.
+
+
+Underfull \vbox (badness 2799) has occurred while \output is active []
+
+ [8 <./img/layer2_CPUspeedup_vs_performance_loss_finetune_and_orig.pdf> <./img/
+layer2_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf>]) (./compress.bbl)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 53.
+ [9]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 53.
+
+(./compress.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 53.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 53.
+Package rerunfilecheck Info: File `compress.out' has not changed.
+(rerunfilecheck)             Checksum: 00950262661A3B89F5F98036918E33A3;1077.
+
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 53.
+ ) 
+Here is how much of TeX's memory you used:
+ 6513 strings out of 493315
+ 94954 string characters out of 6137904
+ 186712 words of memory out of 5000000
+ 9796 multiletter control sequences out of 15000+600000
+ 27168 words of font info for 61 fonts, out of 8000000 for 9000
+ 957 hyphenation exceptions out of 8191
+ 30i,11n,28p,844b,344s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
+exlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
+xlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/tex
+live/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texli
+ve/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive
+/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2
+013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/201
+3/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2013/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2013/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2013/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2013/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2013/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2013/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2013/texmf-dist/fon
+ts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2013/texmf-dist
+/fonts/type1/public/amsfonts/symbols/msbm7.pfb></usr/local/texlive/2013/texmf-d
+ist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2013/texmf-dist/font
+s/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1
+/urw/times/utmb8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/times
+/utmr8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/times/utmri8a.p
+fb>
+Output written on compress.pdf (9 pages, 1478703 bytes).
+PDF statistics:
+ 369 PDF objects out of 1000 (max. 8388607)
+ 303 compressed objects within 4 object streams
+ 57 named destinations out of 1000 (max. 500000)
+ 174 words of extra memory for PDF output out of 10000 (max. 10000000)
+

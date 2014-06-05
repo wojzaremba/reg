@@ -291,6 +291,7 @@ We refer to this approximation as the outer product decomposition ans use $K$ to
 %
 %We will compare the number of floating-point operations for different
 %approximation methods. Table \ref{table:ops} shows a breakdown of the number of operations required for the standard convolution and for our approximations.
+\vspace{-3mm}
 
 \begin{figure}[ht]
 \centering
@@ -312,22 +313,20 @@ We refer to this approximation as the outer product decomposition ans use $K$ to
 }
 }
 \vspace{-3mm}
-\caption{ A visualization of monochromatic and biclustering approximation structures. {\bf (a)} The monochromatic approximation, used for the first layer. Input color channels are projected by a set of intermediate color channels. After this transformation, output features need only to look at one intermediate color channel. This sparsity structure is what makes the speedups feasible. {\bf (b)} The biclustering approximation, used for higher convolution layers. Input and output features are clustered into equal sized groups. The weight tensor corresponding to each pair of input and output clusters is then approximated. {\bf (c)} The weight tensors for each input-output pair in (b) is approximated by a sum of rank 1 tensors using techniques described in \ref{subsubsec:svd_tensor}}
+\caption{ A visualization of monochromatic and biclustering approximation structures. {\bf (a)} The monochromatic approximation, used for the first layer. Input color channels are projected by a set of intermediate color channels. After this transformation, output features need only to look at one intermediate color channel. {\bf (b)} The biclustering approximation, used for higher convolution layers. Input and output features are clustered into equal sized groups. The weight tensor corresponding to each pair of input and output clusters is then approximated. {\bf (c)} The weight tensors for each input-output pair in (b) are approximated by a sum of rank 1 tensors using techniques described in \ref{subsubsec:svd_tensor}}
 \end{figure}
 
 \subsection{Monochromatic Convolution Approximation}\label{subsec:monochromatic}
 Let $W \in \mathbb{R}^{C \times X \times Y \times F}$ denote the
-weights of the first convolutional layer of a trained network.  The
-number of input channels, $C$, corresponds to a different color
-component (either RGB or YUV).  
+weights of the first convolutional layer of a trained network.  
 We found that the color components
-tend to have low dimensional structure. In
+ of trained CNNs tend to have low dimensional structure. In
 particular, the weights can be well approximated by projecting the
-color dimension down to a 1D subspace, i.e. a single color
-channel. The low-dimensional structure of the weights is apparent in
+color dimension down to a 1D subspace.
+The low-dimensional structure of the weights is apparent in
 \ref{fig:RGB_components} which shows the original first layer convolutional weights
 and the weights after the color dimension has
-been projected into 1D lines.
+been projected onto 1D lines.
 
 The monochromatic approximation exploits this structure and is computed as follows.
 First, for every output feature, $f$, we consider consider the matrix $W_f \in \mathbb{R}^{C \times (XY) }$, 
@@ -337,21 +336,20 @@ $W_f = U_f S_f V_f^{\top}$,
 %	W_f = U_f S_f V_f^{\top}
 %\end{equation*}
 where $U_f \in \mathbb{R}^{C \times C}, S_f \in \mathbb{R}^{C \times XY}$, and $V_f \in \mathbb{R}^{XY \times XY}$. 
-We then take the rank $1$ approximation of $W_f$: 
-\begin{equation}
-\label{blo1}
-	\tilde{W}_f = \tilde{U}_f \tilde{S}_f \tilde{V}_f^{\top} ~,
-\end{equation}
+We then take the rank $1$ approximation of $W_f$, 
+%\begin{equation}
+%\label{blo1}
+	$\tilde{W}_f = \tilde{U}_f \tilde{S}_f \tilde{V}_f^{\top} ~,$
+%\end{equation}
 where $\tilde{U}_f \in \mathbb{R}^{C \times 1}, \tilde{S}_f \in \mathbb{R}, \tilde{V}_f \in \mathbb{R}^{1 \times XY}$.
-This approximation corresponds to using a single color channel for each output feature. 
 We can further exploit the regularity in the weights by sharing the color component basis between different output features. 
 We do this by clustering the $F$ left singular vectors, $\tilde{U}_f$, of each output feature $f$ into $C'$ clusters, 
-where $C'$ is much smaller than $F$. We constrain the clusters to be of equal size as discussed in section \ref{subsec:clustering}.  
+for $C' < F$  . We constrain the clusters to be of equal size as discussed in section \ref{subsec:clustering}.  
 Then, for each of the $\frac{F}{C'}$ output features $f$ that is assigned to cluster $c_f$, we can approximate $W_f$ with
-\begin{equation}
-\label{blo2}
-	\tilde{W}_f = U_{c_f} \tilde{S}_f \tilde{V}_f^{\top}
-\end{equation}
+%\begin{equation}
+%\label{blo2}
+	$\tilde{W}_f = U_{c_f} \tilde{S}_f \tilde{V}_f^{\top}$
+%\end{equation}
 where $U_{c_f} \in \mathbb{R}^{C \times 1}$ is the cluster center for cluster $c_f$ and $\tilde{S}_f$ and $\tilde{V}_f$ as as before. 
 
 
@@ -412,7 +410,7 @@ output can be computed with significantly fewer operations. The number
 of operations required is a function the number
 of input clusters, $G$, the output clusters $H$ and the rank of the sub-tensor 
 approximations ($K_1, K_2$ for the SVD decomposition; $K$ for the outer product decomposition.  
-The number of operations required for each approximation is described in table \ref{table:ops}.
+The number of operations required for each approximation is described in Table \ref{table:ops}.
 %The number of  input and output feature planes is large for all layers
 %beyond the first. As described in Section
 %\ref{subsec:clustering} we cluster input and output features and then, 
@@ -424,14 +422,16 @@ The number of operations required for each approximation is described in table \
 \begin{table}[t]
 \tiny
 \centering
-\begin{tabular}{lc}
+\begin{tabular}{|lc|}
 \hline
-Approximation technique & Number of operations \\
+{\bf Approximation technique} & {\bf Number of operations} \\
+\hline
 \hline
 No approximation & $X Y C F N M \Delta^{-2}$\\
 Monochromatic & $C' C N M + X Y F N M \Delta^{-2}$\\
 Biclustering + outer product decomposition & $G H K (N M \frac{C}{G} + X Y N M \Delta^{-2} + \frac{F}{H} N M \Delta^{-2})$ \\  
 Biclustering + SVD & $G H N M (\frac{C}{G}K_1 + K_1 X Y K_2 \Delta^{-2} + K_2\frac{F}{H})$\\
+\hline
 \end{tabular}
 \caption{Number of operations required for various approximation methods.} 
 \label{table:ops}
