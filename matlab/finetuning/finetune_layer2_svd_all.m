@@ -1,6 +1,6 @@
 C_(CleanGPU);
 clear all;
-C_(SetDevice, 1);
+C_(SetDevice, 2);
 global plan;
 randn('seed', 1);
 load_imagenet_model('matthew_train', 128);
@@ -11,7 +11,7 @@ W = plan.layer{approx_layer}.cpu.vars.W;
 
 iclust = 2;
 oclust = 2;
-oratio = 0.4; % (0.6 --> 76), (0.5 --> 64)
+oratio = 0.5; % (0.6 --> 76), (0.5 --> 64)
 iratio = 0.4;  % (0.6 --> 78), (0.5 --> 24), (0.4 --> 19)
 odegree = floor(size(W, 1) * oratio / oclust);
 idegree = floor(size(W, 4) * iratio / iclust);
@@ -19,7 +19,7 @@ idegree = floor(size(W, 4) * iratio / iclust);
 fname = sprintf('layer2_svd_%d_%d_%d_%d_finetuneall', iclust, oclust, idegree, odegree);
 
 
-restart = 1;
+restart = 0;
 if ~restart
   load_weights_training(fname, 2);
   fprintf('\nLoading weights from %s\n\n', fname);
@@ -41,7 +41,7 @@ plan.layer{approx_layer}.cpu.vars.W = single(Wapprox);
 % Finetuning parameters
 min_layer = 6;
 plan.momentum = 0.9;
-plan.lr = 0.001;
+plan.lr = 0.00001;
 
 nimg = length(plan.input.Y);
 bs = plan.input.batch_size;
@@ -57,14 +57,14 @@ for epoch = 1 : nepoch
     plan.input.step = nval_batches + 1;
     plan.repeat = epoch;
     error = 0;
-    for b = 1 : ntrain_batches
+    for b = 4000 : ntrain_batches
         
-        if b > 2000 
-            plan.lr = 0.0001;
-        end
-        if b > 4000
-            plan.lr = 0.00001;
-        end
+%         if b > 2000 
+%             plan.lr = 0.0001;
+%         end
+%         if b > 4000
+%             plan.lr = 0.00001;
+%         end
         
         plan.input.GetImage(1);
         ForwardPass();

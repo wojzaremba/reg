@@ -1,6 +1,6 @@
 C_(CleanGPU);
 clear all;
-C_(SetDevice, 2);
+C_(SetDevice, 0);
 global plan;
 randn('seed', 1);
 load_imagenet_model('matthew', 128);

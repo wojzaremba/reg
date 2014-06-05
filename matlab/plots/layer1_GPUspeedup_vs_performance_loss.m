@@ -1,6 +1,8 @@
 clear all
-figure1 = figure('Position', [0, 0, 700, 500]);
+figure1 = figure('Position', [0, 0, 700, 600]);
 set(gca,'Fontsize',16);
+set(gca, 'ytick', 1:0.2:2.6)
+
 hold on;
 
 baseline = 0.177604;
@@ -33,7 +35,8 @@ error_inc = error_inc - baseline;
 
 
 
-errorbar(error_inc * 100, mean_speedup_to_plot, std_speedup_to_plot, 'bx', 'linewidth', 2);
+hplot = errorbar(error_inc * 100, mean_speedup_to_plot, std_speedup_to_plot, 'b.', 'linewidth', 2);
+set(hplot,'MarkerSize',30); 
 
 for  nc = 1 : length(colors_to_plot)
     if colors_to_plot(nc) == 6
@@ -82,7 +85,8 @@ end
 
 error_inc = error_inc - baseline;
 
-errorbar(error_inc * 100, mean_speedup_to_plot, std_speedup_to_plot, 'kx', 'linewidth', 2);
+hplot = errorbar(error_inc * 100, mean_speedup_to_plot, std_speedup_to_plot, 'k.', 'linewidth', 2);
+set(hplot,'MarkerSize',30); 
 
 for  nc = 1 : length(colors_to_plot)
     if colors_to_plot(nc) == 16
@@ -95,7 +99,7 @@ for  nc = 1 : length(colors_to_plot)
     else 
         offset_vert = 0;
     end
-    text(double(error_inc(nc) * 100 + offset), double(mean_speedup_to_plot(nc)) + offset_vert, sprintf('%d', colors_to_plot(nc)), 'FontSize', 13, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+    text(double(error_inc(nc) * 100 + offset), double(mean_speedup_to_plot(nc)) + offset_vert, sprintf('%d', colors_to_plot(nc)), 'FontSize', 14, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
 
 end
 
@@ -132,7 +136,8 @@ end
 
 error_inc = error_inc - baseline;
 
-errorbar(error_inc * 100, mean_speedup_to_plot, std_speedup_to_plot, 'rx', 'linewidth', 2);
+hplot = errorbar(error_inc * 100, mean_speedup_to_plot, std_speedup_to_plot, 'r.', 'linewidth', 2);
+set(hplot,'MarkerSize',30); 
 
 for  nc = 1 : length(colors_to_plot)
     if colors_to_plot(nc) == 12
@@ -145,17 +150,18 @@ for  nc = 1 : length(colors_to_plot)
     else 
         offset_vert = 0;
     end
-    text(double(error_inc(nc) * 100 + offset), double(mean_speedup_to_plot(nc)) + offset_vert, sprintf('%d', colors_to_plot(nc)), 'FontSize', 13, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+    text(double(error_inc(nc) * 100 + offset), double(mean_speedup_to_plot(nc)) + offset_vert, sprintf('%d', colors_to_plot(nc)), 'FontSize', 14, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
 
 end
 
 grid on;
+axis([-1, 7, 1, 2.6]);
 xlabel('Percent loss in performance', 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
 ylabel('Empirical gain in speed on GPU', 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
-title(sprintf('MattNet first layer approximation: \nEmpirical GPU speedup vs. performance loss'), 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+title(sprintf('First layer approximation: \nEmpirical GPU speedup vs. performance loss'), 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
 
-legend1 = legend('Original', 'Data covariance', 'Finetuned');
-set(legend1, 'Position',[0.630714285714286 0.158333333333335 0.242857142857143 0.142], 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+legend1 = legend('Original', '\Sigma_{data} distance metric', 'Finetuned');
+set(legend1, 'Position',[0.555714285714286 0.138500000000002 0.321428571428571 0.128333333333333], 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
 
 set(gcf, 'Color', 'w');
 export_fig '../paper/img/layer1_GPUspeedup_vs_performance_loss_finetune_and_orig' -pdf

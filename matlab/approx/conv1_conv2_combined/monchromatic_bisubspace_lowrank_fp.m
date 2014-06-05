@@ -12,7 +12,7 @@ if 1
     fname = sprintf('/misc/vlgscratch3/FergusGroup/denton/monochromatic%d_finetuneall', num_colors);
     load_weights(fname, 1);
     fprintf('\nLoading weights from %s\n\n', fname);
-    fname = sprintf('momochromatic%d_layer2_bisubspace_48_2_%d_finetuneall', num_colors, rank);
+    fname = sprintf('monochromatic%d_layer2_bisubspace_48_2_%d_finetuneall', num_colors, rank);
     load_weights(fname, 2);
     fprintf('\nLoading weights from %s\n\n', fname);
 end
@@ -65,15 +65,15 @@ for i = 1:nbatches
     fprintf('(%d) %d / %d = %f     (%d / %d = %f)\n', i, e,  plan.input.batch_size, e /  plan.input.batch_size, error, i * plan.input.batch_size, error / (i * plan.input.batch_size));
 end
 
-
-
-load generated_mats/monochromatic6_layer2_bisubspace_finetuned_error.mat
-idx = find(rank_list == rank);
-if isempty(idx)
-    rank_list(end+1) = rank;
-    errors(end+1) =  error / (i * plan.input.batch_size);
-else
-    errors(idx) =  error / (i * plan.input.batch_size);
-end
-save('generated_mats/monochromatic6_layer2_bisubspace_finetuned_error.mat', 'errors', 'rank_list');
+% 
+% 
+% load generated_mats/monochromatic6_layer2_bisubspace_finetuned_error.mat
+% idx = find(rank_list == rank);
+% if isempty(idx)
+%     rank_list(end+1) = rank;
+%     errors(end+1) =  error / (i * plan.input.batch_size);
+% else
+%     errors(idx) =  error / (i * plan.input.batch_size);
+% end
+% save('generated_mats/monochromatic6_layer2_bisubspace_finetuned_error.mat', 'errors', 'rank_list');
 

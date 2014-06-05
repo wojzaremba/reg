@@ -16,26 +16,26 @@ Mathieu, M., Henaff, M., LeCun, Y.:
 \newblock Fast training of convolutional networks through ffts.
 \newblock arXiv preprint arXiv:1312.5851 (2013)
 
+\bibitem{zeiler2013visualizing}
+Zeiler, M.D., Fergus, R.:
+\newblock Visualizing and understanding convolutional neural networks.
+\newblock arXiv preprint arXiv:1311.2901 (2013)
+
 \bibitem{imagenet}
 Deng, J., Dong, W., Socher, R., Li, L.J., Li, K., Fei-Fei, L.:
 \newblock {ImageNet: A Large-Scale Hierarchical Image Database}.
 \newblock In: CVPR09. (2009)
+
+\bibitem{eigenweb}
+Guennebaud, G., Jacob, B.,  et~al.:
+\newblock Eigen v3.
+\newblock http://eigen.tuxfamily.org (2010)
 
 \bibitem{sermanet2013overfeat}
 Sermanet, P., Eigen, D., Zhang, X., Mathieu, M., Fergus, R., LeCun, Y.:
 \newblock Overfeat: Integrated recognition, localization and detection using
   convolutional networks.
 \newblock arXiv preprint arXiv:1312.6229 (2013)
-
-\bibitem{zeiler2013visualizing}
-Zeiler, M.D., Fergus, R.:
-\newblock Visualizing and understanding convolutional neural networks.
-\newblock arXiv preprint arXiv:1311.2901 (2013)
-
-\bibitem{eigenweb}
-Guennebaud, G., Jacob, B.,  et~al.:
-\newblock Eigen v3.
-\newblock http://eigen.tuxfamily.org (2010)
 
 \bibitem{zeiler2011adaptive}
 Zeiler, M.D., Taylor, G.W., Fergus, R.:

@@ -9,7 +9,7 @@
   present within the convolutional filters to derive
   approximations that significantly reduce the required
   computation. Using large state-of-the-art models, we demonstrate
-  speedups by a factor of $2\times$, while keeping the accuracy
+  speedups on both CPU and GPU by a factor of $2\times$, while keeping the accuracy
   within $1\%$ of the original model.
 \end{abstract}
 
@@ -29,7 +29,7 @@ extensive efforts devoted to speeding up training procedure.  However,
 there are relatively few efforts aimed at improving the {\em test-time}
 performance of the models. 
 
- We consider convolutional neural networks used for computer vision tasks, since
+ We consider convolutional neural networks (CNNs) used for computer vision tasks, since
 they are large and widely used in commercial applications. 
 These networks typically require a huge number of parameters ($\sim 10^{7}$ in \cite{overfeat})
 to produce state-of-the-art results. This redundancy seems necessary in order
@@ -49,12 +49,10 @@ is restored. We consider several elementary tensor decompositions based
 on singular value decompositions, as well as vector quantization to 
 also exploit nonlinear approximation. 
 
-In summary, our main contributions are:
-\begin{itemize}
-\item We present a generic method to exploit the redundancy inherent in deep convolutional networks.
-\item We report experiments on state-of-the-art Imagenet CNNs, showing $2\times$ speedups on each 
-	convolutional layer with less than $1\%$ drop in performance, both in GPU and CPU implementations.
-\end{itemize}
+In summary, our main contributions are the following:
+We present a collection of generic methods to exploit the redundancy inherent in deep CNNs.
+We report experiments on state-of-the-art Imagenet CNNs, showing $2-3\times$ empirical speedups on 
+convolutional layers with less than $1\%$ drop in performance and a reduction of parameters in fully connected layers by a factor of $XXX\times$.
 
 
 %Within these models, most of the time ($\sim90\%$) is spent in the
@@ -86,8 +84,7 @@ In summary, our main contributions are:
    \times F}$. $C$ is the number of number of input channels, $X$ and
  $Y$ are the spatial dimensions of the kernel, and $F$ is the target
  number of feature maps. 
- It is common for the first convolutional layer to have a stride associated with the kernel. 
- We denote the stride by $\Delta$.  Let $I \in \mathbb{R}^{C \times N \times M}$
+ It is common for the first convolutional layer to have a stride associated with the kernel which we denote by $\Delta$.  Let $I \in \mathbb{R}^{C \times N \times M}$
  denote an input signal where $C$ is the number of input maps, and $N$
  and $M$ are the spatial dimensions of the maps.  The target value, $T
  = I \ast W$, of a generic convolutional layer, with $\Delta = 1$, for a particular output
@@ -119,7 +116,7 @@ to each weight element independently. By contrast, our approximation approach mo
 the structure within each filter. Potentially, the two approaches
 could be used in conjunction. 
 
-The most expensive operations in convolutional networks are the
+The most expensive operations in CNNs are the
 convolutions in the first few layers. The complexity of this operation
 is linear in the area of the receptive field of the filters, which is
 relatively large for these layers.  However, Mathieu \etal \cite{mathieu2013fast} have shown that convolution can be
@@ -138,9 +135,9 @@ methods presented here focus on exploiting the linear structure of this
 over-parametrization.
 
 Finally, a recent preprint \cite{zisserman14} also exploits low-rank decompositions
-of convolutional tensors to speed up the evaluation of convolutional neural networks, applied to scene text character
+of convolutional tensors to speed up the evaluation of CNNs, applied to scene text character
 recognition. This work was developed simultaneously with ours, and provides 
 further evidence that such techniques can be applied to a variety of architectures 
-and tasks.
+and tasks. 
 
 

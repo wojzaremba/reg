@@ -1,7 +1,7 @@
 [    
     {
         "type" : "RawImageInputTrainImgNet",
-        "file_pattern": "/misc/vlgscratch3/data/imagenet12/original/train/",
+        "file_pattern": "/misc/vlgscratch3/FergusGroup/denton/imagenet_data/train_cropped/",
         "batch_size": 128,
         "rows": 224,
         "cols": 224,

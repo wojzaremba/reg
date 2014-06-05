@@ -61,6 +61,9 @@ for epoch = 1 : nepoch
         if b > 1000 
             plan.lr = 0.0001;
         end
+        if b > 2000
+            plan.lr = 0.00001;
+        end
         
         plan.input.GetImage(1);
         ForwardPass();
