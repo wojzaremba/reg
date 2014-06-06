@@ -156,9 +156,9 @@ end
 
 grid on;
 axis([-1, 6, 1, 2.6]);
-xlabel('Percent loss in performance', 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
-ylabel('Empirical gain in speed on GPU', 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
-title(sprintf('First layer approximation: \nEmpirical GPU speedup vs. performance loss'), 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+xlabel('Percent loss in performance', 'FontSize', 18, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+ylabel('Empirical gain in speed on GPU', 'FontSize', 18, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+title(sprintf('First layer approximation: \nEmpirical GPU speedup vs. performance loss'), 'FontSize', 23, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
 
 legend1 = legend('Original', '||W||_{data} distance metric', 'Finetuned');
 set(legend1, 'Position',[0.5899999515594 0.146666666666667 0.287777777777778 0.211666666666666], 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');

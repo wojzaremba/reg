@@ -1,6 +1,4 @@
-
 \section{Discussion}
-
 In this paper we have presented techniques that can speed up the
 bottleneck convolution operations in the first layers of a CNN by a factor $2-3\times$, with negligible loss of performance ($< 1\%$). The empirical speedups
 achieved are still some way short of the theoretical gains, thus
@@ -14,30 +12,29 @@ Given the widespread use of neural networks in large scale industrial
 settings, the speed gains we demonstrate have significant economic
 value. Companies such as Google or Facebook process $10^8$ images/day,
 requiring many thousands of machines. Our speed gains mean that the
-number of machines dedicated to running convolutional networks could be roughly halved, so saving millions of
-dollars, as well as a significant reduction in environmental impact.
-
+number of machines dedicated to running convolutional networks could be significantly reduced, saving millions of
+dollars, as well as significantly reducing the environmental impact.
 
 We also show that our methods reduce the memory footprint of weights
-in the first two layers by factor of $2-3\times$. When applied to the whole network,
-this would translate into a significant savings, which would facilitate mobile deployment
-of convolutional networks.
+in the first two layers by factor of $2-3\times$ and the fully connected layers by a factor of $5-13\times$.
+Since the vast majority of weights reside in the fully connected layers, compressing only these layers 
+translate into a significant savings, which would facilitate mobile deployment
+of convolutional networks.  
 
-Our approximations are applied to fully trained networks. The
-small performance drops that result could well be mitigated by further
-training the network after applying the approximation. By alternating
-these two steps, we could potentially achieve further gains in
-speed-up for a modest performance drop.
+%Our approximations are applied to fully trained networks. The
+%small performance drops that result could well be mitigated by further
+%training the network after applying the approximation. By alternating
+%these two steps, we could potentially achieve further gains in
+%speed-up for a modest performance drop.
 
-
-Another aspect of our technique is regularization. It seems that
-approximated filters look cleaner, and that sporadically we get better
-test error (e.g.~bottom left of Figure
-\ref{fig:biclustering_theory}(left)). We would like to experiment with
-low-rank projections during training as a regularization
-technique. Effectively it decreases number of learnable parameters,
-so it might improve generalization, a major issue with large convolutional networks.
-  
+An interesting avenue of research to explore in further work is the ability of these techniques to aid in regularization either during or post training.
+The low-rank projections effectively decrease number of learnable parameters,
+suggesting that they might improve generalization ability,
+a major issue with large CNNs.
+The regularization potential of the low-rank approximations is further motivated by two observations. 
+The first is that the approximated filters for the first conolutional layer appear to be cleaned up versions of the original filters. 
+Additionally, we noticed that we sporadically achieve better
+test error with some of the more conservative approximations. 
 
 
 % Presented methods were applied to fully trained networks. Obviously, networks were not trained

@@ -38,7 +38,7 @@ weight_savings = orig_weights ./ approx_weights;
 plot(100 * (errors - baseline), weight_savings, 'k', 'linewidth', 2);
 
 
-xlabel('Percent loss in performance', 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
-ylabel('Reduction is number of weights', 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
-title(sprintf('MattNet FC layers approximation: \nPerformance loss vs. reduction of parameters'), 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+xlabel('Percent loss in performance', 'FontSize', 18, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+ylabel('Reduction is number of weights', 'FontSize', 18, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+title(sprintf('MattNet FC layers approximation: \nPerformance loss vs. reduction of parameters'), 'FontSize', 20, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
 legend1 = legend('FC1', 'FC2', 'FC3');

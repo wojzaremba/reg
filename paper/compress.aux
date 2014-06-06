@@ -16,9 +16,9 @@
 \gdef\HyperFirstAtBeginDocument#1{#1}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
-\citation{overfeat}
+\citation{sermanet2013overfeat}
 \citation{denil2013predicting}
-\citation{hintonseparable}
+\citation{hinton2012improving}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}}
 \citation{vanhoucke2011improving}
 \citation{mathieu2013fast}
@@ -28,9 +28,9 @@
 \newlabel{relwork}{{2}{2}{Related Work}{section.2}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Convolutional Tensor Compression}{2}{section.3}}
 \newlabel{sec:approx_tech}{{3}{2}{Convolutional Tensor Compression}{section.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Approximation Metric}{2}{subsection.3.1}}
-\newlabel{reconstr_sect}{{3.1}{2}{Approximation Metric}{subsection.3.1}{}}
 \citation{zisserman14}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Approximation Metric}{3}{subsection.3.1}}
+\newlabel{reconstr_sect}{{3.1}{3}{Approximation Metric}{subsection.3.1}{}}
 \newlabel{approxi}{{1}{3}{Approximation Metric}{equation.3.1}{}}
 \newlabel{poormansmaha}{{2}{3}{Approximation Metric}{equation.3.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Low-rank Tensor Approximations}{3}{subsection.3.2}}
@@ -53,7 +53,6 @@
 \newlabel{subsec:monochromatic}{{3.3}{4}{Monochromatic Convolution Approximation}{subsection.3.3}{}}
 \citation{zeiler2013visualizing}
 \citation{imagenet}
-\citation{eigenweb}
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Number of operations required for various approximation methods.}}{5}{table.1}}
 \newlabel{table:ops}{{1}{5}{Number of operations required for various approximation methods}{table.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Biclustering Approximations}{5}{subsection.3.4}}
@@ -61,34 +60,6 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Fine-tuning}{5}{subsection.3.5}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Experiments}{5}{section.4}}
 \newlabel{sec:experiments}{{4}{5}{Experiments}{section.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Speedup}{5}{subsection.4.1}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Evaluation time in seconds per layer on CPU (left) and GPU (right) with batch size of 128. Results are averaged over 8 runs.}}{6}{table.2}}
-\newlabel{evaluation_time}{{2}{6}{Evaluation time in seconds per layer on CPU (left) and GPU (right) with batch size of 128. Results are averaged over 8 runs}{table.2}{}}
+\citation{eigenweb}
 \newlabel{fig:RGB_components}{{4.1.1}{6}{First Layer}{subsubsection.4.1.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Visualization of the 1st layer filters. Each component of the 96 7x7 filters is plotted in RGB space. Points are colored based on the output filter they belong to. Hence, there are 96 colors and $7^2$ points of each color. {\bf  (Left)} Shows the original filters and {\bf  (Middle)} shows the filters after the monochromatic approximation, where each filter has been projected down to a line in colorspace. {\bf  (Right)} Original and approximate versions of a selection of 1st layer filters.}}{6}{figure.2}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.1}First Layer}{6}{subsubsection.4.1.1}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Empirical speedups on ({\bf  Left}) CPU and ({\bf  Right}) GPU for the first layer. $C'$ is the number of colors used in the approximation.}}{7}{figure.3}}
-\newlabel{fig:mono_speedups}{{3}{7}{Empirical speedups on ({\bf Left}) CPU and ({\bf Right}) GPU for the first layer. $C'$ is the number of colors used in the approximation}{figure.3}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.2}Second Layer}{7}{subsubsection.4.1.2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Reduction in memory overhead}{7}{subsection.4.2}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Empirical speedups for second convolutional layer. ({\bf  Left}) Speedups on CPU using biclustered ($G = 2$ and $H = 2$) with SVD approximation.({\bf  Right}) peedups on GPU using biclustered ($G = 48$ and $h = 2$) with outer product decomposition approximation.}}{8}{figure.4}}
-\newlabel{fig:biclust_speedups}{{4}{8}{Empirical speedups for second convolutional layer. ({\bf Left}) Speedups on CPU using biclustered ($G = 2$ and $H = 2$) with SVD approximation.({\bf Right}) peedups on GPU using biclustered ($G = 48$ and $h = 2$) with outer product decomposition approximation}{figure.4}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Number of parameters expressed as a function of hyperparameters for various approximation methods and empirical reduction in parameters with corresponding network performance.}}{8}{table.3}}
-\newlabel{table:memory}{{3}{8}{Number of parameters expressed as a function of hyperparameters for various approximation methods and empirical reduction in parameters with corresponding network performance}{table.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion}{8}{section.5}}
-\citation{*}
-\bibstyle{splncs}
-\bibdata{bibliography}
-\bibcite{denil2013predicting}{1}
-\bibcite{vanhoucke2011improving}{2}
-\bibcite{mathieu2013fast}{3}
-\bibcite{zeiler2013visualizing}{4}
-\bibcite{imagenet}{5}
-\bibcite{eigenweb}{6}
-\bibcite{sermanet2013overfeat}{7}
-\bibcite{zeiler2011adaptive}{8}
-\bibcite{LeNgiChenChiaKohNg10}{9}
-\bibcite{le2011building}{10}
-\bibcite{lowe1999object}{11}
-\bibcite{hinton2012improving}{12}
-\bibcite{krizhevsky2012imagenet}{13}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Visualization of the 1st layer filters. Each component of the 96 7x7 filters is plotted in RGB space. Points are colored based on the output filter they belong to. Hence, there are 96 colors and $7^2$ points of each color. {\bf  (Left)} Shows the original filters and {\bf  (Middl

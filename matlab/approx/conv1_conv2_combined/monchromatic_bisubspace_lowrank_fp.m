@@ -6,7 +6,7 @@ randn('seed', 1);
 load_imagenet_model;
 
 num_colors = 6;
-rank = 8;
+rank = 6;
 
 if 1
     fname = sprintf('/misc/vlgscratch3/FergusGroup/denton/monochromatic%d_finetuneall', num_colors);

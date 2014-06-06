@@ -161,9 +161,9 @@ end
 set(gca,'Fontsize',16);
 grid on;
 axis([-1, 7, 1.4, 3])
-xlabel('Percent loss in performance', 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
-ylabel('Empirical gain in speed on CPU', 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
-title(sprintf('Second layer approximation: \nEmpirical CPU speedup vs. performance loss'), 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+xlabel('Percent loss in performance', 'FontSize', 18, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+ylabel('Empirical gain in speed on CPU', 'FontSize', 18, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+title(sprintf('Second layer approximation: \nEmpirical CPU speedup vs. performance loss'), 'FontSize', 23, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
 
 legend1 = legend('Original', '||W||_{data} distance metric', 'Finetuned');
 set(legend1, 'Position',[0.5899999515594 0.146666666666667 0.287777777777778 0.211666666666666], 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');

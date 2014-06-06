@@ -9,7 +9,7 @@
   present within the convolutional filters to derive
   approximations that significantly reduce the required
   computation. Using large state-of-the-art models, we demonstrate
-  speedups on both CPU and GPU by a factor of $2\times$, while keeping the accuracy
+  speedups of convolutional layers on both CPU and GPU by a factor of $2\times$, while keeping the accuracy
   within $1\%$ of the original model.
 \end{abstract}
 
@@ -31,10 +31,11 @@ performance of the models.
 
  We consider convolutional neural networks (CNNs) used for computer vision tasks, since
 they are large and widely used in commercial applications. 
-These networks typically require a huge number of parameters ($\sim 10^{7}$ in \cite{overfeat})
-to produce state-of-the-art results. This redundancy seems necessary in order
-to overcome a highly non-convex optimization \cite{denil2013predicting, hintonseparable}, 
-but as a byproduct the resulting network wastes computing resources.
+These networks typically require a huge number of parameters ($\sim 10^{7}$ in \cite{sermanet2013overfeat})
+to produce state-of-the-art results. 
+While, these networks tend to be hugely over parameterized \cite{denil2013predicting}, this redundancy seems necessary in order
+to overcome a highly non-convex optimization \cite{hinton2012improving}. 
+As a byproduct, the resulting network wastes computing resources.
 In this paper we show that this redundancy can be 
 exploited with linear compression techniques,
 resulting in significant speedups for the evaluation of {\em trained}
@@ -51,8 +52,8 @@ also exploit nonlinear approximation.
 
 In summary, our main contributions are the following:
 We present a collection of generic methods to exploit the redundancy inherent in deep CNNs.
-We report experiments on state-of-the-art Imagenet CNNs, showing $2-3\times$ empirical speedups on 
-convolutional layers with less than $1\%$ drop in performance and a reduction of parameters in fully connected layers by a factor of $XXX\times$.
+We report experiments on state-of-the-art Imagenet CNNs, showing empirical speedups on 
+convolutional layers by a factor of $2-3\times$ and a reduction of parameters in fully connected layers by a factor of $5-10\times$.
 
 
 %Within these models, most of the time ($\sim90\%$) is spent in the
@@ -139,5 +140,5 @@ of convolutional tensors to speed up the evaluation of CNNs, applied to scene te
 recognition. This work was developed simultaneously with ours, and provides 
 further evidence that such techniques can be applied to a variety of architectures 
 and tasks. 
-
+Out work differs in that we consider a significantly larger model, apply different compression techniques and present GPU results in addition to CPU results. 
 
