@@ -40,7 +40,6 @@ The first distance metric we propose seeks to emphasize coordinates more prone t
 coordinates whose effect is less harmful for the overall system. 
 We can obtain such measurements as follows.
 Let $\Theta=\{W_1,\dots,W_S\}$ denote
-Let $\Theta=\{W_1,\dots,W_S\}$ denote
 the set of all parameters of the $S$-layer network, and let $U(I; \Theta)$ denote the output 
 after the softmax layer of input image $I$.
 We consider  a given input training set $(I_1,\dots,I_N)$ 
@@ -71,8 +70,8 @@ In particular, we propose the following, approximate, Mahalanobis distance metri
 where the sum runs over the tensor coordinates.
 Since (\ref{poormansmaha}) is a reweighted Euclidiean metric, we 
 can simply compute $W' = \alpha~ .* W$, where $.*$ denotes element-wise multiplication, 
-then compute the approximation $\widetilde{W'}$ on $W'$ using the standard $L_2$ norm, 
-and finally output $\widetilde{W} = \alpha^{-1} .* \widetilde{W'}~.$
+then compute the approximation $\tilde{W'}$ on $W'$ using the standard $L_2$ norm, 
+and finally output $\tilde{W} = \alpha^{-1} .* \tilde{W'}~.$
 
 {\bf Data covariance distance metric: }
 One can view the Frobenius norm of $W$ as
@@ -88,8 +87,8 @@ where $W_F$ is the matrix obtained by folding the first three dimensions of $W$.
 
 \subsection{Low-rank Tensor Approximations}\label{subsec:low_rank}
 
-A particularly simple strategy to exploit the redundancy present in trained convolutional network weights is to 
-linearly compress the tensors, which amounts to finding low-rank approximations. 
+%A particularly simple strategy to exploit the redundancy present in trained convolutional network weights is to 
+%linearly compress the tensors, which amounts to finding low-rank approximations. 
 
 %\vspace{-0.3cm}
 \subsubsection{Matrix Decomposition}\label{subsubsec:svd}
@@ -143,7 +142,6 @@ times results in
 We refer to this approximation as the outer product decomposition ans use $K$ to denote the rank of the approximation.
 
 \vspace{-3mm}
-
 \begin{figure}[ht]
 \centering
 \mbox{
@@ -174,10 +172,8 @@ We found that the color components
  of trained CNNs tend to have low dimensional structure. In
 particular, the weights can be well approximated by projecting the
 color dimension down to a 1D subspace.
-The low-dimensional structure of the weights is apparent in
-\ref{fig:RGB_components} which shows the original first layer convolutional weights
-and the weights after the color dimension has
-been projected onto 1D lines.
+The low-dimensional structure of the weights is illustrated in Figure
+\ref{fig:RGB_components}.
 
 The monochromatic approximation exploits this structure and is computed as follows.
 First, for every output feature, $f$, we consider consider the matrix $W_f \in \mathbb{R}^{C \times (XY) }$, 
@@ -196,12 +192,12 @@ where $\tilde{U}_f \in \mathbb{R}^{C \times 1}, \tilde{S}_f \in \mathbb{R}, \til
 We can further exploit the regularity in the weights by sharing the color component basis between different output features. 
 We do this by clustering the $F$ left singular vectors, $\tilde{U}_f$, of each output feature $f$ into $C'$ clusters, 
 for $C' < F$  . We constrain the clusters to be of equal size as discussed in section \ref{subsec:clustering}.  
-Then, for each of the $\frac{F}{C'}$ output features $f$ that is assigned to cluster $c_f$, we can approximate $W_f$ with
+Then, for each of the $\frac{F}{C'}$ output features, $f$, that is assigned to cluster $c_f$, we can approximate $W_f$ with
 %\begin{equation}
 %\label{blo2}
 	$\tilde{W}_f = U_{c_f} \tilde{S}_f \tilde{V}_f^{\top}$
 %\end{equation}
-where $U_{c_f} \in \mathbb{R}^{C \times 1}$ is the cluster center for cluster $c_f$ and $\tilde{S}_f$ and $\tilde{V}_f$ as as before. 
+where $U_{c_f} \in \mathbb{R}^{C \times 1}$ is the cluster center for cluster $c_f$ and $\tilde{S}_f$ and $\tilde{V}_f$ are as before. 
 
 This monochromatic approximation is illustrated in the left panel of Figure \ref{fig:monochromatic}.
 Table \ref{table:ops} shows the number of operations required for the standard and monochromatic versions.
@@ -218,7 +214,7 @@ clusters $C_1, \dots, C_a$. Then we cluster the columns of $W_F  \in
 \dots, F_b$. These two operations break the original weight tensor $W$
 into $ab$ sub-tensors $\{W_{C_i, F_j}\}_{i = 1, \dots, a, j = 1,
   \dots, b}$ as shown in Figure \ref{fig:biclustering}. Each
-sub-tensor contains similar elements, thus is be easier to
+sub-tensor contains similar elements, and thus is easier to
 fit with a low-rank approximation. 
 
 In order to exploit the parallelism inherent in CPU and GPU
@@ -231,7 +227,9 @@ It is implemented with the Floyd algorithm, by modifying the Euclidean distance
 with a subspace projection distance.
 
 After the input and output clusters have been obtained, we find a low-rank approximation of each 
-sub-tensor using either the SVD decomposition or the outer product decomposition as described in \ref{subsubsec:svd_tensor}   
+sub-tensor using either the SVD decomposition or the outer product decomposition as described in \ref{subsubsec:svd_tensor}.
+We concatenate the $X$ and $Y$ spatial dimensions of the sub-tensors so that the decomposition is applied to a 3-tensor.
+While we could look for a separable approximation along these dimensions, we found the gain to be minimal.    
 Using these approximations, the target
 output can be computed with significantly fewer operations. The number
 of operations required is a function the number
@@ -240,7 +238,7 @@ approximations ($K_1, K_2$ for the SVD decomposition; $K$ for the outer product 
 The number of operations required for each approximation is described in Table \ref{table:ops}.
 
 \begin{table}[t]
-\small
+\tiny
 \centering
 \begin{tabular}{|lc|}
 \hline
@@ -255,6 +253,7 @@ Biclustering + SVD & $G H N M (\frac{C}{G}K_1 + K_1 X Y K_2 \Delta^{-2} + K_2\fr
 \end{tabular}
 \caption{Number of operations required for various approximation methods.} 
 \label{table:ops}
+\vspace{-3mm}
 \end{table}
 
 \subsection{Fine-tuning}

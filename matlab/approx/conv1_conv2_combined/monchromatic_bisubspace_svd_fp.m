@@ -6,13 +6,22 @@ randn('seed', 1);
 load_imagenet_model;
 
 num_colors = 6;
-rank = 8;
+
+W = plan.layer{5}.cpu.vars.W;
+
+iclust = 2;
+oclust = 2;
+oratio = 0.4; % (0.6 --> 76), (0.5 --> 64)
+iratio = 0.4;  % (0.6 --> 78), (0.5 --> 24), (0.4 --> 19)
+odegree = floor(size(W, 1) * oratio / oclust);
+idegree = floor(size(W, 4) * iratio / iclust);
+code = sprintf('in%d_out%d', idegree, odegree);
 
 if 1
     fname = sprintf('/misc/vlgscratch3/FergusGroup/denton/monochromatic%d_finetuneall', num_colors);
     load_weights(fname, 1);
     fprintf('\nLoading weights from %s\n\n', fname);
-    fname = sprintf('monochromatic%d_layer2_bisubspace_48_2_%d_finetuneall', num_colors, rank);
+    fname = sprintf('monochromatic%d_layer2_svd_2_2_%d_%d_finetuneall', num_colors, idegree, odegree);
     load_weights(fname, 2);
     fprintf('\nLoading weights from %s\n\n', fname);
 end
@@ -36,13 +45,12 @@ end
 % Compute first layer approximation
 W = plan.layer{5}.cpu.vars.W;
 fprintf('Conv 2: ||W|| = %f \n', norm(W(:)));
-args.iclust = 48;
-args.oclust = 2;
-args.k = rank;
-args.in_s = 55;
-args.out_s = 51;
-args.cluster_type = 'kmeans';
-[Wapprox, F, C, XY, perm_in, perm_out, num_weights] = bisubspace_lowrank_approx_nosep(double(W), args);
+
+in_s = 55;
+out_s = 51;
+
+[Wapprox, C, Z, F, idx_input, idx_output] = bispace_svd(W, iclust, iratio, oclust, oratio, 0, in_s, out_s);
+
 L2_err = norm(W(:) - Wapprox(:)) / norm(W(:));
 fprintf('Conv 2: ||W - Wapprox|| / ||W|| = %f\n', L2_err);
 
@@ -64,16 +72,14 @@ for i = 1:nbatches
     error = error + e;
     fprintf('(%d) %d / %d = %f     (%d / %d = %f)\n', i, e,  plan.input.batch_size, e /  plan.input.batch_size, error, i * plan.input.batch_size, error / (i * plan.input.batch_size));
 end
-
-% 
-% 
-% load generated_mats/monochromatic6_layer2_bisubspace_finetuned_error.mat
-% idx = find(rank_list == rank);
+% % 
+% load generated_mats/monochromatic6_layer2_svd_finetuned_error.mat
+% idx = find(ismember(rank_codes, code));
 % if isempty(idx)
-%     rank_list(end+1) = rank;
-%     errors(end+1) =  error / (i * plan.input.batch_size);
+%     rank_codes{end+1} = code;
+%     errors(end+1) = error / (i * plan.input.batch_size);
 % else
-%     errors(idx) =  error / (i * plan.input.batch_size);
+%     errors(idx) = error / (i * plan.input.batch_size);
 % end
-% save('generated_mats/monochromatic6_layer2_bisubspace_finetuned_error.mat', 'errors', 'rank_list');
-% 
+% save('generated_mats/monochromatic6_layer2_svd_finetuned_error.mat', 'errors', 'rank_codes');
+

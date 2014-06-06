@@ -11,8 +11,8 @@ W = plan.layer{approx_layer}.cpu.vars.W;
 
 iclust = 2;
 oclust = 2;
-oratio = 0.5; % (0.6 --> 76), (0.5 --> 64)
-iratio = 0.4;  % (0.6 --> 78), (0.5 --> 24), (0.4 --> 19)
+oratio = 0.4; % (0.6 --> 76), (0.5 --> 64)
+iratio = 0.35;  % (0.6 --> 78), (0.5 --> 24), (0.4 --> 19)
 odegree = floor(size(W, 1) * oratio / oclust);
 idegree = floor(size(W, 4) * iratio / iclust);
 
@@ -41,7 +41,7 @@ plan.layer{approx_layer}.cpu.vars.W = single(Wapprox);
 % Finetuning parameters
 min_layer = 6;
 plan.momentum = 0.9;
-plan.lr = 0.00001;
+plan.lr = 0.000001;
 
 nimg = length(plan.input.Y);
 bs = plan.input.batch_size;
@@ -57,7 +57,7 @@ for epoch = 1 : nepoch
     plan.input.step = nval_batches + 1;
     plan.repeat = epoch;
     error = 0;
-    for b = 4000 : ntrain_batches
+    for b = 1000 : ntrain_batches
         
 %         if b > 2000 
 %             plan.lr = 0.0001;

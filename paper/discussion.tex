@@ -1,9 +1,7 @@
 \section{Discussion}
 In this paper we have presented techniques that can speed up the
-bottleneck convolution operations in the first layers of a CNN by a factor $2-3\times$, with negligible loss of performance ($< 1\%$). The empirical speedups
-achieved are still some way short of the theoretical gains, thus
-further improvements might be expected with further engineering effort. 
-Moreover, the techniques are orthogonal
+bottleneck convolution operations in the first layers of a CNN by a factor $2-3\times$, with negligible loss of performance.
+The techniques are orthogonal
 to other approaches for efficient evaluation, such as quantization or
 working in the Fourier domain. Hence, they can potentially be used
 together to obtain further gains. 
@@ -29,8 +27,7 @@ of convolutional networks.
 
 An interesting avenue of research to explore in further work is the ability of these techniques to aid in regularization either during or post training.
 The low-rank projections effectively decrease number of learnable parameters,
-suggesting that they might improve generalization ability,
-a major issue with large CNNs.
+suggesting that they might improve generalization ability.
 The regularization potential of the low-rank approximations is further motivated by two observations. 
 The first is that the approximated filters for the first conolutional layer appear to be cleaned up versions of the original filters. 
 Additionally, we noticed that we sporadically achieve better

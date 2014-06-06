@@ -61,4 +61,4 @@ end
 %     errors(idx) =  error / (i * plan.input.batch_size);
 % end
 % save('generated_mats/layer2_bisubspace_finetuned_error.mat', 'errors', 'rank_list');
-
+% 

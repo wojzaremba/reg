@@ -1,26 +1,24 @@
 \documentclass{article} % For LaTeX2e
-\usepackage{nips14submit_e,times}
 \usepackage{hyperref}
 \usepackage{url}
 %\documentstyle[nips14submit_09,times,art10]{article} % For LaTeX 2.09
+\usepackage[top=1in, bottom=1in, left=1.5in, right=1.5in]{geometry}
 
 \usepackage{graphicx}
 \usepackage{subfigure}
 \usepackage{amsmath,amssymb}
 \def\etal{{\textit{et~al.~}}}
 
-\title{Supplement to \\
-``Exploiting Linear Structure Within Convolutional Networks
-  for Efficient Evaluation" \\
-NIPS2014}
-
-
-\newcommand{\fix}{\marginpar{FIX}}
-\newcommand{\new}{\marginpar{NEW}}
-
 \begin{document}
 
-\maketitle
+\centerline{\Large Supplement to}
+\centerline{\Large ``Exploiting Linear Structure Within Convolutional Networks} 
+\centerline{\Large for Efficient Evaluation" NIPS2014}
+
+
+%\newcommand{\fix}{\marginpar{FIX}}
+%\newcommand{\new}{\marginpar{NEW}}
+
 
 \section{Forward propagation time breakdown}
 Table \ref{evaluation_time} shows the time breakdown of forward propagation for each layer in the CNN architecture we explored. Close to 90\% of the time is spent on convolutional layers, and within these layers the majority of time is spent on the first two. 
