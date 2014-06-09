@@ -1,6 +1,6 @@
 C_(CleanGPU);
 clear all;
-C_(SetDevice, 2);
+C_(SetDevice, 1);
 global plan;
 randn('seed', 1);
 load_imagenet_model('matthew_train', 128);
@@ -12,7 +12,7 @@ W = plan.layer{approx_layer}.cpu.vars.W;
 iclust = 2;
 oclust = 2;
 oratio = 0.4; % (0.6 --> 76), (0.5 --> 64)
-iratio = 0.35;  % (0.6 --> 78), (0.5 --> 24), (0.4 --> 19)
+iratio = 0.4;  % (0.6 --> 78), (0.5 --> 24), (0.4 --> 19)
 odegree = floor(size(W, 1) * oratio / oclust);
 idegree = floor(size(W, 4) * iratio / iclust);
 
@@ -57,7 +57,7 @@ for epoch = 1 : nepoch
     plan.input.step = nval_batches + 1;
     plan.repeat = epoch;
     error = 0;
-    for b = 1000 : ntrain_batches
+    for b = 1 : ntrain_batches
         
 %         if b > 2000 
 %             plan.lr = 0.0001;
@@ -95,7 +95,7 @@ for epoch = 1 : nepoch
             plan.training = 1;
         end
 
-        if mod(b, 250) == 0
+        if mod(b, 100) == 0
            fprintf('\nSaving weights to file %s...', fname);
            save_weights(fname, train_err, val_err);
            fprintf('Done\n\n');

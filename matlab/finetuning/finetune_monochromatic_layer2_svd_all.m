@@ -1,6 +1,6 @@
 C_(CleanGPU);
 clear all;
-C_(SetDevice, 1);
+C_(SetDevice, 2);
 global plan;
 randn('seed', 1);
 load_imagenet_model('matthew_train', 128);
@@ -13,7 +13,7 @@ W = plan.layer{5}.cpu.vars.W;
 iclust = 2;
 oclust = 2;
 oratio = 0.4; % (0.6 --> 76), (0.5 --> 64)
-iratio = 0.4;  % (0.6 --> 78), (0.5 --> 24), (0.4 --> 19)
+iratio = 0.35;  % (0.6 --> 78), (0.5 --> 24), (0.4 --> 19)
 odegree = floor(size(W, 1) * oratio / oclust);
 idegree = floor(size(W, 4) * iratio / iclust);
 code = sprintf('in%d_out%d', idegree, odegree);
@@ -63,7 +63,7 @@ plan.layer{approx_layer}.cpu.vars.W = single(Wapprox);
 % Finetuning parameters
 min_layer = 6;
 plan.momentum = 0.9;
-plan.lr = 0.001;
+plan.lr = 0.00001;
 
 nimg = length(plan.input.Y);
 bs = plan.input.batch_size;
@@ -82,10 +82,7 @@ for epoch = 1 : nepoch
     for b = 1 : ntrain_batches
         
         if b > 200
-            plan.lr = 0.0001;
-        end
-        if b > 1500
-            plan.lr = 0.00001;
+            plan.lr = 0.000001;
         end
         
         plan.input.GetImage(1);

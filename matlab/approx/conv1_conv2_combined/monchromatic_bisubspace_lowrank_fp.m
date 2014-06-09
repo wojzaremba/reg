@@ -65,9 +65,9 @@ for i = 1:nbatches
     fprintf('(%d) %d / %d = %f     (%d / %d = %f)\n', i, e,  plan.input.batch_size, e /  plan.input.batch_size, error, i * plan.input.batch_size, error / (i * plan.input.batch_size));
 end
 
+
 % 
-% 
-% load generated_mats/monochromatic6_layer2_bisubspace_finetuned_error.mat
+% load(sprintf('generated_mats/monochromatic%d_layer2_bisubspace_finetuned_error.mat', num_colors));
 % idx = find(rank_list == rank);
 % if isempty(idx)
 %     rank_list(end+1) = rank;
@@ -75,5 +75,5 @@ end
 % else
 %     errors(idx) =  error / (i * plan.input.batch_size);
 % end
-% save('generated_mats/monochromatic6_layer2_bisubspace_finetuned_error.mat', 'errors', 'rank_list');
+% save(sprintf('generated_mats/monochromatic%d_layer2_bisubspace_finetuned_error.mat', num_colors), 'errors', 'rank_list');
 % 

@@ -8,13 +8,13 @@ plan.training = 1;
 
 iclust = 48;
 oclust = 2;
-rank = 6;
-num_colors = 6;
+rank = 8;
+num_colors = 8;
 
 
 % Load weights for finetuned monochromatic layer
 %fname = sprintf('monochromatic%d_finetuneall', num_colors);
-fname = '/misc/vlgscratch3/FergusGroup/denton/monochromatic6_finetuneall.mat';
+fname = sprintf('/misc/vlgscratch3/FergusGroup/denton/monochromatic%d_finetuneall.mat', num_colors);
 load_weights_training(fname, 1);
 fprintf('\nLoading weights from %s\n\n', fname);
 
@@ -61,7 +61,7 @@ plan.layer{approx_layer}.cpu.vars.W = single(Wapprox);
 % Finetuning parameters
 min_layer = 6;
 plan.momentum = 0.9;
-plan.lr = 0.001;
+plan.lr = 0.000001;
 
 nimg = length(plan.input.Y);
 bs = plan.input.batch_size;
@@ -79,10 +79,10 @@ for epoch = 1 : nepoch
     error = 0;
     for b = 1 : ntrain_batches
         
-        if b > 1000
+        if b > 200
             plan.lr = 0.0001;
         end
-        if b > 1500
+        if b > 500
             plan.lr = 0.00001;
         end
         
@@ -115,7 +115,7 @@ for epoch = 1 : nepoch
             plan.training = 1;
         end
 
-        if mod(b, 250) == 0
+        if mod(b, 150) == 0
            fprintf('\nSaving weights to file %s...', fname);
            save_weights(fname, train_err, val_err);
            fprintf('Done\n\n');

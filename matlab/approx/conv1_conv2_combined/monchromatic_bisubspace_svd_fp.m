@@ -11,7 +11,7 @@ W = plan.layer{5}.cpu.vars.W;
 
 iclust = 2;
 oclust = 2;
-oratio = 0.4; % (0.6 --> 76), (0.5 --> 64)
+oratio = 0.5; % (0.6 --> 76), (0.5 --> 64)
 iratio = 0.4;  % (0.6 --> 78), (0.5 --> 24), (0.4 --> 19)
 odegree = floor(size(W, 1) * oratio / oclust);
 idegree = floor(size(W, 4) * iratio / iclust);
@@ -82,4 +82,4 @@ end
 %     errors(idx) = error / (i * plan.input.batch_size);
 % end
 % save('generated_mats/monochromatic6_layer2_svd_finetuned_error.mat', 'errors', 'rank_codes');
-
+% 

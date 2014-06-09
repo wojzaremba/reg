@@ -5,7 +5,6 @@ all:
 	bibtex compress
 	pdflatex compress
 	pdflatex compress
-	open compress.pdf
 
 arxiv:
 	pdflatex compress_arxiv

@@ -22,7 +22,7 @@ apply these techniques to approximate weights of a convolutional neural network.
 \subsection{Approximation Metric}
 \label{reconstr_sect}
 
-The goal is to find an approximation $\tilde{W}$ of a convolutional tensor $W$ 
+Our goal is to find an approximation, $\tilde{W}$, of a convolutional tensor $W$ 
 that facilitates more efficient computation while maintaining the prediction performance of the network.
 A natural choice for an approximation criterion is
 to minimize $\| \tilde{W} - W \|_F$. This criterion yields 
@@ -44,7 +44,7 @@ the set of all parameters of the $S$-layer network, and let $U(I; \Theta)$ denot
 after the softmax layer of input image $I$.
 We consider  a given input training set $(I_1,\dots,I_N)$ 
 with known labels $(y_1,\dots,y_N)$. For each pair $(I_n, y_n)$, 
-the compute the forward propagation pass $U(I_n, \Theta)$, and 
+we compute the forward propagation pass $U(I_n, \Theta)$, and 
 define as $\{\beta_n\}$ the indices of the $h$ largest values of  $U(I_n, \Theta)$ 
 different from $y_n$.
 Then, for a given layer $s$, we compute
@@ -76,15 +76,15 @@ and finally output $\tilde{W} = \alpha^{-1} .* \tilde{W'}~.$
 {\bf Data covariance distance metric: }
 One can view the Frobenius norm of $W$ as
 $\| W \|_F^2 = \mathbb{E}_{x \sim \mathcal{N}(0,I)} \| W x \|_F^2 ~.$
-Another alternative, which has also been considered in \cite{zisserman14}, is to replace the isotropic covariance
+Another alternative, similar to the one considered in \cite{zisserman14}, is to replace the isotropic covariance
 assumption by the empirical covariance of the input of the layer. If $W \in \mathbb{R}^{C \times X \times Y \times F}$ 
 is a convolutional layer, and $\widehat{\Sigma} \in \mathbb{R}^{CXY \times CXY}$ is the empirical estimate of the input data covariance, 
 it can be efficiently computed as 
 \begin{equation}
 \| W \|_{data} = \| \widehat{\Sigma}^{1/2} W_F \|_F~, 
 \end{equation}
-where $W_F$ is the matrix obtained by folding the first three dimensions of $W$.
-
+where $W_F$ is the matrix obtained by folding the first three dimensions of $W$.As opposed to \cite{zisserman14}, this
+approach adapts to the input distribution without the need to iterate through the data.
 \subsection{Low-rank Tensor Approximations}\label{subsec:low_rank}
 
 %A particularly simple strategy to exploit the redundancy present in trained convolutional network weights is to 
@@ -132,14 +132,14 @@ on $\alpha$, $\beta$ and $\gamma$ respectively, although more efficient algorith
 considered \cite{rankonetensors}. 
 
 This easily extends to a rank $K$ approximation using a greedy algorithm: Given a 
-tensor $M$, we compute $(\alpha, \beta, \gamma)$ using (\ref{eq:rank1}), and we update 
-$W_S \leftarrow W_S - \alpha \otimes \beta \otimes \gamma$. Repeating this operation $K$
+tensor $W$, we compute $(\alpha, \beta, \gamma)$ using (\ref{eq:rank1}), and we update 
+$W^{(k+1)} \leftarrow W^{k} - \alpha \otimes \beta \otimes \gamma$. Repeating this operation $K$
 times results in 
 \begin{equation}
 \label{eq:rankK}
 	\tilde{W_S} = \sum_{k = 1}^{K} \alpha_k \otimes \beta_k \otimes \gamma_k ~.
 \end{equation} 
-We refer to this approximation as the outer product decomposition ans use $K$ to denote the rank of the approximation.
+We refer to this approximation as the outer product decomposition and use $K$ to denote the rank of the approximation.
 
 \vspace{-3mm}
 \begin{figure}[ht]
@@ -162,7 +162,7 @@ We refer to this approximation as the outer product decomposition ans use $K$ to
 }
 }
 \vspace{-3mm}
-\caption{ A visualization of monochromatic and biclustering approximation structures. {\bf (a)} The monochromatic approximation, used for the first layer. Input color channels are projected by a set of intermediate color channels. After this transformation, output features need only to look at one intermediate color channel. {\bf (b)} The biclustering approximation, used for higher convolution layers. Input and output features are clustered into equal sized groups. The weight tensor corresponding to each pair of input and output clusters is then approximated. {\bf (c)} The weight tensors for each input-output pair in (b) are approximated by a sum of rank 1 tensors using techniques described in \ref{subsubsec:svd_tensor}}
+\caption{ A visualization of monochromatic and biclustering approximation structures. {\bf (a)} The monochromatic approximation, used for the first layer. Input color channels are projected onto a set of intermediate color channels. After this transformation, output features need only to look at one intermediate color channel. {\bf (b)} The biclustering approximation, used for higher convolution layers. Input and output features are clustered into equal sized groups. The weight tensor corresponding to each pair of input and output clusters is then approximated. {\bf (c)} The weight tensors for each input-output pair in (b) are approximated by a sum of rank 1 tensors using techniques described in \ref{subsubsec:svd_tensor}}
 \end{figure}
 
 \subsection{Monochromatic Convolution Approximation}\label{subsec:monochromatic}
@@ -220,16 +220,16 @@ fit with a low-rank approximation.
 In order to exploit the parallelism inherent in CPU and GPU
 architectures it is useful to constrain clusters to be of equal sizes.
 We therefore perform the biclustering operations (or clustering 
-for monochromatic filters \ref{subsec:monochromatic}) using a modified
+for monochromatic filters in Section \ref{subsec:monochromatic}) using a modified
 version of the $k$-means algorithm which balances the cluster count at
 each iteration. 
 It is implemented with the Floyd algorithm, by modifying the Euclidean distance
 with a subspace projection distance.
 
 After the input and output clusters have been obtained, we find a low-rank approximation of each 
-sub-tensor using either the SVD decomposition or the outer product decomposition as described in \ref{subsubsec:svd_tensor}.
-We concatenate the $X$ and $Y$ spatial dimensions of the sub-tensors so that the decomposition is applied to a 3-tensor.
-While we could look for a separable approximation along these dimensions, we found the gain to be minimal.    
+sub-tensor using either the SVD decomposition or the outer product decomposition as described in Section \ref{subsubsec:svd_tensor}.
+We concatenate the $X$ and $Y$ spatial dimensions of the sub-tensors so that the decomposition is applied to the 3-tensor, $W_S \in \mathbb{R}^{C \times (XY) \times F}$.
+While we could look for a separable approximation along the spatial dimensions as well, we found the resulting gain to be minimal.    
 Using these approximations, the target
 output can be computed with significantly fewer operations. The number
 of operations required is a function the number
@@ -238,7 +238,6 @@ approximations ($K_1, K_2$ for the SVD decomposition; $K$ for the outer product 
 The number of operations required for each approximation is described in Table \ref{table:ops}.
 
 \begin{table}[t]
-\tiny
 \centering
 \begin{tabular}{|lc|}
 \hline
@@ -258,4 +257,4 @@ Biclustering + SVD & $G H N M (\frac{C}{G}K_1 + K_1 X Y K_2 \Delta^{-2} + K_2\fr
 
 \subsection{Fine-tuning}
 Many of the approximation techniques presented here can efficiently compress the weights of a CNN with negligible degradation of classification performance provided the approximation is not too harsh.
-Alternatively, one could use a harsher approximation that gives greater speedup gains but hurts the performance of the network. In this case, the approximated layer and all those below it can be fixed and the upper layers can be fine-tuned until the original performance is restored.  
+Alternatively, one can use a harsher approximation that gives greater speedup gains but hurts the performance of the network. In this case, the approximated layer and all those below it can be fixed and the upper layers can be fine-tuned until the original performance is restored.  

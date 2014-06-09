@@ -22,7 +22,7 @@ example, mobile computing platforms are limited in their CPU speed,
 memory and battery life. At the other end of the spectrum,
 Internet-scale deployment of these models requires thousands of
 servers to process the 100's of millions of images per day. The
-electrical and cooling costs of these servers required is significant.
+electrical and cooling costs of these servers is significant.
 Training large neural networks can take weeks, or even
 months. This hinders research and consequently there have been
 extensive efforts devoted to speeding up training procedure.  However,
@@ -31,17 +31,17 @@ performance of the models.
 
  We consider convolutional neural networks (CNNs) used for computer vision tasks, since
 they are large and widely used in commercial applications. 
-These networks typically require a huge number of parameters ($\sim 10^{7}$ in \cite{sermanet2013overfeat})
+These networks typically require a huge number of parameters ($\sim 10^{8}$ in \cite{sermanet2013overfeat})
 to produce state-of-the-art results. 
-While, these networks tend to be hugely over parameterized \cite{denil2013predicting}, this redundancy seems necessary in order
+While these networks tend to be hugely over parameterized \cite{denil2013predicting}, this redundancy seems necessary in order
 to overcome a highly non-convex optimization \cite{hinton2012improving}. 
 As a byproduct, the resulting network wastes computing resources.
 In this paper we show that this redundancy can be 
 exploited with linear compression techniques,
 resulting in significant speedups for the evaluation of {\em trained}
 large scale networks, with minimal compromise to performance.
-In particular, we concentrate on the lower convolutional layers, which 
-typically dominate the evaluation cost. 
+%In particular, we concentrate on the lower convolutional layers, which 
+%typically dominate the evaluation cost. 
 
 We follow a relatively simple strategy: we start by compressing each 
 convolutional layer by finding an appropriate low-rank approximation, 
@@ -49,9 +49,9 @@ and then we fine-tune the upper layers until the prediction performance
 is restored. We consider several elementary tensor decompositions based 
 on singular value decompositions, as well as filter clustering methods to take advantage of similarities between learned features. 
 
-In summary, our main contributions are the following:
-We present a collection of generic methods to exploit the redundancy inherent in deep CNNs.
-We report experiments on state-of-the-art Imagenet CNNs, showing empirical speedups on 
+Our main contributions are the following:
+(1) We present a collection of generic methods to exploit the redundancy inherent in deep CNNs.
+(2) We report experiments on state-of-the-art Imagenet CNNs, showing empirical speedups on 
 convolutional layers by a factor of $2-3\times$ and a reduction of parameters in fully connected layers by a factor of $5-10\times$.
 
 
@@ -93,11 +93,11 @@ convolutional layers by a factor of $2-3\times$ and a reduction of parameters in
 \label{convlayereq}
 T(f,x,y) = \sum_{c=1}^C \sum_{x'=1}^{X} \sum_{y'=1}^{Y} I(c,x-x',y-y') W(c,x',y',f)
 \end{align*}
-Moreover, we define $W_C \in \mathbb{R}^{C \times (XYF)}$, and $W_F \in \mathbb{R}^{(CXY) \times F}$, 
-and $W_S \in \mathbb{R}^{C \times (XY) \times F}$ to be the folded, with respect to different dimensions, versions of $W$.
+%Moreover, we define $W_C \in \mathbb{R}^{C \times (XYF)}$, and $W_F \in \mathbb{R}^{(CXY) \times F}$, 
+%and $W_S \in \mathbb{R}^{C \times (XY) \times F}$ to be the folded, with respect to different dimensions, versions of $W$.
 
-If $X$ is a tensor, $\|X \|$ denotes its operator norm, and $\|X \|_F$ denotes its Frobenius norm.
-If $v$ is a vector, $\|v \|$ denotes its Euclidean norm.
+If $W$ is a tensor, $\|W \|$ denotes its operator norm, $\sup_{\|x\|=1}\|Wx\|_F $ and $\|W \|_F$ denotes its Frobenius norm.
+%If $v$ is a vector, $\|v \|$ denotes its Euclidean norm.
 
 \section{Related Work}
 \label{relwork}
@@ -141,6 +141,7 @@ further evidence that such techniques can be applied to a variety of architectur
 and tasks. 
 Out work differs in several ways. 
 First, we consider a significantly larger model. 
-This makes it more challenging to compute efficient approximations since there are more layers to propagate through and thus a greater opportunity for error accumulate. 
-Second, we present different compression techniques for the hidden convolutional layers and provide a method of compressing the first convolution. Finally, we present GPU results in addition to CPU results. 
+This makes it more challenging to compute efficient approximations since there are more layers to propagate through and thus a greater opportunity for error to accumulate. 
+Second, we present different compression techniques for the hidden convolutional layers and provide a method of compressing the first convolutional layer. 
+Finally, we present GPU results in addition to CPU results. 
 

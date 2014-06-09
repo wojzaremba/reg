@@ -149,9 +149,9 @@ end
 grid on;
 axis([-0.8, 7, 1, 2.8]);
 set(gca,'Fontsize',16);
-xlabel('Percent loss in performance', 'FontSize', 18, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
-ylabel('Empirical gain in speed on GPU', 'FontSize', 18, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
-title(sprintf('Second layer approximation: \nPerformance loss vs. empirical GPU speedup'), 'FontSize', 23, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+xlabel('Percent loss in performance', 'FontSize', 20, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+ylabel('Empirical gain in speed on GPU', 'FontSize', 20, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+title(sprintf('Second layer approximation: \nPerformance loss vs. empirical GPU speedup'), 'FontSize', 24, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
 
 
 legend1 = legend('Original', '||W||_{maha} distance metric', 'Fine-tuned');

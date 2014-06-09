@@ -3,10 +3,9 @@
 We use the 15 layer convolutional architecture of \cite{zeiler2013visualizing}, trained on the
 ImageNet 2012 dataset \cite{imagenet}.
 The network contains 4 convolutional layers, 3 fully connected layers and a softmax output layer.
-We evaluate these networks on both CPU and GPU platforms. All measurements of prediction performance are with respect to the 20K validation images from the ImageNet12 dataset. 
+We evaluated the network on both CPU and GPU platforms. All measurements of prediction performance are with respect to the 20K validation images from the ImageNet12 dataset. 
 
-We present results showing the performance of the approximations described in section \ref{sec:approx_tech} in terms of prediction accuracy, speedup gains and reduction in memory overhead. 
-
+We present results showing the performance of the approximations described in Section \ref{sec:approx_tech} in terms of prediction accuracy, speedup gains and reduction in memory overhead. 
 All of our fine-tuning results were achieved by training with less than 2 passes using the ImageNet12 training dataset. 
 Unless stated otherwise, classification numbers refer to those of fine-tuned models.
  
@@ -16,7 +15,7 @@ Because of this, we restrict our attention to the first and second convolutional
 However, our approximations could easily
 applied to convolutions in upper layers as well.
 
-We implemented several different CPU and GPU approximation routines 
+We implemented several CPU and GPU approximation routines 
 in an effort to achieve empirical
 speedups. Both the baseline and approximation CPU code is implemented
 in C++ using Eigen3 library \cite{eigenweb} compiled with Intel MKL.
@@ -31,7 +30,7 @@ code was run on a standard nVidia Titan card.
 We have found that in practice it is often difficult to achieve
 speedups close to the theoretical gains based on the number of
 arithmetic operations (see Supplementary Material for discussion of theoretical gains).
-Moreover, different computer architectures and convolutional network
+Moreover, different computer architectures and CNN 
 architectures afford different optimization strategies making most
 implementations highly specific.  However, regardless of
 implementation details, all of the approximations we present reduce
@@ -67,7 +66,7 @@ subspaces. Figure \ref{fig:RGB_components} illustrates the effect of the monochr
 
 %We evaluated the network on 20K validation images from the ImageNet12 dataset using various monochromatic approximations for the first layer weights. 
 The only parameter in the approximation is $C'$, the number of color channels used for the intermediate representation. As expected, the network performance begins to degrade as $C'$ decreases. 
-The number of FLOPS required to compute the output of the monochromatic convolution is reduced by a factor of $2-3\times$, with the larger gain resulting for small $C'$. 
+The number of floating point operations required to compute the output of the monochromatic convolution is reduced by a factor of $2-3\times$, with the larger gain resulting for small $C'$. 
 %Since the majority of the operations result from the convolution part of the computation, rather than the color transform,
 %the theoretically achievable speedup decreases only slightly as $C'$ is increased.
 %In practice, we found it difficult to optimize the monochromatic convolution routines as for large $C'$ since less work can be shared amongst output filters making it challenging to parallelize.
@@ -87,7 +86,7 @@ Our CPU and GPU implementations achieve empirical speedups of $2-2.5\times$ rela
 
 \subsubsection{Second Layer}
 The second convolutional layer has 96 input channels, 256 output channels and 5x5 filters. 
-We approximated the weights using the techniques described in section \ref{subsec:clustering}. 
+We approximated the weights using the techniques described in Section \ref{subsec:clustering}. 
 We explored various configurations of the approximations by varying the number of input clusters $G$, the number of output clusters $H$ and the rank of the approximation (denoted by $K_1$ and $K_2$ for the SVD decomposition and $K$ for the outer product decomposition). 
 
 Figure \ref{fig:biclust_speedups} shows our empirical speedups on CPU
@@ -102,7 +101,7 @@ We achieved promising results and present speedups of $2-2.5\times$ relative to 
       \quad
       \includegraphics[width=0.5\linewidth]{img/layer2_GPUspeedup_vs_performance_loss_finetune_and_orig.pdf}
 \end{minipage}
-\caption{Empirical speedups for second convolutional layer. ({\bf Left}) Speedups on CPU using biclustered ($G = 2$ and $H = 2$) with SVD approximation.({\bf Right}) peedups on GPU using biclustered ($G = 48$ and $h = 2$) with outer product decomposition approximation.}
+\caption{Empirical speedups for second convolutional layer. ({\bf Left}) Speedups on CPU using biclustered ($G = 2$ and $H = 2$) with SVD approximation. ({\bf Right}) peedups on GPU using biclustered ($G = 48$ and $h = 2$) with outer product decomposition approximation.}
 \label{fig:biclust_speedups}
 \end{figure}
 
@@ -115,10 +114,10 @@ Next, compress the second convolutional layer weights that result from the fine-
 Fine-tune all the layers above until performance is restored and then continue the process. 
 
 We applied this procedure to the first two convolutional layers. 
-We used the monochromatic approximation with 6 colors for the first layer approximation. 
-We used the biclustering with outer product decomposition approximation for the second layer. 
-Fine-tuning with a single pass through the training set resulted in a network whose prediction accuracy was within 1\% of the original model.
+Using the monochromatic approximation with 6 colors for the first layer and the biclustering with outer product decomposition approximation for the second layer ($G = 48; H = 2; K = 8$) and 
+fine-tuning with a single pass through the training set we are able to keep accuracy within 1\% of the original model.
 This procedure could be applied to each convolutional layer, in this sequential manner, to achieve overall speedups much greater than any individual layer can provide. 
+A more comprehensive summary of these results can be found in the Supplementary Material.
 
 \subsection{Reduction in memory overhead}
 In many commercial applications memory conservation and storage are a
@@ -143,8 +142,8 @@ The table also shows the empirical reduction of parameters and the corresponding
 \centering
 \begin{tabular}{|l|c|c|c|c|}
 \hline
-{\bf Approximation method} & {\bf Number of parameters} & {\bf Approximation} & {\bf Reduction} & {\bf Increase in}\\ 
-& & {\bf hyperparameters} &  {\bf in weights} & {\bf test error}\\
+{\bf Approximation method} & {\bf Number of parameters} & {\bf Approximation} & {\bf Reduction} & {\bf Increase }\\ 
+& & {\bf hyperparameters} &  {\bf in weights} & {\bf in error}\\
 \hline
 \hline
 Standard colvolution & $CXYF$ & & &\\

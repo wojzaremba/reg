@@ -130,5 +130,29 @@ For a given setting of input and output clusters numbers, the performance tends 
 \label{fig:biclustering_theory}
 \end{figure}
 
+\section{Combined results}
+We used the monochromatic approximation with 6 colors for the first layer. Table \ref{table:combined} summarizes the results after fine-tuning for 1 pass through the ImageNet12 training data using a variety of second layer approximations.
 
+\begin{table}[b]
+\centering
+\begin{tabular}{|cc|c|}
+\hline
+\multicolumn{2}{|c|}{{\bf Layer 2 }} & {\bf Increase in error}\\ 
+{\bf Method} & {\bf Hyperparameters}& \\  
+\hline
+\hline
+Biclustering & $G = 48; H = 2; K = 8$ & 1\%\\
+ + outer product decomposition & & \\ 
+\hline
+Biclustering & $G = 48; H = 2; K = 6$ & 1.5\%\\
+ + outer product decomposition & & \\ 
+\hline
+Biclustering + SVD & $G = 2; H = 2; K_1 = 19; K_2 = 64$ & 1.2\%\\
+\hline
+Biclustering + SVD & $G = 2; H = 2; K_1 = 19; K_2 = 51$ & 1.4\%\\
+\hline
+\end{tabular}
+\caption{Cascading approximations.} 
+\label{table:combined}
+\end{table}
 \end{document}

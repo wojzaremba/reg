@@ -1,24 +1,21 @@
 \section{Discussion}
 In this paper we have presented techniques that can speed up the
 bottleneck convolution operations in the first layers of a CNN by a factor $2-3\times$, with negligible loss of performance.
-The techniques are orthogonal
-to other approaches for efficient evaluation, such as quantization or
-working in the Fourier domain. Hence, they can potentially be used
-together to obtain further gains. 
-
-Given the widespread use of neural networks in large scale industrial
-settings, the speed gains we demonstrate have significant economic
-value. Companies such as Google or Facebook process $10^8$ images/day,
-requiring many thousands of machines. Our speed gains mean that the
-number of machines dedicated to running convolutional networks could be significantly reduced, saving millions of
-dollars, as well as significantly reducing the environmental impact.
-
+%Given the widespread use of neural networks in large scale industrial
+%settings, the speed gains we demonstrate have significant economic
+%value. Companies such as Google or Facebook process $10^8$ images/day,
+%requiring many thousands of machines. Our speed gains mean that the
+%number of machines dedicated to running convolutional networks could be significantly reduced, saving millions of
+%dollars, as well as significantly reducing the environmental impact.
 We also show that our methods reduce the memory footprint of weights
 in the first two layers by factor of $2-3\times$ and the fully connected layers by a factor of $5-13\times$.
 Since the vast majority of weights reside in the fully connected layers, compressing only these layers 
 translate into a significant savings, which would facilitate mobile deployment
 of convolutional networks.  
-
+These techniques are orthogonal
+to other approaches for efficient evaluation, such as quantization or
+working in the Fourier domain. Hence, they can potentially be used
+together to obtain further gains. 
 %Our approximations are applied to fully trained networks. The
 %small performance drops that result could well be mitigated by further
 %training the network after applying the approximation. By alternating

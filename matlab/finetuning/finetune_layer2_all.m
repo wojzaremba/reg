@@ -40,7 +40,7 @@ plan.layer{approx_layer}.cpu.vars.W = single(Wapprox);
 % Finetuning parameters
 min_layer = 6;
 plan.momentum = 0.9;
-plan.lr = 0.001;
+plan.lr = 0.000001;
 
 nimg = length(plan.input.Y);
 bs = plan.input.batch_size;
@@ -58,11 +58,17 @@ for epoch = 1 : nepoch
     error = 0;
     for b = 1 : ntrain_batches
         
-        if b > 1000 
+        if b > 300 
             plan.lr = 0.0001;
         end
-        if b > 2000
+        if b > 600
             plan.lr = 0.00001;
+        end
+        if b > 800
+            plan.lr = 0.000001;
+        end
+        if b > 1000
+            plan.lr = 0.0000001;
         end
         
         plan.input.GetImage(1);

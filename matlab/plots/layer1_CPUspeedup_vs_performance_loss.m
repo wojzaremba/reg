@@ -6,7 +6,7 @@ set(gca, 'ytick', 1.4:0.2:3)
 hold on;
 
 baseline = 0.177604;
-colors_to_plot = [6, 12, 16, 24];
+colors_to_plot = [6, 8, 12, 16, 24];
 load generated_mats/monochromatic_error.mat
 num_colors_err = num_colors_list;
 load generated_mats/layer1_speedup_vs_numcolors_cpu.mat 
@@ -57,7 +57,7 @@ end
 hold on
 baseline = 0.177604;
 
-colors_to_plot = [3, 4, 6, 16, 24];
+colors_to_plot = [3, 4, 6, 8, 12, 16, 24];
 load generated_mats/monochromatic_error_datacov.mat
 num_colors_err = num_colors_list;
 load generated_mats/layer1_speedup_vs_numcolors_cpu.mat 
@@ -109,7 +109,7 @@ baseline = 0.177604;
 
 
 baseline = 0.177604;
-colors_to_plot = [4, 6, 12];
+colors_to_plot = [4, 6, 8, 12];
 load generated_mats/monochromatic_finetuned_error.mat
 num_colors_err = num_colors_list;
 load generated_mats/layer1_speedup_vs_numcolors_cpu.mat 
@@ -156,9 +156,9 @@ end
 
 grid on;
 axis([-1, 6, 1.4, 3]);
-xlabel('Percent loss in performance', 'FontSize', 18, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
-ylabel('Empirical gain in speed on CPU', 'FontSize', 18, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
-title(sprintf('First layer approximation: \nEmpirical CPU speedup vs. performance loss'), 'FontSize', 23, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+xlabel('Percent loss in performance', 'FontSize', 20, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+ylabel('Empirical gain in speed on CPU', 'FontSize', 20, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
+title(sprintf('First layer approximation: \nPerformance loss vs. empirical CPU speedup'), 'FontSize', 24, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
 
 legend1 = legend('Original', '||W||_{data} distance metric', 'Finetuned');
 set(legend1, 'Position',[0.5899999515594 0.146666666666667 0.287777777777778 0.211666666666666], 'FontSize', 15, 'FontName', 'TimesNewRoman', 'FontWeight', 'bold');
